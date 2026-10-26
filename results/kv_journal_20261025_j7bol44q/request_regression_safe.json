@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "tests": 9,
+  "artifact_root": "/root/lmetric-repro/results/kv_journal_20261025_j7bol44q/request_regression_safe_output",
+  "historical_file_sha256_before": "b0b98552a9a2b48a33f7095617686887cfd81edaaaf47f5294977884cad9e828",
+  "historical_file_sha256_after": "b0b98552a9a2b48a33f7095617686887cfd81edaaaf47f5294977884cad9e828",
+  "historical_file_unchanged_during_this_safe_run": true
+}

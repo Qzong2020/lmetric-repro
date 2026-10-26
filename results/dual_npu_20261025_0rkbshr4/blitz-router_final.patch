@@ -1,0 +1,1228 @@
+diff --git a/.cargo/config.toml b/.cargo/config.toml
+index 86a4b01..10c3fb2 100644
+--- a/.cargo/config.toml
++++ b/.cargo/config.toml
+@@ -7,4 +7,8 @@ registry = "sparse+https://rsproxy.cn/index/"
+ [registries.rsproxy]
+ index = "https://rsproxy.cn/crates.io-index"
+ [net]
+-git-fetch-with-cli = true
+\ No newline at end of file
++git-fetch-with-cli = true
++
++[resolver]
++# Keep freshly resolved dependencies compatible with rust-toolchain.toml.
++incompatible-rust-versions = "fallback"
+diff --git a/CLAUDE.md b/CLAUDE.md
+index 7930437..cd9e1ee 100644
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -79,7 +79,7 @@ blitz-router/
+ │   │   │   │                        # `apply_default_after`, Observation schema
+ │   │   │   ├── simple.rs            # random-q, round-robin-q, least-wait-token-q,
+ │   │   │   │                        # bounded-most-hit-q (no upstream-system origin)
+-│   │   │   ├── vllm.rs              # join-shortest-weight-q (vLLM 4·waiting + bs)
++│   │   │   ├── vllm.rs              # join-shortest-weight-q (vLLM 3·waiting + bs)
+ │   │   │   ├── lmetric.rs           # lmetric-q
+ │   │   │   ├── bailian.rs           # bailian-impl-q
+ │   │   │   ├── aibrix.rs            # aibrix-q
+@@ -141,7 +141,7 @@ Policies are organized under `router/src/scheduler/policies/` by their upstream
+ - `bounded-most-hit-q` — `Filter (queued_tokens < BOUND) (max hit) (min prefill_tokens)`, with the attention-black-hole fallback fix.
+ 
+ **`vllm.rs`** — vLLM baseline
+-- `join-shortest-weight-q` — `Select min by 4·sctx.waiting + sctx.bs`. The "weight" qualifier names the formula's defining feature (waiting carries weight 4 vs weight 1 on bs); also serves as the catch-all default when no policy feature is selected.
++- `join-shortest-weight-q` — `Select min by 3·sctx.waiting + sctx.bs`. The "weight" qualifier names the formula's defining feature (the paper weights queued requests by 4 and running requests by 1; since bs includes both, this is 3·waiting + bs); also serves as the catch-all default when no policy feature is selected.
+ 
+ **`bailian.rs`** — Bailian baseline
+ - `bailian-impl-q` — Per-component normalize then weighted-sample `(α, β, γ)` over `(hit_pct, 1-bs/M_bs, 1-tok/M_tok)`.
+diff --git a/README.md b/README.md
+index 46d83c8..95db1f6 100644
+--- a/README.md
++++ b/README.md
+@@ -4,6 +4,21 @@ Distributed LLM inference router written in Rust. Routes client requests to back
+ 
+ ## Build
+ 
++Install the system build dependencies first:
++
++```bash
++# openEuler
++sudo dnf install -y gcc gcc-c++ make cmake perl pkgconf openssl-devel
++
++# Debian / Ubuntu
++sudo apt-get install -y build-essential cmake perl pkg-config libssl-dev
++```
++
++The pinned Rust toolchain is selected automatically by rustup. Cargo is
++configured to prefer dependencies compatible with that toolchain when resolving
++a new lockfile. If an existing lockfile selects packages requiring a newer Rust
++version, run `cargo update` once to resolve compatible versions.
++
+ ```bash
+ # Default build (lmetric scheduling policy)
+ cargo build -p router --features lmetric-q
+@@ -46,3 +61,9 @@ Copyright 2022-present Hugging Face Inc.
+ Licensed under the **Apache License, Version 2.0**.
+ The full license text is provided in `LICENSES/Apache-2.0.txt`.
+ Modification details in `NOTICE` and individual source files.
++
++### Experimental Ascend request events
++
++The local vLLM-Ascend 0.23.0 request/execution prototype uses versioned SSE,
++with CPU synthetic replay validation and no KV mutation export or NPU result.
++See [scope, configuration and tests](docs/ascend-request-events.md).
+diff --git a/docs/dsl/policies.md b/docs/dsl/policies.md
+index d1567e1..d6a349b 100644
+--- a/docs/dsl/policies.md
++++ b/docs/dsl/policies.md
+@@ -43,8 +43,9 @@ policy round-robin-q (gctx: RRGCtx):
+     after: default; gctx.next_replica_id <- (gctx.next_replica_id + 1) % Count
+ 
+ policy join-shortest-weight-q (gctx: ()):
+-    Select min by 4 · sctx.waiting + sctx.bs
++    Select min by 3 · sctx.waiting + sctx.bs
+     after: default
++    # Paper Fig.6(a): 4*queued + running; bs = queued + running.
+ 
+ policy least-wait-token-q (gctx: ()):
+     Select min by prefill_tokens(req, sctx)
+diff --git a/policy-dsl/src/lower.rs b/policy-dsl/src/lower.rs
+index b15ce30..bd1bce4 100644
+--- a/policy-dsl/src/lower.rs
++++ b/policy-dsl/src/lower.rs
+@@ -60,7 +60,9 @@ pub fn lower(policy: &PolicyInput) -> TokenStream {
+                     let observations = capture_observations(entry, all_sctx).await;
+                     let chosen: Option<usize> = #body;
+                     if let Some(idx) = chosen {
+-                        apply_default_after(entry, all_sctx, idx, &observations[idx]).await;
++                        if !apply_default_after(entry, all_sctx, idx, &observations[idx]).await {
++                            return None;
++                        }
+                         #[allow(unused_variables)]
+                         let chosen: usize = idx;
+                         #after_extra
+diff --git a/radixtree/src/block_hash.rs b/radixtree/src/block_hash.rs
+index d731ffb..525ba25 100644
+--- a/radixtree/src/block_hash.rs
++++ b/radixtree/src/block_hash.rs
+@@ -733,7 +733,9 @@ impl RadixTreeBlockHash {
+             // it's parent's responsibility to drop child
+         }
+ 
+-        debug_assert!(nblock_canary <= block_indices.len());
++        // Removing the last copy of a parent prunes its suffix/children too.
++        // Count every invalidated physical mapping, not just requested IDs.
++        debug_assert!(nblock_canary <= self.block_to_node.len());
+         nblock_canary
+     }
+ }
+@@ -859,3 +861,20 @@ impl RadixTreeBlockHash {
+ // referenced through `Children<K, V>`'s default type parameter.
+ #[allow(unused_imports)]
+ use BuildNoHashHasher as _;
++
++#[cfg(test)]
++mod kv_parent_regression {
++    use super::*;
++    #[test]
++    fn kv_parent_only_removal_preserves_unrelated_prefix_and_allows_reuse() {
++        let mut tree=RadixTreeBlockHash::new(16);
++        tree.insert(&[11,12,13],vec![1,2,3]);
++        tree.insert(&[21,22],vec![4,5]);
++        tree.remove(vec![1]);
++        assert_eq!(tree.get(&[11,12,13]),0);
++        assert_eq!(tree.get(&[21,22]),2);
++        tree.remove(vec![2,3]); // Already pruned descendants must be safe.
++        tree.insert(&[31,32],vec![1,2]);
++        assert_eq!(tree.get(&[31,32]),2);
++    }
++}
+diff --git a/router/src/engine/client.rs b/router/src/engine/client.rs
+index ae2d31f..dd2e524 100644
+--- a/router/src/engine/client.rs
++++ b/router/src/engine/client.rs
+@@ -78,6 +78,13 @@ pub struct RequestStepOutput {
+ /// `EngineCoreOutputs` (ZMQ) for the event loop.
+ #[derive(Debug, Clone, Serialize, Deserialize)]
+ pub struct EngineStepOutput {
++    pub engine_epoch: Option<String>,
++    pub kv_journal: Option<super::kv_journal::KvJournal>,
++    /// Versioned compute-only Prefill semantics. None preserves yaullm behavior.
++    #[serde(default)]
++    pub lmetric_protocol: Option<String>,
++    #[serde(default)]
++    pub lmetric_block_size: Option<usize>,
+     /// Number of prefill tokens processed in this step.
+     pub prefill_tokens: usize,
+     /// Remaining prefill token budget after this step.
+@@ -169,6 +176,7 @@ mod vllm_impl {
+     /// Internal state for the SSE stream, lazily initialized on the first
+     /// call to `recv_step`.
+     struct SseState {
++        sequence: super::super::vllm_http::MetricSequence,
+         stream: Box<dyn futures::Stream<Item = Result<es::SSE, es::Error>> + Unpin + Send>,
+     }
+ 
+@@ -180,6 +188,13 @@ mod vllm_impl {
+         sse_state: Option<SseState>,
+     }
+ 
++    #[cfg(test)]
++    pub(super) async fn connected_kv_receiver(url:&str)->Result<Box<dyn EngineStepReceiver>,EngineClientError> {
++        let mut receiver=VllmStepReceiver {inner:VllmClient::new(url,"ascend-small"),sse_state:None};
++        receiver.ensure_sse_connected().await?;
++        Ok(Box::new(receiver))
++    }
++
+     impl VllmStepReceiver {
+         async fn ensure_sse_connected(&mut self) -> Result<(), EngineClientError> {
+             if self.sse_state.is_some() {
+@@ -218,6 +233,7 @@ mod vllm_impl {
+             }
+ 
+             self.sse_state = Some(SseState {
++                sequence: Default::default(),
+                 stream: Box::new(stream),
+             });
+ 
+@@ -231,11 +247,20 @@ mod vllm_impl {
+             self.ensure_sse_connected().await?;
+ 
+             let sse_state = self.sse_state.as_mut().unwrap();
++            if sse_state.sequence.failed() {
++                return Err(EngineClientError::StreamEnded);
++            }
+ 
+             loop {
+                 match sse_state.stream.next().await {
+                     Some(Ok(es::SSE::Event(e))) => {
+-                        let m: VllmMetric = serde_json::from_str(&e.data).map_err(|err| {
++                        #[cfg(test)]
++                        if let Ok(path) = std::env::var("LMETRIC_KV_SSE_FILE") {
++                            use std::io::Write;
++                            let mut f=std::fs::OpenOptions::new().create(true).append(true).open(path).unwrap();
++                            writeln!(f,"{}",e.data).unwrap();
++                        }
++                        let m = sse_state.sequence.parse(&e.data).map_err(|err| {
+                             EngineClientError::Json(format!(
+                                 "Failed to parse SSE event data: {} (raw: {:?})",
+                                 err, e.data
+@@ -245,10 +270,19 @@ mod vllm_impl {
+                     }
+                     Some(Ok(es::SSE::Comment(_))) => continue,
+                     Some(Ok(es::SSE::Connected(_))) => {
++                        if sse_state.sequence.versioned() {
++                            sse_state.sequence.invalidate();
++                            return Err(EngineClientError::Sse(
++                                "request-v1 reconnect requires a fresh Router/engine session".into()
++                            ));
++                        }
+                         tracing::debug!("SSE reconnected");
+                         continue;
+                     }
+                     Some(Err(e)) => {
++                        if sse_state.sequence.versioned() {
++                            sse_state.sequence.invalidate();
++                        }
+                         return Err(EngineClientError::Sse(format!("SSE stream error: {}", e)));
+                     }
+                     None => {
+@@ -275,7 +309,7 @@ mod vllm_impl {
+     }
+ 
+     /// Convert `VllmMetric` (from SSE JSON) into the unified `EngineStepOutput`.
+-    fn vllm_metric_to_step_output(m: VllmMetric) -> EngineStepOutput {
++    pub(super) fn vllm_metric_to_step_output(m: VllmMetric) -> EngineStepOutput {
+         let outputs = m
+             .outputs
+             .into_iter()
+@@ -290,6 +324,10 @@ mod vllm_impl {
+             .collect();
+ 
+         EngineStepOutput {
++            engine_epoch: m.engine_epoch,
++            kv_journal: m.kv_journal,
++            lmetric_protocol: m.lmetric_protocol,
++            lmetric_block_size: m.block_size,
+             prefill_tokens: m.prefill_tokens,
+             prefill_token_budget: m.prefill_token_budget,
+             latency: m.latency,
+@@ -463,6 +501,9 @@ mod zmq_impl {
+                 .unwrap_or(0);
+ 
+             Ok(EngineStepOutput {
++                engine_epoch: None, kv_journal: None,
++            lmetric_protocol: None,
++                lmetric_block_size: None,
+                 prefill_tokens: outputs.prefill_tokens.unwrap_or(0) as usize,
+                 prefill_token_budget: outputs.prefill_token_budget.unwrap_or(0) as usize,
+                 latency: latency_ms,
+@@ -516,3 +557,13 @@ mod zmq_impl {
+ 
+ #[cfg(feature = "zmq-backend")]
+ pub use zmq_impl::ZmqEngineClientAdapter;
++
++#[cfg(all(test, feature = "vllm-backend"))]
++pub(crate) fn lmetric_test_convert(v: serde_json::Value) -> EngineStepOutput {
++    vllm_impl::vllm_metric_to_step_output(serde_json::from_value(v).unwrap())
++}
++
++#[cfg(all(test,feature="vllm-backend"))]
++pub(crate) async fn lmetric_kv_connected_receiver(url:&str)->Result<Box<dyn EngineStepReceiver>,EngineClientError> {
++    vllm_impl::connected_kv_receiver(url).await
++}
+diff --git a/router/src/engine/colocation.rs b/router/src/engine/colocation.rs
+index 94ce634..545c4a3 100644
+--- a/router/src/engine/colocation.rs
++++ b/router/src/engine/colocation.rs
+@@ -217,7 +217,8 @@ mod task_assignment {
+                     }
+                 }
+                 Err(SendError(_)) => {
+-                    unreachable!("engine#{replica_index} WQ channel closed by receiver at CQ");
++                    tracing::info!(engine = replica_index, "WORK_LOOP_STOPPED");
++                    break;
+                 }
+             }
+         }
+@@ -302,7 +303,7 @@ mod task_assignment {
+         );
+         entry
+             .response_tx
+-            .send(Ok(InferStreamResponse::Prefill))
++            .send(Ok(InferStreamResponse::Prefill { input_length: entry.request.input_length as usize }))
+             .map_err(|_| ExtExcept::FrontendAbort)?;
+         for &t in new_token_ids {
+             entry
+@@ -375,7 +376,10 @@ mod task_assignment {
+         let _skip = entry.response_tx.send(Ok(InferStreamResponse::End {
+             token: Token::default(),
+             top_tokens: Vec::default(),
+-            generated_text: proto::GeneratedText::default(),
++            generated_text: proto::GeneratedText {
++                generated_tokens: entry.generated_token_cnt.try_into().expect("validated token budget fits u32"),
++                ..Default::default()
++            },
+             start: entry.batch_time.unwrap(),
+             queued: entry.queue_time,
+             max_time_between_tokens: entry.max_time_between_tokens,
+@@ -416,6 +420,12 @@ mod task_assignment {
+                 Ok(step) => step,
+                 Err(e) => {
+                     tracing::error!(engine = replica_index, error = %e, "RECV_STEP_ERROR");
++                    let mut context = schedule_context.lock().await;
++                    if context.kv_journal.active() || std::env::var("LMETRIC_REQUIRE_KV_JOURNAL").as_deref()==Ok("1") {
++                        context.invalidate_kv(e.to_string());
++                        break;
++                    }
++                    drop(context);
+                     // For stream-ended errors, break out of the loop
+                     if matches!(e, super::super::client::EngineClientError::StreamEnded) {
+                         break;
+@@ -424,6 +434,7 @@ mod task_assignment {
+                 }
+             };
+ 
++            let apply_started = std::time::Instant::now();
+             // Adds newly posted requests
+             {
+                 let _g = wqe_mtx.lock().await;
+@@ -443,9 +454,38 @@ mod task_assignment {
+             }
+             // postcond: all requests in step output are visible to CQ
+ 
++            // Never apply a request-v1 step using a different token/block unit.
++            // This also catches a Router left at its legacy CLI default of 16.
++            if matches!(m.lmetric_protocol.as_deref(), Some("request-v1" | "request-kv-v1"))
++                && entries.values().chain(except_context.entries.values()).any(|entry|
++                    m.lmetric_block_size != Some(entry.block_hash_state.get_block_size())) {
++                tracing::error!(engine = replica_index, "LMetric block-size mismatch; stop consumer and restart session");
++                schedule_context.lock().await.invalidate_kv("block-size mismatch".into());
++                break;
++            }
++
++            // Stage journal before applying request accounting. No partial cache
++            // view or untrusted physical ID becomes visible to a policy.
++            let kv_started = std::time::Instant::now();
++            let prepared_kv = if let Some(journal) = &m.kv_journal {
++                let mut context = schedule_context.lock().await;
++                match context.kv_journal.prepare(journal, m.engine_epoch.as_deref().unwrap_or(""), m.lmetric_block_size.unwrap_or(0)) {
++                    Ok(prepared) => Some(prepared),
++                    Err(reason) => {
++                        tracing::error!(engine=replica_index, %reason, "KV_JOURNAL_INVALID");
++                        context.invalidate_kv(reason);
++                        break;
++                    }
++                }
++            } else {
++                let mut context = schedule_context.lock().await;
++                if context.kv_journal.active() { context.invalidate_kv("KV capability disappeared".into()); break; }
++                None
++            };
++            metrics::histogram!("blitz_kv_prepare_duration_seconds", kv_started.elapsed().as_secs_f64());
+             tracing::trace!(engine = replica_index, step = ?m, "STEP_RECEIVED");
+ 
+-            let current_epoch = schedule_context.lock().await.block_hash.epoch();
++            let current_epoch = schedule_context.lock().await.cache_epoch();
+ 
+             if !m.preempted_ids.is_empty() {
+                 m.preempted_ids.iter().for_each(|&id| {
+@@ -476,6 +516,16 @@ mod task_assignment {
+                         if is_known {
+                             metric_delta.waiting_reqs_dec += 1;
+                         }
++                        // request-v1 excludes hits from reported prompt work.
++                        // Apply H_actual-H_pred even when the first output finishes.
++                        if is_finished && matches!(m.lmetric_protocol.as_deref(), Some("request-v1" | "request-kv-v1")) {
++                            if let Some(entry) = entries.get_mut(&request_id)
++                                .or_else(|| except_context.entries.get_mut(&request_id)) {
++                                metric_delta.prefill_tokens_dec += entry.block_hash_state
++                                    .set_real_token_hits_get_diff(hit_token_cnt)
++                                    * entry.block_hash_state.get_block_size() as isize;
++                            }
++                        }
+                         if is_finished {
+                             if let Some(entry) = entries.get_mut(&request_id) {
+                                 let input_length = entry.request.input_length as isize;
+@@ -594,7 +644,7 @@ mod task_assignment {
+             let mut sctx = schedule_context.lock().await;
+ 
+             // Update PrefixBlockHash
+-            let epoch_before = sctx.block_hash.epoch();
++            let epoch_before = sctx.cache_epoch();
+             if !m.evicted_block_ids.is_empty() {
+                 tracing::info!(
+                     target: "cache_tracking",
+@@ -603,6 +653,18 @@ mod task_assignment {
+                     "EVICTION"
+                 );
+             }
++            if let Some((state, tree)) = prepared_kv {
++                for mutation in &m.kv_journal.as_ref().unwrap().mutations {
++                    if matches!(mutation.kind.as_str(), "request_blocks" | "request_release") {
++                        let rid = mutation.request_id.unwrap();
++                        if let Some(entry) = entries.get_mut(&rid).or_else(|| except_context.entries.get_mut(&rid)) {
++                            entry.block_hash_state.set_bids(mutation.block_ids.clone());
++                        }
++                    }
++                }
++                sctx.kv_journal = state;
++                sctx.block_hash = tree;
++            }
+             sctx.block_hash.remove(m.evicted_block_ids.clone());
+             for (rid, block_indices) in &m.cur_used_block_ids {
+                 if block_indices.is_empty() {
+@@ -661,7 +723,7 @@ mod task_assignment {
+                     }
+                 }
+             }
+-            let epoch_after = sctx.block_hash.epoch();
++            let epoch_after = sctx.cache_epoch();
+             tracing::info!(
+                 target: "cache_tracking",
+                 engine = replica_index,
+@@ -691,6 +753,16 @@ mod task_assignment {
+             #[cfg(any(feature = "preble-bs-q", feature = "preble-tps-q"))]
+             let pre_step_bs = sctx.lmetric.bs;
+             sctx.lmetric -= metric_delta;
++            // State after this engine step. These gauges also make drain
++            // checks possible without parsing periodic statistics files.
++            metrics::gauge!("blitz_replica_active_requests", sctx.lmetric.bs as f64,
++                "engine" => replica_index.to_string());
++            metrics::gauge!("blitz_replica_waiting_requests", sctx.lmetric.waiting_reqs as f64,
++                "engine" => replica_index.to_string());
++            metrics::gauge!("blitz_replica_pending_prefill_tokens", sctx.lmetric.prefill_tokens as f64,
++                "engine" => replica_index.to_string());
++            metrics::gauge!("blitz_replica_context_tokens", sctx.lmetric.all_tokens as f64,
++                "engine" => replica_index.to_string());
+             #[cfg(any(feature = "preble-bs-q", feature = "preble-tps-q"))]
+             sctx.block_hash.update_with_step(pre_step_bs, std::time::Instant::now());
+             drop(sctx);
+@@ -740,7 +812,10 @@ mod task_assignment {
+                             cancel_req_ids.push(request_id);
+                         }
+                         if is_finished {
+-                            let entry = entries.remove(&request_id).unwrap();
++                            let mut entry = entries.remove(&request_id).unwrap();
++                            // Accounting has already closed this request. Retain
++                            // the final real tokens only for completion metadata.
++                            entry.append_state(&new_token_ids, &tbt);
+                             request_phases.remove(&request_id);
+                             on_finish_request(
+                                 replica_index,
+@@ -764,7 +839,10 @@ mod task_assignment {
+                             cancel_req_ids.push(request_id);
+                         }
+                         if is_finished {
+-                            let entry = entries.remove(&request_id).unwrap();
++                            let mut entry = entries.remove(&request_id).unwrap();
++                            // Accounting has already closed this request. Retain
++                            // the final real tokens only for completion metadata.
++                            entry.append_state(&new_token_ids, &tbt);
+                             request_phases.remove(&request_id);
+                             on_finish_request(
+                                 replica_index,
+@@ -844,6 +922,19 @@ mod task_assignment {
+             skipped_fault_entries.0.clear();
+             skipped_fault_entries.1.clear();
+ 
++            metrics::histogram!("blitz_step_apply_duration_seconds", apply_started.elapsed().as_secs_f64());
++            if tracing::enabled!(target: "cache_tracking", tracing::Level::DEBUG) {
++                let c = schedule_context.lock().await;
++                let state = serde_json::json!({"engine":replica_index,"step_id":m.step_id,
++                    "engine_epoch":c.kv_journal.epoch,"mutation_seq":c.kv_journal.last,
++                    "physical":c.kv_journal.mapping_view(),"requests":c.kv_journal.requests,
++                    "valid":c.kv_journal.routable(),"active_entries":entries.len(),
++                    "exception_entries":except_context.entries.len(),
++                    "bs":c.lmetric.bs,"waiting":c.lmetric.waiting_reqs,
++                    "prefill":c.lmetric.prefill_tokens,"all_tokens":c.lmetric.all_tokens});
++                tracing::debug!(target: "cache_tracking", state = %state, "KV_STATE");
++            }
++
+             // Invariant checks at event loop boundary
+             #[cfg(debug_assertions)]
+             {
+@@ -874,6 +965,10 @@ mod task_assignment {
+             }
+         }
+     }
++    #[cfg(all(test, feature = "lmetric-q", feature = "vllm-backend"))]
++    include!("ascend_request_tests.rs");
++    include!("kv_journal_tests.rs");
++
+ }
+ 
+ mod except_management {
+diff --git a/router/src/engine/mod.rs b/router/src/engine/mod.rs
+index e9ec498..89abab4 100644
+--- a/router/src/engine/mod.rs
++++ b/router/src/engine/mod.rs
+@@ -6,6 +6,7 @@
+ pub(crate) mod client;
+ pub(crate) mod colocation;
+ pub(crate) mod vllm_http;
++pub mod kv_journal;
+ #[cfg(feature = "zmq-backend")]
+ pub(crate) mod zmq;
+ 
+diff --git a/router/src/engine/vllm_http.rs b/router/src/engine/vllm_http.rs
+index e486cdc..a4e86b5 100644
+--- a/router/src/engine/vllm_http.rs
++++ b/router/src/engine/vllm_http.rs
+@@ -153,6 +153,17 @@ impl VllmClient {
+ 
+ #[derive(Serialize, Deserialize, Debug)]
+ pub(crate) struct VllmMetric {
++    #[serde(default)]
++    pub lmetric_protocol: Option<String>,
++    #[serde(default)]
++    pub engine_epoch: Option<String>,
++    pub kv_journal: Option<super::kv_journal::KvJournal>,
++    #[serde(default)]
++    pub kv_events: Option<bool>,
++    #[serde(default)]
++    pub block_size: Option<usize>,
++    #[serde(default)]
++    pub kv_groups: Option<usize>,
+     #[serde(default)]
+     pub prefill_tokens: usize,
+     #[serde(default)]
+@@ -307,3 +318,116 @@ struct Request2Vllm {
+     #[serde(skip_serializing_if = "Option::is_none")]
+     temperature: Option<f32>,
+ }
++
++/// New request-v1 sessions are contiguous and cannot silently reconnect.
++/// Legacy yaullm JSON keeps its existing permissive parsing behavior.
++#[derive(Default)]
++pub(super) struct MetricSequence {
++    epoch: Option<String>,
++    last: u64,
++    mutation_last: u64,
++    kv_mode: bool,
++    failed: bool,
++}
++
++impl MetricSequence {
++    pub(super) fn versioned(&self) -> bool { self.epoch.is_some() }
++
++    pub(super) fn failed(&self) -> bool { self.failed }
++
++    pub(super) fn invalidate(&mut self) { self.failed = true; }
++
++    pub(super) fn parse(&mut self, data: &str) -> Result<VllmMetric, String> {
++        if self.failed { return Err("LMetric session invalid; restart required".into()); }
++        let result = self.parse_inner(data);
++        if result.is_err() && (self.versioned() || data.contains("lmetric_protocol")) {
++            self.failed = true;
++        }
++        result
++    }
++
++    fn parse_inner(&mut self, data: &str) -> Result<VllmMetric, String> {
++        if data.len() > 20 * 1024 * 1024 { return Err("oversized SSE envelope".into()); }
++        let raw: serde_json::Value = serde_json::from_str(data).map_err(|e| e.to_string())?;
++        let metric: VllmMetric = serde_json::from_value(raw.clone()).map_err(|e| e.to_string())?;
++        match metric.lmetric_protocol.as_deref() {
++            None if self.epoch.is_none() => return Ok(metric),
++            Some("request-v1" | "request-kv-v1") => {},
++            _ => return Err("Unsupported/missing LMetric protocol".into()),
++        }
++        let kv_mode = metric.lmetric_protocol.as_deref() == Some("request-kv-v1");
++        if self.versioned() && kv_mode != self.kv_mode { return Err("KV capability changed".into()); }
++        if kv_mode && !cfg!(all(any(feature="lmetric-q",feature="join-shortest-weight-q"),feature="radixtree-blockhash",not(feature="simulator"))) {
++            return Err("KV journal requires lmetric-q or join-shortest-weight-q/radixtree without simulator".into());
++        }
++        let mut mutation_last = self.mutation_last;
++        if kv_mode {
++            let j = metric.kv_journal.as_ref().ok_or("missing KV journal")?;
++            if j.version != "kv-journal-v1" || j.observation_kind != "scheduler_cache_metadata"
++                || !(2..=1_000_000).contains(&j.num_blocks) || j.mutations.len() > 8192 {
++                return Err("invalid KV journal capabilities/bounds".into());
++            }
++            for m in &j.mutations {
++                if m.mutation_seq != mutation_last + 1 || m.group_id != 0
++                    || Some(m.block_size) != metric.block_size {
++                    return Err("KV mutation sequence or group/block mismatch".into());
++                }
++                mutation_last = m.mutation_seq;
++            }
++            if mutation_last != j.mutation_seq { return Err("KV watermark mismatch".into()); }
++            if !matches!(raw["event_kind"].as_str(),Some("completion"|"control")) {
++                return Err("invalid KV envelope kind".into());
++            }
++        } else if metric.kv_journal.is_some() { return Err("unexpected KV journal".into()); }
++        for field in ["step_id", "latency", "outputs", "prefill_tokens"] {
++            if raw.get(field).is_none() { return Err(format!("Missing request-v1 field: {field}")); }
++        }
++        if metric.kv_groups != Some(1) || metric.block_size.unwrap_or(0) == 0
++            || metric.kv_events != Some(kv_mode)
++            || raw["latency_kind"] != "schedule_to_completion_host_ms"
++            || !matches!(raw["execution_mode"].as_str(), Some("sync" | "async")) {
++            return Err("Invalid request-v1 capabilities/timing semantics".into());
++        }
++        if !metric.evicted_block_ids.is_empty() || !metric.cur_used_block_ids.is_empty()
++            || !metric.new_block_hashes_ids.is_empty() || !metric.new_block_hashes.is_empty()
++            || !metric.evicted_block_hashes.is_empty() || !metric.preempted_ids.is_empty()
++            || !metric.aborted_requests.is_empty() {
++            return Err("request-v1 does not support KV/preempt/abort events".into());
++        }
++        let epoch = metric.engine_epoch.as_deref().filter(|s| !s.is_empty())
++            .ok_or("Missing request-v1 engine_epoch")?;
++        if self.epoch.as_deref().map_or(false, |e| e != epoch) || metric.step_id != self.last + 1 {
++            return Err("LMetric epoch changed or step sequence duplicated/gapped".into());
++        }
++        let mut seen = std::collections::HashSet::new();
++        for (i, status) in metric.outputs.iter().enumerate() {
++            for field in ["request_id", "new_token_ids", "state", "is_finished", "hit_token_cnt", "prev_computed_tokens"] {
++                if raw["outputs"][i].get(field).is_none() {
++                    return Err(format!("Missing request-v1 output field: {field}"));
++                }
++            }
++            if !matches!(status.state.as_str(), "PREFILL" | "DECODE")
++                || !seen.insert(status.request_id)
++                || (status.new_token_ids.is_empty() && !status.is_finished) {
++                return Err("Invalid request-v1 request output".into());
++            }
++        }
++        self.epoch = Some(epoch.to_owned());
++        self.last = metric.step_id;
++        self.kv_mode = kv_mode;
++        self.mutation_last = mutation_last;
++        Ok(metric)
++    }
++}
++
++#[cfg(all(test, feature="join-shortest-weight-q", not(feature="lmetric-q")))]
++mod dual_baseline_tests {
++    use super::*;
++    #[test]
++    fn dual_baseline_accepts_same_kv_protocol_as_lmetric() {
++        let packet=json!({"lmetric_protocol":"request-kv-v1","engine_epoch":"baseline","step_id":1,"latency":0,"outputs":[],"prefill_tokens":0,"latency_kind":"schedule_to_completion_host_ms","execution_mode":"sync","event_kind":"control","kv_events":true,"block_size":128,"kv_groups":1,"kv_journal":{"version":"kv-journal-v1","observation_kind":"scheduler_cache_metadata","num_blocks":8,"mutation_seq":1,"mutations":[{"mutation_seq":1,"type":"cache_reset","group_id":0,"block_size":128,"reason":"initial_empty"}]}});
++        let mut seq=MetricSequence::default();
++        assert!(seq.parse(&packet.to_string()).is_ok(),"the comparison baseline must consume exactly the same journal contract");
++        assert!(seq.parse(&packet.to_string()).is_err(),"baseline must retain duplicate rejection");
++    }
++}
+diff --git a/router/src/gateway/server.rs b/router/src/gateway/server.rs
+index 8067439..db0091d 100644
+--- a/router/src/gateway/server.rs
++++ b/router/src/gateway/server.rs
+@@ -276,7 +276,7 @@ async fn chat_completions_stream(
+                     match response {
+                         Ok(response) => {
+                             match response {
+-                                InferStreamResponse::Prefill => {}
++                                InferStreamResponse::Prefill { .. } => {}
+                                 InferStreamResponse::Intermediate { token, .. } => {
+                                     let chunk = ChatCompletionChunk {
+                                         id: chat_id.clone(),
+@@ -490,6 +490,12 @@ pub async fn run(
+ 
+     // Prometheus handler
+     let builder = PrometheusBuilder::new()
++        .set_buckets_for_metric(
++            Matcher::Full("blitz_policy_schedule_duration_seconds".into()),
++            &[0.000001, 0.000002, 0.000005, 0.000010, 0.000020, 0.000050,
++              0.000100, 0.000200, 0.000500, 0.001, 0.002, 0.005, 0.01, 0.1],
++        )
++        .unwrap()
+         .set_buckets_for_metric(duration_matcher, &duration_buckets)
+         .unwrap()
+         .set_buckets_for_metric(input_length_matcher, &input_length_buckets)
+diff --git a/router/src/scheduler/infer.rs b/router/src/scheduler/infer.rs
+index 7e8f6e4..47b35a3 100644
+--- a/router/src/scheduler/infer.rs
++++ b/router/src/scheduler/infer.rs
+@@ -48,6 +48,7 @@ pub struct Infer {
+ 
+     /// Colocation controller
+     colocation_controller: Option<Arc<ColocationController>>,
++    shared_tokenizer: Option<Arc<tokenizers::Tokenizer>>,
+ }
+ 
+ impl Infer {
+@@ -63,7 +64,7 @@ impl Infer {
+         let all_schedule_contexts: Vec<Arc<Mutex<ScheduleContext>>> = (0..num_replicas)
+             .map(|_| {
+                 Arc::new(Mutex::new(ScheduleContext {
+-                    lmetric: LMetric::default(),
++                    kv_journal: Default::default(), lmetric: LMetric::default(),
+                     // FIXME(@Healthcliff-Ding): a hack for Qwen2.5-7B
+                     block_hash: PrefixBlockHash::new(83000 + 1),
+                 }))
+@@ -76,7 +77,7 @@ impl Infer {
+             queue.clone(),
+             all_engine_clients,
+             all_schedule_contexts.clone(),
+-            shared_tokenizer,
++            shared_tokenizer.clone(),
+         );
+ 
+         let semaphore = Arc::new(Semaphore::new(max_concurrent_requests));
+@@ -89,6 +90,7 @@ impl Infer {
+             queue,
+             limit_concurrent_requests: semaphore,
+             colocation_controller: Some(controller),
++            shared_tokenizer,
+         }
+     }
+ 
+@@ -173,7 +175,8 @@ impl Infer {
+         while let Some(response) = stream.next().await {
+             match response? {
+                 // Add prefill tokens
+-                InferStreamResponse::Prefill => {
++                InferStreamResponse::Prefill { input_length: actual_input_length } => {
++                    input_length = actual_input_length;
+                     first_token_time.get_or_insert(s.elapsed());
+                     interval = tokio::time::Instant::now();
+                 }
+@@ -214,6 +217,9 @@ impl Infer {
+         if let (Some(mut generated_text), Some(queued), Some(start)) =
+             (result_generated_text, result_queued, result_start)
+         {
++            generated_text = assemble_generated_text(
++                generated_text, &result_tokens, self.shared_tokenizer.as_deref()
++            )?;
+             let mut max_time_between_tokens_except_first = Duration::from_micros(0);
+             let mut avg_time_between_tokens = Duration::from_micros(0);
+             let mut p90_time_between_tokens = Duration::from_micros(0);
+@@ -305,7 +311,7 @@ impl Infer {
+ #[derive(Debug)]
+ pub(crate) enum InferStreamResponse {
+     // Optional first message
+-    Prefill,
++    Prefill { input_length: usize },
+     // Intermediate messages
+     Intermediate {
+         token: Token,
+@@ -365,3 +371,35 @@ impl InferError {
+         }
+     }
+ }
++
++/// Build text/usage from all real token IDs, including the finishing event.
++fn assemble_generated_text(
++    mut metadata: GeneratedText,
++    tokens: &[Token],
++    tokenizer: Option<&tokenizers::Tokenizer>,
++) -> Result<GeneratedText, InferError> {
++    metadata.generated_tokens = tokens.len() as u32;
++    metadata.text = if let Some(tokenizer) = tokenizer {
++        let ids: Vec<u32> = tokens.iter().map(|t| t.id).collect();
++        tokenizer.decode(&ids, true).map_err(|e| InferError::GenerationError(e.to_string()))?
++    } else {
++        tokens.iter().map(|t|t.text.as_str()).collect()
++    };
++    Ok(metadata)
++}
++
++#[cfg(test)]
++mod gateway_aggregation_tests {
++    use super::*;
++    #[test]
++    fn gateway_aggregation_counts_and_decodes_complete_token_sequence() {
++        let model=tokenizers::models::wordlevel::WordLevel::builder()
++            .vocab([("hello".into(),0),("world".into(),1),("<unk>".into(),2)].into_iter().collect())
++            .unk_token("<unk>".into()).build().unwrap();
++        let tokenizer=tokenizers::Tokenizer::new(model);
++        // Per-token text may be partial/invalid. The final text must decode IDs.
++        let tokens=vec![Token {id:0,text:"wrong".into(),logprob:0.0},Token {id:1,text:"wrong".into(),logprob:0.0}];
++        let result=assemble_generated_text(GeneratedText::default(),&tokens,Some(&tokenizer)).unwrap();
++        assert_eq!(result.generated_tokens,2);assert_eq!(result.text,"hello world");
++    }
++}
+diff --git a/router/src/scheduler/kvcache.rs b/router/src/scheduler/kvcache.rs
+index 149894a..fbf6003 100644
+--- a/router/src/scheduler/kvcache.rs
++++ b/router/src/scheduler/kvcache.rs
+@@ -183,7 +183,7 @@ impl BlockHashState {
+         let mut token_in_last_block = Vec::with_capacity(block_size);
+ 
+         for block in input_tokens.chunks(block_size) {
+-            if block.len() < 16 {
++            if block.len() < block_size {
+                 token_in_last_block.extend_from_slice(block);
+                 break;
+             }
+@@ -243,7 +243,7 @@ impl BlockHashState {
+ 
+     pub fn append_tokens(&mut self, new_tokens: &[u32]) {
+         self.token_in_last_block.extend_from_slice(new_tokens);
+-        if self.token_in_last_block.len() >= self.block_size {
++        while self.token_in_last_block.len() >= self.block_size {
+             let block = self.token_in_last_block.drain(..self.block_size).collect::<Vec<_>>();
+             let len = block.len() * std::mem::size_of::<u32>();
+             let ptr = block.as_ptr() as *const u8;
+@@ -257,7 +257,11 @@ impl BlockHashState {
+     /// # Arguments:
+     /// `backend_bids` currently occupied blocks at backend, including prefix
+     pub fn set_bids(&mut self, backend_bids: Vec<u64>) {
+-        assert!(backend_bids.is_empty() == false);
++        if backend_bids.is_empty() {
++            self.block_indices.clear();
++            self.sync_nblks = 0;
++            return;
++        }
+         // `0` is an invalid bid at backend
+         let old = self.block_indices.get(self.sync_nblks).cloned().unwrap_or(0);
+         let new = backend_bids.get(self.sync_nblks).cloned().unwrap_or(0);
+diff --git a/router/src/scheduler/policies/dsl_runtime.rs b/router/src/scheduler/policies/dsl_runtime.rs
+index 1888079..87edfa6 100644
+--- a/router/src/scheduler/policies/dsl_runtime.rs
++++ b/router/src/scheduler/policies/dsl_runtime.rs
+@@ -26,6 +26,7 @@ use crate::{LMetricInc, ScheduleContext};
+ #[derive(Debug, Clone, Copy)]
+ pub(crate) struct Observation {
+     pub idx: usize,
++    pub routing_enabled: bool,
+     pub bs: usize,
+     pub waiting: usize,
+     pub queued_tokens: isize,
+@@ -80,12 +81,23 @@ pub(crate) async fn capture_observations(
+         #[allow(unused_mut)]
+         let mut sctx = arc.lock().await;
+         let hit_blocks = sctx.block_hash.get(hashes);
+-        let epoch = sctx.block_hash.epoch();
++        let epoch = sctx.cache_epoch();
+         #[cfg(any(feature = "preble-q", feature = "preble-bs-q", feature = "preble-tps-q"))]
+         let now = std::time::Instant::now();
+         #[cfg(feature = "preble-tps-q")]
+         let bs_now = sctx.lmetric.bs;
++        tracing::debug!(target: "scheduling", request_id = entry.request.request_id,
++            engine = idx, routing_enabled = sctx.kv_journal.routable(),
++            bs = sctx.lmetric.bs, waiting = sctx.lmetric.waiting_reqs,
++            prefill = sctx.lmetric.prefill_tokens, all_tokens = sctx.lmetric.all_tokens,
++            hit_tokens = hit_blocks * block_size, cache_epoch = epoch,
++            lmetric_score = (sctx.lmetric.prefill_tokens.max(0) as usize
++                + entry.request.input_tokens.len().saturating_sub(hit_blocks * block_size))
++                * (sctx.lmetric.bs + 1),
++            shortest_weight_score = 3 * sctx.lmetric.waiting_reqs + sctx.lmetric.bs,
++            "CANDIDATE");
+         Observation {
++            routing_enabled: sctx.kv_journal.routable(),
+             idx,
+             bs: sctx.lmetric.bs,
+             waiting: sctx.lmetric.waiting_reqs,
+@@ -410,7 +422,7 @@ where
+ 
+ #[inline]
+ pub(crate) fn root_target(observations: &[Observation]) -> Vec<&Observation> {
+-    observations.iter().collect()
++    observations.iter().filter(|o| o.routing_enabled).collect()
+ }
+ 
+ // =========================================================================
+@@ -517,11 +529,12 @@ pub(crate) async fn apply_default_after(
+     all_sctx: &[Arc<Mutex<ScheduleContext>>],
+     chosen: usize,
+     cached: &Observation,
+-) {
++) -> bool {
+     let request = &entry.request;
+-    let ScheduleContext { lmetric, block_hash } =
+-        &mut *all_sctx[chosen].lock().await;
+-    let current_epoch = block_hash.epoch();
++    let mut context = all_sctx[chosen].lock().await;
++    if !context.kv_journal.routable() { return false; }
++    let current_epoch = context.cache_epoch();
++    let ScheduleContext { lmetric, block_hash, .. } = &mut *context;
+     let hit_nblks = if cached.epoch == current_epoch {
+         cached.hit_blocks
+     } else {
+@@ -548,4 +561,5 @@ pub(crate) async fn apply_default_after(
+         prefill_tokens_inc: new_ntkns,
+         all_tokens_inc: request.input_tokens.len(),
+     };
++    true
+ }
+diff --git a/router/src/scheduler/policies/llm_d/least_bs.rs b/router/src/scheduler/policies/llm_d/least_bs.rs
+index 38f975c..8c0f79e 100644
+--- a/router/src/scheduler/policies/llm_d/least_bs.rs
++++ b/router/src/scheduler/policies/llm_d/least_bs.rs
+@@ -26,7 +26,7 @@
+ //! signal versus queue-aware composite signal.
+ //!
+ //! Distinct from:
+-//!   - `join-shortest-weight-q` (in `vllm.rs`, `4·waiting + bs`,
++//!   - `join-shortest-weight-q` (in `vllm.rs`, `3·waiting + bs`,
+ //!     additionally weights `sctx.waiting`)
+ //!   - `least-waiting-q` (`sctx.waiting` only — different "queue")
+ 
+diff --git a/router/src/scheduler/policies/llm_d/least_waiting.rs b/router/src/scheduler/policies/llm_d/least_waiting.rs
+index b5347ac..3d5d068 100644
+--- a/router/src/scheduler/policies/llm_d/least_waiting.rs
++++ b/router/src/scheduler/policies/llm_d/least_waiting.rs
+@@ -23,7 +23,7 @@
+ //! labels ("load-aware" tells the reader nothing about which signal).
+ //!
+ //! Distinct from `join-shortest-weight-q` in `vllm.rs` which uses
+-//! `4·waiting + bs` (combines waiting AND batch size). This one uses
++//! `3·waiting + bs` (combines waiting AND batch size). This one uses
+ //! `waiting` only.
+ 
+ use policy_dsl::policy;
+diff --git a/router/src/scheduler/policies/lmetric.rs b/router/src/scheduler/policies/lmetric.rs
+index 89e21b8..0cef6e4 100644
+--- a/router/src/scheduler/policies/lmetric.rs
++++ b/router/src/scheduler/policies/lmetric.rs
+@@ -17,3 +17,83 @@ policy! {
+     gctx: (),
+     body: { select_min_by(&root_target(&observations), |o| prefill_tokens(req, o) * (o.bs + 1)) },
+ }
++
++#[cfg(test)]
++mod tests {
++    use super::LmetricQ;
++    use crate::gateway::validation::ValidGenerateRequest;
++    use crate::scheduler::kvcache::{BlockHash, BlockHashState, PrefixBlockHash};
++    use crate::scheduler::policies::{policy_trait::Policy, Entry};
++    use crate::scheduler::state::LMetric;
++    use crate::types::GenerationParams;
++    use crate::ScheduleContext;
++    use std::{sync::Arc, time::Duration};
++    use tokio::sync::{mpsc, Mutex};
++
++    fn entry(id: u64) -> Entry {
++        let tokens: Vec<u32> = (0..64).collect();
++        let (response_tx, _) = mpsc::unbounded_channel();
++        Entry {
++            block_hash_state: BlockHashState::new(&tokens, 16),
++            request: ValidGenerateRequest {
++                request_id: id, messages: vec![], inputs: String::new(),
++                input_length: 64, truncate: 0, decoder_input_details: false,
++                params: GenerationParams {
++                    temperature: 1.0, repetition_penalty: 1.0, top_k: 0,
++                    top_p: 1.0, seed: 0, max_new_tokens: 8,
++                    stop_sequences: vec![], ignore_eos_token: false,
++                },
++                top_n_tokens: 0, input_tokens: tokens,
++            },
++            response_tx, span: tracing::Span::none(), temp_span: None,
++            queue_time: tokio::time::Instant::now(), batch_time: None,
++            generated_token_cnt: 0, prev_token_time: None, time_of_per_token: None,
++            max_time_between_tokens: Duration::ZERO,
++        }
++    }
++
++    fn pool(n: usize) -> Vec<Arc<Mutex<ScheduleContext>>> {
++        (0..n).map(|_| Arc::new(Mutex::new(ScheduleContext {
++            kv_journal: Default::default(), lmetric: LMetric::default(), block_hash: PrefixBlockHash::new(1024),
++        }))).collect()
++    }
++
++    #[tokio::test]
++    async fn balances_cache_affinity_against_pending_work_and_active_requests() {
++        let req = entry(0);
++        let p = pool(2);
++        {
++            let mut cached = p[0].lock().await;
++            cached.block_hash.insert(&req.block_hash_state.get_hashes()[..3], vec![1, 2, 3]);
++        }
++        assert_eq!(LmetricQ::schedule(&req, &p, &mut ()).await, Some(0));
++        assert_eq!(req.block_hash_state.pred_hit_tokens(), 48);
++        let cached = p[0].lock().await;
++        assert_eq!(cached.lmetric.bs, 1);
++        assert_eq!(cached.lmetric.waiting_reqs, 1);
++        assert_eq!(cached.lmetric.prefill_tokens, 16);
++        drop(cached);
++        // Cached but busy: (128 + 16) * (8 + 1) > (0 + 64) * (0 + 1).
++        {
++            let mut cached = p[0].lock().await;
++            cached.lmetric.bs = 8;
++            cached.lmetric.prefill_tokens = 128;
++        }
++        assert_eq!(LmetricQ::schedule(&entry(1), &p, &mut ()).await, Some(1));
++    }
++
++    #[tokio::test]
++    async fn admission_updates_prevent_burst_concentration() {
++        let p = pool(4);
++        let mut counts = [0; 4];
++        for id in 0..100 {
++            counts[LmetricQ::schedule(&entry(id), &p, &mut ()).await.unwrap()] += 1;
++        }
++        assert_eq!(counts, [25; 4]);
++    }
++
++    #[tokio::test]
++    async fn no_replicas_returns_none() {
++        assert_eq!(LmetricQ::schedule(&entry(0), &[], &mut ()).await, None);
++    }
++}
+diff --git a/router/src/scheduler/policies/mod.rs b/router/src/scheduler/policies/mod.rs
+index 64277c8..f8a3a72 100644
+--- a/router/src/scheduler/policies/mod.rs
++++ b/router/src/scheduler/policies/mod.rs
+@@ -10,7 +10,7 @@
+ // for trivial policies with no upstream origin:
+ //
+ //   simple.rs   — random / round-robin / least-wait-token / bounded-most-hit
+-//   vllm.rs     — vLLM 4·waiting + bs                                   (1)
++//   vllm.rs     — vLLM 3·waiting + bs                                   (1)
+ //   bailian.rs  — Bailian                                               (1)
+ //   aibrix.rs   — AIBrix                                                (1)
+ //   dynamo.rs   — AI-Dynamo Decode-node + Prefill-node logits           (2)
+@@ -63,6 +63,9 @@ pub(crate) mod simple;
+ // is selected.
+ pub(crate) mod vllm;
+ 
++#[cfg(all(test, feature = "lmetric-q"))]
++mod paper_tests;
++
+ // Re-export concrete policy structs (each emitted by `policy!`).
+ // Each `pub(crate) use` is feature-gated identically to its `mod`,
+ // so the unused-import warnings the older `#[allow(unused_imports)]`
+@@ -163,7 +166,14 @@ pub(crate) struct Entry {
+ 
+ impl Entry {
+     pub fn append_state(&mut self, new_tokens: &Vec<u32>, tbt: &Duration) {
+-        self.append_tbt_to_tpot(tbt);
++        // A completion may contain multiple tokens. Account for each token;
++        // divide the observed interval across them for the existing TPOT average.
++        if !new_tokens.is_empty() {
++            let per_token = *tbt / new_tokens.len() as u32;
++            for _ in new_tokens {
++                self.append_tbt_to_tpot(&per_token);
++            }
++        }
+         self.block_hash_state.append_tokens(new_tokens);
+     }
+ 
+@@ -243,7 +253,7 @@ pub(crate) type TaskAssigner = PolicyRunner<RandomQ>;
+ #[cfg(feature = "least-ttft-q")]
+ pub(crate) type TaskAssigner = PolicyRunner<LeastTtftQ>;
+ // `join-shortest-weight-q` is also the catch-all default — vLLM's
+-// `4·sctx.waiting + sctx.bs` formula.
++// `3·sctx.waiting + sctx.bs` formula.
+ #[cfg(any(
+     feature = "join-shortest-weight-q",
+     not(any(
+diff --git a/router/src/scheduler/policies/policy_runner.rs b/router/src/scheduler/policies/policy_runner.rs
+index 430b274..508242f 100644
+--- a/router/src/scheduler/policies/policy_runner.rs
++++ b/router/src/scheduler/policies/policy_runner.rs
+@@ -68,6 +68,22 @@ where
+         }
+     }
+ 
++    /// Wall time of the policy call, including snapshot locks and admission
++    /// bookkeeping; excludes the time waiting in the command queue.
++    async fn schedule_measured(
++        entry: &Entry,
++        all_sctx: &[Arc<Mutex<ScheduleContext>>],
++        gctx: &mut P::GlobalContext,
++    ) -> Option<usize> {
++        let started = std::time::Instant::now();
++        let chosen = P::schedule(entry, all_sctx, gctx).await;
++        metrics::histogram!(
++            "blitz_policy_schedule_duration_seconds",
++            started.elapsed().as_secs_f64()
++        );
++        chosen
++    }
++
+     async fn queue_task(
+         num_replicas: usize,
+         mut receiver: mpsc::UnboundedReceiver<PolicyCommand>,
+@@ -85,7 +101,7 @@ where
+                     uncommit_buffer.push_back(*entry);
+                     let entry = uncommit_buffer.front().unwrap();
+                     if let Some(replica_idx) =
+-                        P::schedule(entry, &all_schedule_context, &mut gctx).await
++                        Self::schedule_measured(entry, &all_schedule_context, &mut gctx).await
+                     {
+                         let entry = uncommit_buffer.pop_front().unwrap();
+                         let request_id = entry.request.request_id;
+@@ -99,7 +115,7 @@ where
+                     'ineligible: while all_commit_req_buffers[replica_idx].is_empty() {
+                         if let Some(entry) = uncommit_buffer.front() {
+                             if let Some(tmp_replica_idx) =
+-                                P::schedule(entry, &all_schedule_context, &mut gctx).await
++                                Self::schedule_measured(entry, &all_schedule_context, &mut gctx).await
+                             {
+                                 let entry = uncommit_buffer.pop_front().unwrap();
+                                 let request_id = entry.request.request_id;
+diff --git a/router/src/scheduler/policies/preble/mod.rs b/router/src/scheduler/policies/preble/mod.rs
+index 79a04db..ff6fcc2 100644
+--- a/router/src/scheduler/policies/preble/mod.rs
++++ b/router/src/scheduler/policies/preble/mod.rs
+@@ -281,7 +281,7 @@ mod bs_q_policy_tests {
+         (0..n)
+             .map(|_| {
+                 Arc::new(Mutex::new(ScheduleContext {
+-                    lmetric: LMetric::default(),
++                    kv_journal: Default::default(), lmetric: LMetric::default(),
+                     block_hash: PrefixBlockHash::new(1024),
+                 }))
+             })
+diff --git a/router/src/scheduler/policies/vllm.rs b/router/src/scheduler/policies/vllm.rs
+index fac4b8f..4777770 100644
+--- a/router/src/scheduler/policies/vllm.rs
++++ b/router/src/scheduler/policies/vllm.rs
+@@ -1,30 +1,28 @@
+ //! Scheduling policies derived from the vLLM baseline.
+ //!
+-//! Currently one policy: `join-shortest-weight-q`. The "weight" qualifier
+-//! names the formula's defining feature — `sctx.waiting` carries weight 4
+-//! in the score versus weight 1 on `sctx.bs`, so the policy weights the
+-//! waiting queue more than the active batch. Without "weight" the name
++//! Currently one policy: `join-shortest-weight-q`. Figure 6(a) of
++//! arXiv:2603.15202v3 uses 4 * queued + running. Here `bs` includes both
++//! queued and running requests, so the equivalent expression is
++//! 3 * waiting + bs. Without "weight" the name
+ //! would be ambiguous with other "shortest"-style policies (`least-bs-q`,
+ //! `least-waiting-q`) that drop one term entirely.
+ //!
+ //! Spec-form DSL (`docs/dsl/policies.md` §2):
+ //!
+ //! ```text
+-//! Select min by 4 · sctx.waiting + sctx.bs
++//! Select min by 3 · sctx.waiting + sctx.bs
+ //! ```
+ //!
+ //! ## vLLM origin
+ //!
+-//! Mirrors vLLM's stock dispatch tendency to pick the engine with the
+-//! lowest combined queue+batch pressure, with the `4×` weight on waiting
+-//! reflecting that a request stuck in the waiting queue costs more than
+-//! an extra slot in the active batch (the latter only adds parallelism
+-//! pressure; the former adds head-of-line latency).
++//! Matches the paper's Figure 6(a), https://arxiv.org/html/2603.15202v3#S4.F6.
++//! State invariant: bs = waiting + running. Applying weight four to waiting
++//! AND adding bs would count waiting once more, yielding 5 * queued + running.
+ 
+ use policy_dsl::policy;
+ 
+ policy! {
+     name: JShortestWeightQ,
+     gctx: (),
+-    body: { select_min_by(&root_target(&observations), |o| 4 * o.waiting + o.bs) },
++    body: { select_min_by(&root_target(&observations), |o| 3 * o.waiting + o.bs) },
+ }
+diff --git a/router/src/scheduler/simulator/mirror.rs b/router/src/scheduler/simulator/mirror.rs
+index 6dad2cf..a3be1ce 100644
+--- a/router/src/scheduler/simulator/mirror.rs
++++ b/router/src/scheduler/simulator/mirror.rs
+@@ -162,6 +162,9 @@ mod tests {
+         preempted: Vec<u64>,
+     ) -> EngineStepOutput {
+         EngineStepOutput {
++            engine_epoch: None, kv_journal: None,
++            lmetric_protocol: None,
++            lmetric_block_size: None,
+             prefill_tokens: 0,
+             prefill_token_budget: 1024,
+             latency: 1,
+diff --git a/router/src/scheduler/simulator/mod.rs b/router/src/scheduler/simulator/mod.rs
+index d717501..e3920c0 100644
+--- a/router/src/scheduler/simulator/mod.rs
++++ b/router/src/scheduler/simulator/mod.rs
+@@ -219,6 +219,9 @@ mod tests {
+ 
+     fn empty_step(prefill_tokens: usize, latency_ms: u64, outputs: Vec<RequestStepOutput>) -> EngineStepOutput {
+         EngineStepOutput {
++            engine_epoch: None, kv_journal: None,
++            lmetric_protocol: None,
++            lmetric_block_size: None,
+             prefill_tokens,
+             prefill_token_budget: 1024,
+             latency: latency_ms,
+diff --git a/router/src/scheduler/simulator/pctx.rs b/router/src/scheduler/simulator/pctx.rs
+index 11cb8f7..ad338a6 100644
+--- a/router/src/scheduler/simulator/pctx.rs
++++ b/router/src/scheduler/simulator/pctx.rs
+@@ -762,6 +762,9 @@ mod tests {
+         outputs: Vec<RequestStepOutput>,
+     ) -> EngineStepOutput {
+         EngineStepOutput {
++            engine_epoch: None, kv_journal: None,
++            lmetric_protocol: None,
++            lmetric_block_size: None,
+             prefill_tokens,
+             prefill_token_budget: 1024,
+             latency: 1,
+diff --git a/router/src/scheduler/simulator/sched.rs b/router/src/scheduler/simulator/sched.rs
+index 1392a63..2896574 100644
+--- a/router/src/scheduler/simulator/sched.rs
++++ b/router/src/scheduler/simulator/sched.rs
+@@ -281,6 +281,9 @@ mod tests {
+         aborted: Vec<u64>,
+     ) -> EngineStepOutput {
+         EngineStepOutput {
++            engine_epoch: None, kv_journal: None,
++            lmetric_protocol: None,
++            lmetric_block_size: None,
+             prefill_tokens,
+             prefill_token_budget: 1024,
+             latency: 1,
+diff --git a/router/src/scheduler/state.rs b/router/src/scheduler/state.rs
+index c346b3e..995e18a 100644
+--- a/router/src/scheduler/state.rs
++++ b/router/src/scheduler/state.rs
+@@ -2,7 +2,7 @@ use std::sync::OnceLock;
+ use std::time::{Duration, Instant};
+ use std::ops::{AddAssign, SubAssign};
+ 
+-use super::kvcache::PrefixBlockHash;
++use super::kvcache::{BlockHash, PrefixBlockHash};
+ 
+ use serde::Serialize;
+ 
+@@ -257,4 +257,15 @@ impl AddAssign<LMetricInc> for LMetric {
+ pub(crate) struct ScheduleContext {
+     pub lmetric: LMetric,
+     pub block_hash: PrefixBlockHash,
++    pub kv_journal: crate::engine::kv_journal::KvJournalState,
++}
++
++impl ScheduleContext {
++    pub fn cache_epoch(&self) -> u64 {
++        if self.kv_journal.active() { self.kv_journal.last } else { self.block_hash.epoch() }
++    }
++    pub fn invalidate_kv(&mut self, reason: String) {
++        self.kv_journal.invalidate(reason);
++        self.block_hash = PrefixBlockHash::new(self.kv_journal.capacity.max(2));
++    }
+ }

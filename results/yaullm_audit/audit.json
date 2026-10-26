@@ -1,0 +1,5 @@
+{
+  "author_revision": "aa897f04a5a891c39e96ca2d554cf310d2933fa2",
+  "upstream_base": "6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+  "scope": "source review only; no engine installation, model inference or scoring edits this turn"
+}

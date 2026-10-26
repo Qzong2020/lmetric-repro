@@ -1,0 +1,159 @@
+[package]
+name = "router"
+version.workspace = true
+edition.workspace = true
+
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "router"
+path = "src/main.rs"
+
+[dependencies]
+async-trait = "0.1"
+async-stream = "0.3.5"
+axum = { version = "0.6.20", features = ["json"] }
+axum-tracing-opentelemetry = "0.14.1"
+clap = { version = "4.4.5", features = ["derive", "env"] }
+eventsource-client = { version = "0.15.0" }
+futures = "0.3.28"
+futures-util = "0.3.31"
+metrics = "0.21.1"
+metrics-exporter-prometheus = { version = "0.12.1", features = [] }
+nohash-hasher = "0.2.0"
+opentelemetry = { version = "0.20.0", features = ["rt-tokio"] }
+opentelemetry-otlp = "0.13.0"
+reqwest = { version = "0.11.20", features = ["stream", "json"] }
+serde = "1.0.188"
+serde_json = "1.0.107"
+thiserror = "1.0.48"
+tokenizers = { version = "0.21.4", features = ["http"] }
+tokio = { version = "1.32.0", features = [
+    "rt",
+    "rt-multi-thread",
+    "parking_lot",
+    "signal",
+    "sync",
+    "fs",
+] }
+tokio-stream = "0.1.14"
+policy-dsl = { path = "../policy-dsl" }
+radixtree = { path = "../radixtree" }
+tracing = "^0.1"
+http = "*"
+rand = "0.8.5"
+sha2 = "0.10"
+tower-http = { version = "0.4.4", features = ["cors"] }
+tracing-opentelemetry = "0.21.0"
+tracing-subscriber = { version = "0.3.17", features = ["json", "env-filter"] }
+utoipa = { version = "3.5.0", features = ["axum_extras"] }
+utoipa-swagger-ui = { version = "3.1.5", features = ["axum"] }
+ngrok = { version = "0.13.1", features = ["axum"], optional = true }
+hf-hub = "0.3.1"
+init-tracing-opentelemetry = { version = "0.14.1", features = [
+    "opentelemetry-otlp",
+] }
+toml = "0.8.12"
+tracing-appender = "0.2.3"
+async-channel = "2.3.1"
+xxhash-rust = { version = "0.8.15", features = ["xxh3"] }
+smallvec = { version = "1.15.1" }
+zeromq = { version = "0.4", optional = true }
+rmp-serde = { version = "1.3", optional = true }
+pyo3 = { version = "0.23", features = ["auto-initialize", "py-clone"], optional = true }
+
+[dev-dependencies]
+proptest = "1.6"
+criterion = { version = "0.5", features = ["html_reports"] }
+tempfile = "3"
+
+[build-dependencies]
+vergen = { version = "8.2.5", features = ["build", "git", "gitcl"] }
+
+[features]
+default = [
+    "ngrok",
+    "vllm-backend",
+    "radixtree-blockhash",
+    "default-hash-algo",
+    "determinent-schedule",
+]
+ngrok = ["dep:ngrok"]
+statistic = []
+
+# ------ Deployment ------ #
+colocation = []
+vllm-backend = ["colocation"]
+zmq-backend = ["dep:zeromq", "dep:rmp-serde", "colocation"]
+python-chat-template = ["dep:pyo3"]
+# ----------------------- #
+
+# ---- Prefix Cache ----- #
+default-hash-algo = []
+sha256-hash-algo = []
+hashtable-blockhash = []
+radixtree-blockhash = []
+# ----------------------- #
+
+# --- Scheduling Policy -- #
+# Organized by baseline system. Exactly one feature should be enabled per
+# build. See docs/dsl/policies.md §2 for the canonical listing and
+# router/src/policies/{vllm,llm_d,...}.rs for implementations.
+
+# simple/ — trivial policies with no upstream-system origin
+random-q = []
+round-robin-q = []
+least-wait-token-q = []
+bounded-most-hit-q = []
+
+# vllm/ — vLLM-baseline scheduling (4·waiting + bs)
+join-shortest-weight-q = []
+
+# prediction-based — uses simulator::query (RolloutGist.ttft_ms)
+least-ttft-q = ["simulator"]
+
+# bailian/ — Bailian baseline
+bailian-impl-q = []
+
+# aibrix/ — AIBrix baseline
+aibrix-q = []
+
+# dynamo/ — AI-Dynamo baselines (PD-disaggregated formulas, ported)
+dynamo-q = []
+dynamo-po-q = []
+
+# lmetric/ — our system
+lmetric-q = []
+
+# preble/ — Preble baseline
+preble-q = []
+# preble-bs / preble-tps — Single-metric ablations of Preble.
+# Same KV$-aware-branch prefix-match filter, but the load-balancing
+# branch replaces the (PT_r + DT_r) cost-min with a single windowed
+# metric:
+#   preble-bs-q  : load-balancing branch = min Σ BS samples over
+#                  past 3 min (higher BS sample sum ⇒ more loaded)
+#   preble-tps-q : load-balancing branch = max forward-step count
+#                  over past 3 min (higher count ⇒ more throughput)
+# Mutually exclusive with preble-q (single TaskAssigner alias picks).
+preble-bs-q = []
+preble-tps-q = []
+
+# llm_d/ — llm-d baselines (single-scorer ablations + multi-scorer combos)
+most-hit-q = []
+least-waiting-q = []
+least-bs-q = []
+least-active-q = []
+least-token-load-q = []
+most-hit-load-q = []
+most-hit-load-active-q = []
+
+stochastic-schedule = []
+determinent-schedule = []
+# ----------------------- #
+
+# --- Latency Simulator (orthogonal to policies; piggyback observability) --- #
+simulator = []
+# ----------------------- #

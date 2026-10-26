@@ -1,0 +1,118 @@
+   Compiling radixtree v0.1.0 (/root/lmetric-repro/blitz-router/radixtree)
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:174:17
+    |
+174 |                 (*node).payload[i].push(alias_bid);
+    |                 ^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+    = note: `#[warn(dangerous_implicit_autorefs)]` on by default
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+174 |                 (&mut (*node).payload)[i].push(alias_bid);
+    |                 +++++                +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:356:47
+    |
+356 |                     !(*n).value.is_empty() && (*n).value[0] == key[consumed]
+    |                                               ^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+356 |                     !(*n).value.is_empty() && (&(*n).value)[0] == key[consumed]
+    |                                               ++          +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:366:58
+    |
+366 |             while i < val_len && consumed < key.len() && (*child).value[i] == key[consumed] {
+    |                                                          ^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+366 |             while i < val_len && consumed < key.len() && (&(*child).value)[i] == key[consumed] {
+    |                                                          ++              +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:369:21
+    |
+369 |                     (*child).payload[i].push(alias_bid);
+    |                     ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+369 |                     (&mut (*child).payload)[i].push(alias_bid);
+    |                     +++++                 +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:459:41
+    |
+459 | ...                   for bids in (*node).payload[new_start..].iter() {
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+459 |                             for bids in (&(*node).payload)[new_start..].iter() {
+    |                                         ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:685:51
+    |
+685 |             while pos < (*node).payload.len() && !(*node).payload[pos].contains(&block_id) {
+    |                                                   ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+685 |             while pos < (*node).payload.len() && !(&(*node).payload)[pos].contains(&block_id) {
+    |                                                   ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:691:36
+    |
+691 |             let bids_at_pos = &mut (*node).payload[pos];
+    |                                    ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+691 |             let bids_at_pos = &mut (&mut (*node).payload)[pos];
+    |                                    +++++                +
+
+warning: `radixtree` (lib test) generated 7 warnings
+warning: `radixtree` (lib) generated 7 warnings (7 duplicates)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.05s
+     Running unittests src/lib.rs (target/debug/deps/radixtree-db419fa151de3417)
+
+running 17 tests
+test block_hash::kv_parent_regression::kv_parent_only_removal_preserves_unrelated_prefix_and_allows_reuse ... ok
+test req_id_hash::tests::duplicate_insert_idempotent ... ok
+test req_id_hash::tests::empty_insert_is_noop ... ok
+test req_id_hash::tests::epoch_bumps_on_mutation ... ok
+test req_id_hash::tests::evict_orphan_drops_subtree ... ok
+test req_id_hash::tests::insert_and_get_basic ... ok
+test req_id_hash::tests::remove_last_owner_drops_path_completely ... ok
+test req_id_hash::tests::remove_one_rid_keeps_shared_prefix ... ok
+test req_id_hash::tests::remove_unknown_rid_is_noop ... ok
+test req_id_hash::tests::shared_prefix_two_rids ... ok
+test types::sliding_window::tests::aggregate_at_expires_then_reads ... ok
+test types::sliding_window::tests::aggregate_matches_replay ... ok
+test types::sliding_window::tests::boundary_at_exact_duration_is_kept ... ok
+test types::sliding_window::tests::empty_window_is_zero ... ok
+test types::sliding_window::tests::expire_removes_old_entries_and_decrements_aggregate ... ok
+test types::sliding_window::tests::negative_values_and_signed_sum ... ok
+test types::sliding_window::tests::push_increments_aggregate_and_len ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests radixtree
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

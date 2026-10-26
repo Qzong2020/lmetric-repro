@@ -1,0 +1,12 @@
+test_eviction_preserves_pinned_blocks_and_reuses_ids (test_cpu_backend.CacheTests.test_eviction_preserves_pinned_blocks_and_reuses_ids) ... ok
+test_http_and_sse_agree_on_cache_and_completion (test_cpu_backend.CacheTests.test_http_and_sse_agree_on_cache_and_completion) ... ok
+test_only_committed_prefix_is_reusable (test_cpu_backend.CacheTests.test_only_committed_prefix_is_reusable) ... ok
+test_spawned_backend_has_separate_process_and_drain_state (test_cpu_backend.CacheTests.test_spawned_backend_has_separate_process_and_drain_state) ... Executing <Task pending name='Task-32' coro=<CacheTests.test_spawned_backend_has_separate_process_and_drain_state() running at /root/lmetric-repro/scripts/test_cpu_backend.py:88> wait_for=<Future pending cb=[BaseSelectorEventLoop._sock_write_done(6, handle=<Handle BaseS...events.py:317>)(), Task.task_wakeup()] created at /usr/local/python3.12.13/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /usr/local/python3.12.13/lib/python3.12/asyncio/base_events.py:181] created at /usr/local/python3.12.13/lib/python3.12/asyncio/runners.py:100> took 0.383 seconds
+ok
+test_lengths_and_reproducibility (test_cpu_backend.TraceTests.test_lengths_and_reproducibility) ... ok
+test_policy_histogram_excludes_warmup (test_cpu_backend.TraceTests.test_policy_histogram_excludes_warmup) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.793s
+
+OK

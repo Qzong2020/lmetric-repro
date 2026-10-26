@@ -1,0 +1,31 @@
+async_attempt1: both engines ready, subscribed and reset
+Traceback (most recent call last):
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 287, in <module>
+    try:correctness(s)
+        ^^^^^^^^^^^^^^
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 255, in correctness
+    pre=s.controlled_pair(x,y,'preflight')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 156, in controlled_pair
+    self.drain();assert len(self.responses)==old+2;self.verify();self.reconcile(rows)
+    ^^^^^^^^^^^^
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 120, in drain
+    wait(check,30,'per-replica request table/ledger drain')
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 29, in wait
+    if check():return
+       ^^^^^^^
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 112, in check
+    events=self.events(idx)
+           ^^^^^^^^^^^^^^^^
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 94, in events
+    def events(self,idx):return [x['event'] for x in tagged(self.out/f'engine_{idx}.log','VALIDATION_GATEWAY_SSE')]
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 24, in tagged
+    return [json.loads(x.split(tag+' ',1)[1]) for x in path.read_text(errors='replace').splitlines() if tag+' ' in x]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.12.13/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.12.13/lib/python3.12/json/decoder.py", line 341, in decode
+    raise JSONDecodeError("Extra data", s, end)
+json.decoder.JSONDecodeError: Extra data: line 1 column 617 (char 616)

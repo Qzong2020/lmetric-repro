@@ -1,0 +1,2 @@
+[W1025 10:18:34.132927625 FunctionLoader.cpp:48] Warning: LD_PRELOAD detected, FunctionLoader prefers RTLD_DEFAULT for symbol resolution. (function operator())
+Saved /root/lmetric-repro/results/ascend_single_card_validation/initial.json

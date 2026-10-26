@@ -1,0 +1,10 @@
+2026-10-23T03:08:06.647301Z  WARN router: router/src/main.rs:417: The shard info is not set properly by the st-server
+Blitz router is ready
+2026-10-23T03:08:06.650636Z  WARN router::scheduler::statistic: router/src/scheduler/statistic.rs:16: Statistic path is not set
+2026-10-23T03:08:09.741219Z ERROR router::engine::vllm_http: router/src/engine/vllm_http.rs:131: Request_132 POST error: error sending request for url (http://127.0.0.1:35133/v1/completions): connection closed before message completed
+2026-10-23T03:08:09.741392Z ERROR router::engine::vllm_http: router/src/engine/vllm_http.rs:131: Request_133 POST error: error sending request for url (http://127.0.0.1:41675/v1/completions): connection closed before message completed
+2026-10-23T03:08:09.741449Z ERROR router::engine::vllm_http: router/src/engine/vllm_http.rs:131: Request_130 POST error: error sending request for url (http://127.0.0.1:35563/v1/completions): connection closed before message completed
+
+thread 'tokio-rt-worker' panicked at router/src/engine/colocation.rs:220:21:
+internal error: entered unreachable code: engine#0 WQ channel closed by receiver at CQ
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

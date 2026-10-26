@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 282, in <module>
+    try:correctness(s)
+        ^^^^^^^^^^^^^^
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 247, in correctness
+    s.start();x,y,z=prompt(0),prompt(1),prompt(2,700)
+    ^^^^^^^^^
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 85, in start
+    self.health(18181+idx,p)
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 73, in health
+    wait(check,240 if port!=18184 else 30,'bounded startup timeout')
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 29, in wait
+    if check():return
+       ^^^^^^^
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 69, in check
+    if p.poll() is not None:raise RuntimeError(f'owned process {p.pid} exited during startup')
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: owned process 38146 exited during startup

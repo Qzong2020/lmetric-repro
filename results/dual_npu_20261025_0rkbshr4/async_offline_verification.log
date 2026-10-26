@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/root/lmetric-repro/scripts/dual_npu/verify_correctness.py", line 26, in <module>
+    log=(out/'gateway.log').read_text();assert 'WORK_LOOP_STOPPED engine=0' in log and 'RECV_STEP_ERROR engine=0' in log and 'panicked at' not in log
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

@@ -1,0 +1,351 @@
+diff --git a/.cargo/config.toml b/.cargo/config.toml
+index 86a4b01..10c3fb2 100644
+--- a/.cargo/config.toml
++++ b/.cargo/config.toml
+@@ -7,4 +7,8 @@ registry = "sparse+https://rsproxy.cn/index/"
+ [registries.rsproxy]
+ index = "https://rsproxy.cn/crates.io-index"
+ [net]
+-git-fetch-with-cli = true
+\ No newline at end of file
++git-fetch-with-cli = true
++
++[resolver]
++# Keep freshly resolved dependencies compatible with rust-toolchain.toml.
++incompatible-rust-versions = "fallback"
+diff --git a/CLAUDE.md b/CLAUDE.md
+index 7930437..cd9e1ee 100644
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -79,7 +79,7 @@ blitz-router/
+ │   │   │   │                        # `apply_default_after`, Observation schema
+ │   │   │   ├── simple.rs            # random-q, round-robin-q, least-wait-token-q,
+ │   │   │   │                        # bounded-most-hit-q (no upstream-system origin)
+-│   │   │   ├── vllm.rs              # join-shortest-weight-q (vLLM 4·waiting + bs)
++│   │   │   ├── vllm.rs              # join-shortest-weight-q (vLLM 3·waiting + bs)
+ │   │   │   ├── lmetric.rs           # lmetric-q
+ │   │   │   ├── bailian.rs           # bailian-impl-q
+ │   │   │   ├── aibrix.rs            # aibrix-q
+@@ -141,7 +141,7 @@ Policies are organized under `router/src/scheduler/policies/` by their upstream
+ - `bounded-most-hit-q` — `Filter (queued_tokens < BOUND) (max hit) (min prefill_tokens)`, with the attention-black-hole fallback fix.
+ 
+ **`vllm.rs`** — vLLM baseline
+-- `join-shortest-weight-q` — `Select min by 4·sctx.waiting + sctx.bs`. The "weight" qualifier names the formula's defining feature (waiting carries weight 4 vs weight 1 on bs); also serves as the catch-all default when no policy feature is selected.
++- `join-shortest-weight-q` — `Select min by 3·sctx.waiting + sctx.bs`. The "weight" qualifier names the formula's defining feature (the paper weights queued requests by 4 and running requests by 1; since bs includes both, this is 3·waiting + bs); also serves as the catch-all default when no policy feature is selected.
+ 
+ **`bailian.rs`** — Bailian baseline
+ - `bailian-impl-q` — Per-component normalize then weighted-sample `(α, β, γ)` over `(hit_pct, 1-bs/M_bs, 1-tok/M_tok)`.
+diff --git a/README.md b/README.md
+index 46d83c8..a4b774a 100644
+--- a/README.md
++++ b/README.md
+@@ -4,6 +4,21 @@ Distributed LLM inference router written in Rust. Routes client requests to back
+ 
+ ## Build
+ 
++Install the system build dependencies first:
++
++```bash
++# openEuler
++sudo dnf install -y gcc gcc-c++ make cmake perl pkgconf openssl-devel
++
++# Debian / Ubuntu
++sudo apt-get install -y build-essential cmake perl pkg-config libssl-dev
++```
++
++The pinned Rust toolchain is selected automatically by rustup. Cargo is
++configured to prefer dependencies compatible with that toolchain when resolving
++a new lockfile. If an existing lockfile selects packages requiring a newer Rust
++version, run `cargo update` once to resolve compatible versions.
++
+ ```bash
+ # Default build (lmetric scheduling policy)
+ cargo build -p router --features lmetric-q
+diff --git a/docs/dsl/policies.md b/docs/dsl/policies.md
+index d1567e1..d6a349b 100644
+--- a/docs/dsl/policies.md
++++ b/docs/dsl/policies.md
+@@ -43,8 +43,9 @@ policy round-robin-q (gctx: RRGCtx):
+     after: default; gctx.next_replica_id <- (gctx.next_replica_id + 1) % Count
+ 
+ policy join-shortest-weight-q (gctx: ()):
+-    Select min by 4 · sctx.waiting + sctx.bs
++    Select min by 3 · sctx.waiting + sctx.bs
+     after: default
++    # Paper Fig.6(a): 4*queued + running; bs = queued + running.
+ 
+ policy least-wait-token-q (gctx: ()):
+     Select min by prefill_tokens(req, sctx)
+diff --git a/router/src/engine/colocation.rs b/router/src/engine/colocation.rs
+index 94ce634..34cde4f 100644
+--- a/router/src/engine/colocation.rs
++++ b/router/src/engine/colocation.rs
+@@ -691,6 +691,16 @@ mod task_assignment {
+             #[cfg(any(feature = "preble-bs-q", feature = "preble-tps-q"))]
+             let pre_step_bs = sctx.lmetric.bs;
+             sctx.lmetric -= metric_delta;
++            // State after this engine step. These gauges also make drain
++            // checks possible without parsing periodic statistics files.
++            metrics::gauge!("blitz_replica_active_requests", sctx.lmetric.bs as f64,
++                "engine" => replica_index.to_string());
++            metrics::gauge!("blitz_replica_waiting_requests", sctx.lmetric.waiting_reqs as f64,
++                "engine" => replica_index.to_string());
++            metrics::gauge!("blitz_replica_pending_prefill_tokens", sctx.lmetric.prefill_tokens as f64,
++                "engine" => replica_index.to_string());
++            metrics::gauge!("blitz_replica_context_tokens", sctx.lmetric.all_tokens as f64,
++                "engine" => replica_index.to_string());
+             #[cfg(any(feature = "preble-bs-q", feature = "preble-tps-q"))]
+             sctx.block_hash.update_with_step(pre_step_bs, std::time::Instant::now());
+             drop(sctx);
+diff --git a/router/src/gateway/server.rs b/router/src/gateway/server.rs
+index 8067439..9e91534 100644
+--- a/router/src/gateway/server.rs
++++ b/router/src/gateway/server.rs
+@@ -490,6 +490,12 @@ pub async fn run(
+ 
+     // Prometheus handler
+     let builder = PrometheusBuilder::new()
++        .set_buckets_for_metric(
++            Matcher::Full("blitz_policy_schedule_duration_seconds".into()),
++            &[0.000001, 0.000002, 0.000005, 0.000010, 0.000020, 0.000050,
++              0.000100, 0.000200, 0.000500, 0.001, 0.002, 0.005, 0.01, 0.1],
++        )
++        .unwrap()
+         .set_buckets_for_metric(duration_matcher, &duration_buckets)
+         .unwrap()
+         .set_buckets_for_metric(input_length_matcher, &input_length_buckets)
+diff --git a/router/src/scheduler/policies/llm_d/least_bs.rs b/router/src/scheduler/policies/llm_d/least_bs.rs
+index 38f975c..8c0f79e 100644
+--- a/router/src/scheduler/policies/llm_d/least_bs.rs
++++ b/router/src/scheduler/policies/llm_d/least_bs.rs
+@@ -26,7 +26,7 @@
+ //! signal versus queue-aware composite signal.
+ //!
+ //! Distinct from:
+-//!   - `join-shortest-weight-q` (in `vllm.rs`, `4·waiting + bs`,
++//!   - `join-shortest-weight-q` (in `vllm.rs`, `3·waiting + bs`,
+ //!     additionally weights `sctx.waiting`)
+ //!   - `least-waiting-q` (`sctx.waiting` only — different "queue")
+ 
+diff --git a/router/src/scheduler/policies/llm_d/least_waiting.rs b/router/src/scheduler/policies/llm_d/least_waiting.rs
+index b5347ac..3d5d068 100644
+--- a/router/src/scheduler/policies/llm_d/least_waiting.rs
++++ b/router/src/scheduler/policies/llm_d/least_waiting.rs
+@@ -23,7 +23,7 @@
+ //! labels ("load-aware" tells the reader nothing about which signal).
+ //!
+ //! Distinct from `join-shortest-weight-q` in `vllm.rs` which uses
+-//! `4·waiting + bs` (combines waiting AND batch size). This one uses
++//! `3·waiting + bs` (combines waiting AND batch size). This one uses
+ //! `waiting` only.
+ 
+ use policy_dsl::policy;
+diff --git a/router/src/scheduler/policies/lmetric.rs b/router/src/scheduler/policies/lmetric.rs
+index 89e21b8..da669bd 100644
+--- a/router/src/scheduler/policies/lmetric.rs
++++ b/router/src/scheduler/policies/lmetric.rs
+@@ -17,3 +17,83 @@ policy! {
+     gctx: (),
+     body: { select_min_by(&root_target(&observations), |o| prefill_tokens(req, o) * (o.bs + 1)) },
+ }
++
++#[cfg(test)]
++mod tests {
++    use super::LmetricQ;
++    use crate::gateway::validation::ValidGenerateRequest;
++    use crate::scheduler::kvcache::{BlockHash, BlockHashState, PrefixBlockHash};
++    use crate::scheduler::policies::{policy_trait::Policy, Entry};
++    use crate::scheduler::state::LMetric;
++    use crate::types::GenerationParams;
++    use crate::ScheduleContext;
++    use std::{sync::Arc, time::Duration};
++    use tokio::sync::{mpsc, Mutex};
++
++    fn entry(id: u64) -> Entry {
++        let tokens: Vec<u32> = (0..64).collect();
++        let (response_tx, _) = mpsc::unbounded_channel();
++        Entry {
++            block_hash_state: BlockHashState::new(&tokens, 16),
++            request: ValidGenerateRequest {
++                request_id: id, messages: vec![], inputs: String::new(),
++                input_length: 64, truncate: 0, decoder_input_details: false,
++                params: GenerationParams {
++                    temperature: 1.0, repetition_penalty: 1.0, top_k: 0,
++                    top_p: 1.0, seed: 0, max_new_tokens: 8,
++                    stop_sequences: vec![], ignore_eos_token: false,
++                },
++                top_n_tokens: 0, input_tokens: tokens,
++            },
++            response_tx, span: tracing::Span::none(), temp_span: None,
++            queue_time: tokio::time::Instant::now(), batch_time: None,
++            generated_token_cnt: 0, prev_token_time: None, time_of_per_token: None,
++            max_time_between_tokens: Duration::ZERO,
++        }
++    }
++
++    fn pool(n: usize) -> Vec<Arc<Mutex<ScheduleContext>>> {
++        (0..n).map(|_| Arc::new(Mutex::new(ScheduleContext {
++            lmetric: LMetric::default(), block_hash: PrefixBlockHash::new(1024),
++        }))).collect()
++    }
++
++    #[tokio::test]
++    async fn balances_cache_affinity_against_pending_work_and_active_requests() {
++        let req = entry(0);
++        let p = pool(2);
++        {
++            let mut cached = p[0].lock().await;
++            cached.block_hash.insert(&req.block_hash_state.get_hashes()[..3], vec![1, 2, 3]);
++        }
++        assert_eq!(LmetricQ::schedule(&req, &p, &mut ()).await, Some(0));
++        assert_eq!(req.block_hash_state.pred_hit_tokens(), 48);
++        let cached = p[0].lock().await;
++        assert_eq!(cached.lmetric.bs, 1);
++        assert_eq!(cached.lmetric.waiting_reqs, 1);
++        assert_eq!(cached.lmetric.prefill_tokens, 16);
++        drop(cached);
++        // Cached but busy: (128 + 16) * (8 + 1) > (0 + 64) * (0 + 1).
++        {
++            let mut cached = p[0].lock().await;
++            cached.lmetric.bs = 8;
++            cached.lmetric.prefill_tokens = 128;
++        }
++        assert_eq!(LmetricQ::schedule(&entry(1), &p, &mut ()).await, Some(1));
++    }
++
++    #[tokio::test]
++    async fn admission_updates_prevent_burst_concentration() {
++        let p = pool(4);
++        let mut counts = [0; 4];
++        for id in 0..100 {
++            counts[LmetricQ::schedule(&entry(id), &p, &mut ()).await.unwrap()] += 1;
++        }
++        assert_eq!(counts, [25; 4]);
++    }
++
++    #[tokio::test]
++    async fn no_replicas_returns_none() {
++        assert_eq!(LmetricQ::schedule(&entry(0), &[], &mut ()).await, None);
++    }
++}
+diff --git a/router/src/scheduler/policies/mod.rs b/router/src/scheduler/policies/mod.rs
+index 64277c8..c464922 100644
+--- a/router/src/scheduler/policies/mod.rs
++++ b/router/src/scheduler/policies/mod.rs
+@@ -10,7 +10,7 @@
+ // for trivial policies with no upstream origin:
+ //
+ //   simple.rs   — random / round-robin / least-wait-token / bounded-most-hit
+-//   vllm.rs     — vLLM 4·waiting + bs                                   (1)
++//   vllm.rs     — vLLM 3·waiting + bs                                   (1)
+ //   bailian.rs  — Bailian                                               (1)
+ //   aibrix.rs   — AIBrix                                                (1)
+ //   dynamo.rs   — AI-Dynamo Decode-node + Prefill-node logits           (2)
+@@ -63,6 +63,9 @@ pub(crate) mod simple;
+ // is selected.
+ pub(crate) mod vllm;
+ 
++#[cfg(all(test, feature = "lmetric-q"))]
++mod paper_tests;
++
+ // Re-export concrete policy structs (each emitted by `policy!`).
+ // Each `pub(crate) use` is feature-gated identically to its `mod`,
+ // so the unused-import warnings the older `#[allow(unused_imports)]`
+@@ -243,7 +246,7 @@ pub(crate) type TaskAssigner = PolicyRunner<RandomQ>;
+ #[cfg(feature = "least-ttft-q")]
+ pub(crate) type TaskAssigner = PolicyRunner<LeastTtftQ>;
+ // `join-shortest-weight-q` is also the catch-all default — vLLM's
+-// `4·sctx.waiting + sctx.bs` formula.
++// `3·sctx.waiting + sctx.bs` formula.
+ #[cfg(any(
+     feature = "join-shortest-weight-q",
+     not(any(
+diff --git a/router/src/scheduler/policies/policy_runner.rs b/router/src/scheduler/policies/policy_runner.rs
+index 430b274..508242f 100644
+--- a/router/src/scheduler/policies/policy_runner.rs
++++ b/router/src/scheduler/policies/policy_runner.rs
+@@ -68,6 +68,22 @@ where
+         }
+     }
+ 
++    /// Wall time of the policy call, including snapshot locks and admission
++    /// bookkeeping; excludes the time waiting in the command queue.
++    async fn schedule_measured(
++        entry: &Entry,
++        all_sctx: &[Arc<Mutex<ScheduleContext>>],
++        gctx: &mut P::GlobalContext,
++    ) -> Option<usize> {
++        let started = std::time::Instant::now();
++        let chosen = P::schedule(entry, all_sctx, gctx).await;
++        metrics::histogram!(
++            "blitz_policy_schedule_duration_seconds",
++            started.elapsed().as_secs_f64()
++        );
++        chosen
++    }
++
+     async fn queue_task(
+         num_replicas: usize,
+         mut receiver: mpsc::UnboundedReceiver<PolicyCommand>,
+@@ -85,7 +101,7 @@ where
+                     uncommit_buffer.push_back(*entry);
+                     let entry = uncommit_buffer.front().unwrap();
+                     if let Some(replica_idx) =
+-                        P::schedule(entry, &all_schedule_context, &mut gctx).await
++                        Self::schedule_measured(entry, &all_schedule_context, &mut gctx).await
+                     {
+                         let entry = uncommit_buffer.pop_front().unwrap();
+                         let request_id = entry.request.request_id;
+@@ -99,7 +115,7 @@ where
+                     'ineligible: while all_commit_req_buffers[replica_idx].is_empty() {
+                         if let Some(entry) = uncommit_buffer.front() {
+                             if let Some(tmp_replica_idx) =
+-                                P::schedule(entry, &all_schedule_context, &mut gctx).await
++                                Self::schedule_measured(entry, &all_schedule_context, &mut gctx).await
+                             {
+                                 let entry = uncommit_buffer.pop_front().unwrap();
+                                 let request_id = entry.request.request_id;
+diff --git a/router/src/scheduler/policies/vllm.rs b/router/src/scheduler/policies/vllm.rs
+index fac4b8f..4777770 100644
+--- a/router/src/scheduler/policies/vllm.rs
++++ b/router/src/scheduler/policies/vllm.rs
+@@ -1,30 +1,28 @@
+ //! Scheduling policies derived from the vLLM baseline.
+ //!
+-//! Currently one policy: `join-shortest-weight-q`. The "weight" qualifier
+-//! names the formula's defining feature — `sctx.waiting` carries weight 4
+-//! in the score versus weight 1 on `sctx.bs`, so the policy weights the
+-//! waiting queue more than the active batch. Without "weight" the name
++//! Currently one policy: `join-shortest-weight-q`. Figure 6(a) of
++//! arXiv:2603.15202v3 uses 4 * queued + running. Here `bs` includes both
++//! queued and running requests, so the equivalent expression is
++//! 3 * waiting + bs. Without "weight" the name
+ //! would be ambiguous with other "shortest"-style policies (`least-bs-q`,
+ //! `least-waiting-q`) that drop one term entirely.
+ //!
+ //! Spec-form DSL (`docs/dsl/policies.md` §2):
+ //!
+ //! ```text
+-//! Select min by 4 · sctx.waiting + sctx.bs
++//! Select min by 3 · sctx.waiting + sctx.bs
+ //! ```
+ //!
+ //! ## vLLM origin
+ //!
+-//! Mirrors vLLM's stock dispatch tendency to pick the engine with the
+-//! lowest combined queue+batch pressure, with the `4×` weight on waiting
+-//! reflecting that a request stuck in the waiting queue costs more than
+-//! an extra slot in the active batch (the latter only adds parallelism
+-//! pressure; the former adds head-of-line latency).
++//! Matches the paper's Figure 6(a), https://arxiv.org/html/2603.15202v3#S4.F6.
++//! State invariant: bs = waiting + running. Applying weight four to waiting
++//! AND adding bs would count waiting once more, yielding 5 * queued + running.
+ 
+ use policy_dsl::policy;
+ 
+ policy! {
+     name: JShortestWeightQ,
+     gctx: (),
+-    body: { select_min_by(&root_target(&observations), |o| 4 * o.waiting + o.bs) },
++    body: { select_min_by(&root_target(&observations), |o| 3 * o.waiting + o.bs) },
+ }

@@ -1,0 +1,46 @@
+{
+  "scope": "static arithmetic under isolated one-step prefill, first output nonfinal, no preempt/cancel; no Rust event loop or real inference executed",
+  "cases": [
+    {
+      "prompt_length": 64,
+      "predicted_hit_tokens": 0,
+      "actual_hit_tokens": 0,
+      "admitted_prefill": 64,
+      "producer_prefill": 64,
+      "consumer_extra_decrement": 0,
+      "derived_prefill_after_first_nonfinal_output": 0,
+      "independently_expected_remaining_prefill": 0
+    },
+    {
+      "prompt_length": 64,
+      "predicted_hit_tokens": 32,
+      "actual_hit_tokens": 32,
+      "admitted_prefill": 32,
+      "producer_prefill": 64,
+      "consumer_extra_decrement": 0,
+      "derived_prefill_after_first_nonfinal_output": -32,
+      "independently_expected_remaining_prefill": 0
+    },
+    {
+      "prompt_length": 64,
+      "predicted_hit_tokens": 16,
+      "actual_hit_tokens": 32,
+      "admitted_prefill": 48,
+      "producer_prefill": 64,
+      "consumer_extra_decrement": 16,
+      "derived_prefill_after_first_nonfinal_output": -32,
+      "independently_expected_remaining_prefill": 0
+    },
+    {
+      "prompt_length": 64,
+      "predicted_hit_tokens": 32,
+      "actual_hit_tokens": 16,
+      "admitted_prefill": 32,
+      "producer_prefill": 64,
+      "consumer_extra_decrement": -16,
+      "derived_prefill_after_first_nonfinal_output": -16,
+      "independently_expected_remaining_prefill": 0
+    }
+  ],
+  "finding": "selected producer/consumer pair over-decrements by actual cached tokens under stated assumptions; verify compatible artifact versions before changing either side"
+}

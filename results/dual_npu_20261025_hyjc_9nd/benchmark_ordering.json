@@ -1,0 +1,10 @@
+{
+  "seed": 4259862290,
+  "method": "python random.Random(seed).sample(...,2)",
+  "order": [
+    "lmetric-q",
+    "join-shortest-weight-q"
+  ],
+  "chosen_at_utc": "2026-10-26T03:09:11.668440+00:00",
+  "note": "order fixed before any benchmark session started; second independent pair may reverse it if resources allow"
+}

@@ -1,0 +1,58 @@
+{
+  "sessions": {
+    "benchmark_lmetric_attempt2": {
+      "requests": 50,
+      "status_200": 50,
+      "errors": 0,
+      "predicted_equals_actual": 50,
+      "input_len_313": 50,
+      "generated_len_8": 50,
+      "token_events_8": 50,
+      "distribution": {
+        "0": 31,
+        "1": 19
+      }
+    },
+    "benchmark_baseline_attempt1": {
+      "requests": 50,
+      "status_200": 50,
+      "errors": 0,
+      "predicted_equals_actual": 50,
+      "input_len_313": 50,
+      "generated_len_8": 50,
+      "token_events_8": 50,
+      "distribution": {
+        "0": 25,
+        "1": 25
+      }
+    },
+    "benchmark_baseline_attempt2": {
+      "requests": 50,
+      "status_200": 50,
+      "errors": 0,
+      "predicted_equals_actual": 50,
+      "input_len_313": 50,
+      "generated_len_8": 50,
+      "token_events_8": 50,
+      "distribution": {
+        "0": 25,
+        "1": 25
+      }
+    },
+    "benchmark_lmetric_attempt3": {
+      "requests": 50,
+      "status_200": 50,
+      "errors": 0,
+      "predicted_equals_actual": 50,
+      "input_len_313": 50,
+      "generated_len_8": 50,
+      "token_events_8": 50,
+      "distribution": {
+        "0": 31,
+        "1": 19
+      }
+    }
+  },
+  "total_requests": 200,
+  "all_passed": true
+}

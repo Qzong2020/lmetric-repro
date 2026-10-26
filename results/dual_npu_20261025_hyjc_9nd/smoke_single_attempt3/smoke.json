@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "model": "/models/Qwen2.5-7B-Instruct",
+  "gpu_memory_utilization": "0.40",
+  "num_gpu_blocks_override": "8",
+  "max_model_len": "1024",
+  "load_seconds": 67.56938378326595,
+  "nonstream": {
+    "engine": 0,
+    "actual_hits": 0,
+    "prefill_work": 313,
+    "latency_ms": 28522.513548
+  },
+  "stream": {
+    "engine": 0,
+    "actual_hits": 256,
+    "prefill_work": 57,
+    "ttft_ms": 84.764265,
+    "tpot_ms": 58.16110928571429,
+    "token_events": 8
+  },
+  "usage": {
+    "prompt_tokens": 313,
+    "completion_tokens": 8,
+    "total_tokens": 321
+  },
+  "generated_ids": {
+    "nonstream": [
+      10339,
+      1246,
+      264,
+      1681,
+      16211,
+      1526,
+      264,
+      4128
+    ],
+    "stream": [
+      10339,
+      1246,
+      264,
+      1681,
+      16211,
+      1526,
+      264,
+      4128
+    ]
+  }
+}

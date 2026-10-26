@@ -1,0 +1,1006 @@
+--- before/policy-dsl/src/lower.rs
++++ after/policy-dsl/src/lower.rs
+@@ -60,7 +60,9 @@
+                     let observations = capture_observations(entry, all_sctx).await;
+                     let chosen: Option<usize> = #body;
+                     if let Some(idx) = chosen {
+-                        apply_default_after(entry, all_sctx, idx, &observations[idx]).await;
++                        if !apply_default_after(entry, all_sctx, idx, &observations[idx]).await {
++                            return None;
++                        }
+                         #[allow(unused_variables)]
+                         let chosen: usize = idx;
+                         #after_extra
+--- before/radixtree/src/block_hash.rs
++++ after/radixtree/src/block_hash.rs
+@@ -733,7 +733,9 @@
+             // it's parent's responsibility to drop child
+         }
+ 
+-        debug_assert!(nblock_canary <= block_indices.len());
++        // Removing the last copy of a parent prunes its suffix/children too.
++        // Count every invalidated physical mapping, not just requested IDs.
++        debug_assert!(nblock_canary <= self.block_to_node.len());
+         nblock_canary
+     }
+ }
+@@ -859,3 +861,20 @@
+ // referenced through `Children<K, V>`'s default type parameter.
+ #[allow(unused_imports)]
+ use BuildNoHashHasher as _;
++
++#[cfg(test)]
++mod kv_parent_regression {
++    use super::*;
++    #[test]
++    fn kv_parent_only_removal_preserves_unrelated_prefix_and_allows_reuse() {
++        let mut tree=RadixTreeBlockHash::new(16);
++        tree.insert(&[11,12,13],vec![1,2,3]);
++        tree.insert(&[21,22],vec![4,5]);
++        tree.remove(vec![1]);
++        assert_eq!(tree.get(&[11,12,13]),0);
++        assert_eq!(tree.get(&[21,22]),2);
++        tree.remove(vec![2,3]); // Already pruned descendants must be safe.
++        tree.insert(&[31,32],vec![1,2]);
++        assert_eq!(tree.get(&[31,32]),2);
++    }
++}
+--- before/router/src/engine/ascend_request_tests.rs
++++ after/router/src/engine/ascend_request_tests.rs
+@@ -49,7 +49,7 @@
+     async fn replay(pred: usize, events: Vec<Value>, disconnect: bool) -> Value {
+         let (e, rx) = entry();
+         let ctx = Arc::new(Mutex::new(ScheduleContext {
+-            lmetric:LMetric::default(), block_hash:PrefixBlockHash::new(128),
++            kv_journal: Default::default(), lmetric:LMetric::default(), block_hash:PrefixBlockHash::new(128),
+         }));
+         if pred > 0 {
+             ctx.lock().await.block_hash.insert(&e.block_hash_state.get_hashes()[..pred],
+@@ -202,7 +202,7 @@
+         e.request.input_tokens=(0..384).collect();
+         e.block_hash_state=BlockHashState::new(&e.request.input_tokens,128);
+         let ctx=Arc::new(Mutex::new(ScheduleContext {
+-            lmetric:LMetric::default(),block_hash:PrefixBlockHash::new(128)}));
++            kv_journal: Default::default(), lmetric:LMetric::default(),block_hash:PrefixBlockHash::new(128)}));
+         ctx.lock().await.block_hash.insert(&e.block_hash_state.get_hashes()[..1],vec![1]);
+         assert_eq!(LmetricQ::schedule(&e,&[ctx.clone()],&mut ()).await,Some(0));
+         let (tx,cq)=channel(8);tx.send(e).await.unwrap();
+--- before/router/src/engine/client.rs
++++ after/router/src/engine/client.rs
+@@ -78,6 +78,8 @@
+ /// `EngineCoreOutputs` (ZMQ) for the event loop.
+ #[derive(Debug, Clone, Serialize, Deserialize)]
+ pub struct EngineStepOutput {
++    pub engine_epoch: Option<String>,
++    pub kv_journal: Option<super::kv_journal::KvJournal>,
+     /// Versioned compute-only Prefill semantics. None preserves yaullm behavior.
+     #[serde(default)]
+     pub lmetric_protocol: Option<String>,
+@@ -186,6 +188,13 @@
+         sse_state: Option<SseState>,
+     }
+ 
++    #[cfg(test)]
++    pub(super) async fn connected_kv_receiver(url:&str)->Result<Box<dyn EngineStepReceiver>,EngineClientError> {
++        let mut receiver=VllmStepReceiver {inner:VllmClient::new(url,"ascend-small"),sse_state:None};
++        receiver.ensure_sse_connected().await?;
++        Ok(Box::new(receiver))
++    }
++
+     impl VllmStepReceiver {
+         async fn ensure_sse_connected(&mut self) -> Result<(), EngineClientError> {
+             if self.sse_state.is_some() {
+@@ -245,6 +254,12 @@
+             loop {
+                 match sse_state.stream.next().await {
+                     Some(Ok(es::SSE::Event(e))) => {
++                        #[cfg(test)]
++                        if let Ok(path) = std::env::var("LMETRIC_KV_SSE_FILE") {
++                            use std::io::Write;
++                            let mut f=std::fs::OpenOptions::new().create(true).append(true).open(path).unwrap();
++                            writeln!(f,"{}",e.data).unwrap();
++                        }
+                         let m = sse_state.sequence.parse(&e.data).map_err(|err| {
+                             EngineClientError::Json(format!(
+                                 "Failed to parse SSE event data: {} (raw: {:?})",
+@@ -309,6 +324,8 @@
+             .collect();
+ 
+         EngineStepOutput {
++            engine_epoch: m.engine_epoch,
++            kv_journal: m.kv_journal,
+             lmetric_protocol: m.lmetric_protocol,
+             lmetric_block_size: m.block_size,
+             prefill_tokens: m.prefill_tokens,
+@@ -484,7 +501,8 @@
+                 .unwrap_or(0);
+ 
+             Ok(EngineStepOutput {
+-                lmetric_protocol: None,
++                engine_epoch: None, kv_journal: None,
++            lmetric_protocol: None,
+                 lmetric_block_size: None,
+                 prefill_tokens: outputs.prefill_tokens.unwrap_or(0) as usize,
+                 prefill_token_budget: outputs.prefill_token_budget.unwrap_or(0) as usize,
+@@ -544,3 +562,8 @@
+ pub(crate) fn lmetric_test_convert(v: serde_json::Value) -> EngineStepOutput {
+     vllm_impl::vllm_metric_to_step_output(serde_json::from_value(v).unwrap())
+ }
++
++#[cfg(all(test,feature="vllm-backend"))]
++pub(crate) async fn lmetric_kv_connected_receiver(url:&str)->Result<Box<dyn EngineStepReceiver>,EngineClientError> {
++    vllm_impl::connected_kv_receiver(url).await
++}
+--- before/router/src/engine/colocation.rs
++++ after/router/src/engine/colocation.rs
+@@ -302,7 +302,7 @@
+         );
+         entry
+             .response_tx
+-            .send(Ok(InferStreamResponse::Prefill))
++            .send(Ok(InferStreamResponse::Prefill { input_length: entry.request.input_length as usize }))
+             .map_err(|_| ExtExcept::FrontendAbort)?;
+         for &t in new_token_ids {
+             entry
+@@ -375,7 +375,10 @@
+         let _skip = entry.response_tx.send(Ok(InferStreamResponse::End {
+             token: Token::default(),
+             top_tokens: Vec::default(),
+-            generated_text: proto::GeneratedText::default(),
++            generated_text: proto::GeneratedText {
++                generated_tokens: entry.generated_token_cnt.try_into().expect("validated token budget fits u32"),
++                ..Default::default()
++            },
+             start: entry.batch_time.unwrap(),
+             queued: entry.queue_time,
+             max_time_between_tokens: entry.max_time_between_tokens,
+@@ -416,6 +419,12 @@
+                 Ok(step) => step,
+                 Err(e) => {
+                     tracing::error!(engine = replica_index, error = %e, "RECV_STEP_ERROR");
++                    let mut context = schedule_context.lock().await;
++                    if context.kv_journal.active() || std::env::var("LMETRIC_REQUIRE_KV_JOURNAL").as_deref()==Ok("1") {
++                        context.invalidate_kv(e.to_string());
++                        break;
++                    }
++                    drop(context);
+                     // For stream-ended errors, break out of the loop
+                     if matches!(e, super::super::client::EngineClientError::StreamEnded) {
+                         break;
+@@ -445,16 +454,34 @@
+ 
+             // Never apply a request-v1 step using a different token/block unit.
+             // This also catches a Router left at its legacy CLI default of 16.
+-            if m.lmetric_protocol.as_deref() == Some("request-v1")
++            if matches!(m.lmetric_protocol.as_deref(), Some("request-v1" | "request-kv-v1"))
+                 && entries.values().chain(except_context.entries.values()).any(|entry|
+                     m.lmetric_block_size != Some(entry.block_hash_state.get_block_size())) {
+                 tracing::error!(engine = replica_index, "LMetric block-size mismatch; stop consumer and restart session");
++                schedule_context.lock().await.invalidate_kv("block-size mismatch".into());
+                 break;
+             }
+ 
++            // Stage journal before applying request accounting. No partial cache
++            // view or untrusted physical ID becomes visible to a policy.
++            let prepared_kv = if let Some(journal) = &m.kv_journal {
++                let mut context = schedule_context.lock().await;
++                match context.kv_journal.prepare(journal, m.engine_epoch.as_deref().unwrap_or(""), m.lmetric_block_size.unwrap_or(0)) {
++                    Ok(prepared) => Some(prepared),
++                    Err(reason) => {
++                        tracing::error!(engine=replica_index, %reason, "KV_JOURNAL_INVALID");
++                        context.invalidate_kv(reason);
++                        break;
++                    }
++                }
++            } else {
++                let mut context = schedule_context.lock().await;
++                if context.kv_journal.active() { context.invalidate_kv("KV capability disappeared".into()); break; }
++                None
++            };
+             tracing::trace!(engine = replica_index, step = ?m, "STEP_RECEIVED");
+ 
+-            let current_epoch = schedule_context.lock().await.block_hash.epoch();
++            let current_epoch = schedule_context.lock().await.cache_epoch();
+ 
+             if !m.preempted_ids.is_empty() {
+                 m.preempted_ids.iter().for_each(|&id| {
+@@ -487,7 +514,7 @@
+                         }
+                         // request-v1 excludes hits from reported prompt work.
+                         // Apply H_actual-H_pred even when the first output finishes.
+-                        if is_finished && m.lmetric_protocol.as_deref() == Some("request-v1") {
++                        if is_finished && matches!(m.lmetric_protocol.as_deref(), Some("request-v1" | "request-kv-v1")) {
+                             if let Some(entry) = entries.get_mut(&request_id)
+                                 .or_else(|| except_context.entries.get_mut(&request_id)) {
+                                 metric_delta.prefill_tokens_dec += entry.block_hash_state
+@@ -613,7 +640,7 @@
+             let mut sctx = schedule_context.lock().await;
+ 
+             // Update PrefixBlockHash
+-            let epoch_before = sctx.block_hash.epoch();
++            let epoch_before = sctx.cache_epoch();
+             if !m.evicted_block_ids.is_empty() {
+                 tracing::info!(
+                     target: "cache_tracking",
+@@ -621,6 +648,18 @@
+                     evicted_blocks = m.evicted_block_ids.len(),
+                     "EVICTION"
+                 );
++            }
++            if let Some((state, tree)) = prepared_kv {
++                for mutation in &m.kv_journal.as_ref().unwrap().mutations {
++                    if matches!(mutation.kind.as_str(), "request_blocks" | "request_release") {
++                        let rid = mutation.request_id.unwrap();
++                        if let Some(entry) = entries.get_mut(&rid).or_else(|| except_context.entries.get_mut(&rid)) {
++                            entry.block_hash_state.set_bids(mutation.block_ids.clone());
++                        }
++                    }
++                }
++                sctx.kv_journal = state;
++                sctx.block_hash = tree;
+             }
+             sctx.block_hash.remove(m.evicted_block_ids.clone());
+             for (rid, block_indices) in &m.cur_used_block_ids {
+@@ -680,7 +719,7 @@
+                     }
+                 }
+             }
+-            let epoch_after = sctx.block_hash.epoch();
++            let epoch_after = sctx.cache_epoch();
+             tracing::info!(
+                 target: "cache_tracking",
+                 engine = replica_index,
+@@ -769,7 +808,10 @@
+                             cancel_req_ids.push(request_id);
+                         }
+                         if is_finished {
+-                            let entry = entries.remove(&request_id).unwrap();
++                            let mut entry = entries.remove(&request_id).unwrap();
++                            // Accounting has already closed this request. Retain
++                            // the final real tokens only for completion metadata.
++                            entry.append_state(&new_token_ids, &tbt);
+                             request_phases.remove(&request_id);
+                             on_finish_request(
+                                 replica_index,
+@@ -793,7 +835,10 @@
+                             cancel_req_ids.push(request_id);
+                         }
+                         if is_finished {
+-                            let entry = entries.remove(&request_id).unwrap();
++                            let mut entry = entries.remove(&request_id).unwrap();
++                            // Accounting has already closed this request. Retain
++                            // the final real tokens only for completion metadata.
++                            entry.append_state(&new_token_ids, &tbt);
+                             request_phases.remove(&request_id);
+                             on_finish_request(
+                                 replica_index,
+@@ -905,6 +950,7 @@
+     }
+     #[cfg(all(test, feature = "lmetric-q", feature = "vllm-backend"))]
+     include!("ascend_request_tests.rs");
++    include!("kv_journal_tests.rs");
+ 
+ }
+ 
+--- before/router/src/engine/kv_journal.rs
++++ after/router/src/engine/kv_journal.rs
+@@ -0,0 +1,203 @@
++//! Scheduler metadata journal. Backend hashes are identities, never local keys.
++use serde::{Deserialize, Serialize};
++use std::collections::HashMap;
++use crate::scheduler::kvcache::{BlockHash, BlockHashState, PrefixBlockHash};
++
++#[derive(Debug, Clone, Serialize, Deserialize)]
++#[serde(deny_unknown_fields)]
++pub struct KvJournal {
++    pub version: String,
++    pub observation_kind: String,
++    pub num_blocks: usize,
++    pub mutation_seq: u64,
++    pub mutations: Vec<KvMutation>,
++}
++
++#[derive(Debug, Clone, Serialize, Deserialize)]
++#[serde(deny_unknown_fields)]
++pub struct KvMutation {
++    pub mutation_seq: u64,
++    #[serde(rename="type")]
++    pub kind: String,
++    pub group_id: usize,
++    pub block_size: usize,
++    pub block_id: Option<u64>,
++    pub cache_hash: Option<String>,
++    pub logical_index: Option<usize>,
++    #[serde(default)]
++    pub prefix_token_ids: Vec<u32>,
++    pub request_id: Option<u64>,
++    #[serde(default)]
++    pub block_ids: Vec<u64>,
++    pub reason: Option<String>,
++}
++
++#[derive(Clone, Debug)]
++struct Mapping { backend: String, prefix: Vec<u64> }
++
++#[derive(Clone, Debug, Default)]
++pub(crate) struct KvJournalState {
++    pub epoch: Option<String>,
++    pub last: u64,
++    pub capacity: usize,
++    pub failed: Option<String>,
++    maps: HashMap<u64, Mapping>,
++    pub requests: HashMap<u64, Vec<u64>>,
++}
++
++impl KvJournalState {
++    pub fn active(&self) -> bool { self.epoch.is_some() }
++    pub fn routable(&self) -> bool { self.failed.is_none() }
++    pub fn invalidate(&mut self, reason: String) { self.failed.get_or_insert(reason); }
++    pub fn mapping_count(&self) -> usize { self.maps.len() }
++    pub fn mapping_view(&self) -> std::collections::BTreeMap<u64, String> {
++        self.maps.iter().map(|(bid,m)|(*bid,m.backend.clone())).collect()
++    }
++
++    /// Validate and stage a whole transaction before touching the routing view.
++    pub fn prepare(&self, journal: &KvJournal, epoch: &str, block_size: usize)
++        -> Result<(Self, PrefixBlockHash), String> {
++        if let Some(reason)=&self.failed { return Err(reason.clone()); }
++        if journal.version!="kv-journal-v1" || journal.observation_kind!="scheduler_cache_metadata"
++            || !(2..=1_000_000).contains(&journal.num_blocks) || journal.mutations.len()>8192 {
++            return Err("unsupported journal capabilities or bounds".into());
++        }
++        if self.epoch.as_deref().map_or(false,|e|e!=epoch) || epoch.is_empty()
++            || (self.capacity!=0 && self.capacity!=journal.num_blocks) {
++            return Err("KV epoch or physical capacity changed".into());
++        }
++        let mut next=self.clone();
++        if next.epoch.is_none() {
++            let first=journal.mutations.first().ok_or("missing initial empty baseline")?;
++            if first.kind!="cache_reset" || first.reason.as_deref()!=Some("initial_empty") || first.mutation_seq!=1 {
++                return Err("KV stream must start with an initial empty baseline".into());
++            }
++        }
++        next.epoch=Some(epoch.into());next.capacity=journal.num_blocks;
++        for m in &journal.mutations {
++            if m.mutation_seq!=next.last+1 || m.group_id!=0 || m.block_size!=block_size || block_size==0 {
++                return Err("KV mutation duplicated/gapped, group or block size mismatch".into());
++            }
++            let valid_bid=|bid:u64|bid>0 && bid<(journal.num_blocks as u64);
++            match m.kind.as_str() {
++                "cache_reset" => {
++                    if !next.requests.is_empty() { return Err("reset while requests hold blocks".into()); }
++                    if !matches!(m.reason.as_deref(),Some("initial_empty"|"explicit_reset"))
++                        || (m.reason.as_deref()==Some("initial_empty") && m.mutation_seq!=1) {
++                        return Err("invalid reset reason".into());
++                    }
++                    next.maps.clear();
++                }
++                "cache_insert" => {
++                    let bid=m.block_id.filter(|b|valid_bid(*b)).ok_or("invalid insert ID")?;
++                    let hash=m.cache_hash.as_ref().filter(|s| !s.is_empty() && s.len()<=128 && s.len()%2==0 && s.bytes().all(|b|b.is_ascii_hexdigit())).ok_or("invalid backend hash")?;
++                    let logical=m.logical_index.ok_or("missing logical position")?;
++                    if logical>=8192/block_size || m.prefix_token_ids.len()!=(logical+1)*block_size
++                        || m.prefix_token_ids.len()>8192 || next.maps.contains_key(&bid) {
++                        return Err("invalid prefix proof or physical ID reuse without removal".into());
++                    }
++                    let hashes=BlockHashState::new(&m.prefix_token_ids,block_size).get_hashes().to_vec();
++                    next.maps.insert(bid,Mapping {backend:hash.clone(),prefix:hashes});
++                }
++                "cache_remove" => {
++                    let bid=m.block_id.filter(|b|valid_bid(*b)).ok_or("invalid remove ID")?;
++                    let old=next.maps.get(&bid).ok_or("unknown physical mapping removed")?;
++                    if m.cache_hash.as_deref()!=Some(old.backend.as_str()) { return Err("old physical mapping identity mismatch".into()); }
++                    next.maps.remove(&bid);
++                }
++                "request_blocks" => {
++                    let rid=m.request_id.ok_or("missing occupancy request ID")?;
++                    if m.block_ids.len()>8192/block_size+1 || m.block_ids.iter().any(|b|!valid_bid(*b)) {
++                        return Err("invalid full occupancy list".into());
++                    }
++                    let unique:std::collections::HashSet<_>=m.block_ids.iter().collect();
++                    if unique.len()!=m.block_ids.len() || next.requests.len()>=1024 && !next.requests.contains_key(&rid) {
++                        return Err("duplicate occupancy or active request bound".into());
++                    }
++                    next.requests.insert(rid,m.block_ids.clone());
++                }
++                "request_release" => {
++                    let rid=m.request_id.ok_or("missing release request ID")?;
++                    if !m.block_ids.is_empty() || next.requests.remove(&rid).is_none() {
++                        return Err("unknown request release".into());
++                    }
++                }
++                _ => return Err("unknown KV mutation type".into()),
++            }
++            next.last=m.mutation_seq;
++        }
++        if next.last!=journal.mutation_seq {return Err("KV watermark mismatch".into());}
++        // Rebuild from the bounded authoritative physical registry. Orphaned
++        // descendants remain in that registry, but cannot yield a false hit.
++        let mut copies:HashMap<u64,Vec<u64>>=HashMap::new();
++        for (&bid,m) in &next.maps { copies.entry(*m.prefix.last().unwrap()).or_default().push(bid); }
++        let mut tree=PrefixBlockHash::new(next.capacity);
++        for (&bid,m) in &next.maps {
++            let path:Option<Vec<u64>>=m.prefix.iter().enumerate().map(|(i,h)| {
++                if i+1==m.prefix.len() {Some(bid)} else {copies.get(h).map(|ids|ids[0])}
++            }).collect();
++            if let Some(path)=path {tree.insert(&m.prefix,path);}
++        }
++        Ok((next,tree))
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use serde_json::{json,Value};
++    fn m(seq:u64,kind:&str)->Value {json!({"mutation_seq":seq,"type":kind,"group_id":0,"block_size":128})}
++    fn reset(seq:u64,reason:&str)->Value {let mut v=m(seq,"cache_reset");v["reason"]=json!(reason);v}
++    fn insert(seq:u64,bid:u64,n:usize,seed:u32)->Value {
++        let mut v=m(seq,"cache_insert");v["block_id"]=json!(bid);v["cache_hash"]=json!(format!("{:064x}",seed as u64+n as u64));
++        v["logical_index"]=json!(n-1);v["prefix_token_ids"]=json!(vec![seed;n*128]);v
++    }
++    fn remove(seq:u64,bid:u64,hash:&str)->Value {let mut v=m(seq,"cache_remove");v["block_id"]=json!(bid);v["cache_hash"]=json!(hash);v}
++    fn j(ms:Vec<Value>,last:u64)->KvJournal {serde_json::from_value(json!({"version":"kv-journal-v1","observation_kind":"scheduler_cache_metadata","num_blocks":16,"mutation_seq":last,"mutations":ms})).unwrap()}
++    #[test]
++    fn kv_journal_duplicate_gap_epoch_and_atomic_failure() {
++        let (state,_)=KvJournalState::default().prepare(&j(vec![reset(1,"initial_empty"),insert(2,1,1,7)],2),"e",128).unwrap();
++        for bad in [j(vec![insert(2,2,1,8)],2),j(vec![insert(4,2,1,8)],4),j(vec![insert(3,1,1,8)],3)] {
++            assert!(state.prepare(&bad,"e",128).is_err());assert_eq!(state.last,2);assert_eq!(state.mapping_count(),1);
++        }
++        assert!(state.prepare(&j(vec![],2),"other",128).is_err());
++    }
++    #[test]
++    fn kv_journal_parent_only_eviction_orphan_restore_alias_reuse_and_reset() {
++        let mut state=KvJournalState::default();
++        let (s,tree)=state.prepare(&j(vec![reset(1,"initial_empty"),insert(2,1,1,7),insert(3,2,2,7),insert(4,3,1,7)],4),"e",128).unwrap();state=s;
++        let hashes=BlockHashState::new(&vec![7;256],128).get_hashes().to_vec();assert_eq!(tree.get(&hashes),2);
++        let h=format!("{:064x}",8);
++        let (s,tree)=state.prepare(&j(vec![remove(5,1,&h)],5),"e",128).unwrap();state=s;assert_eq!(tree.get(&hashes),2);
++        let (s,tree)=state.prepare(&j(vec![remove(6,3,&h)],6),"e",128).unwrap();state=s;assert_eq!(tree.get(&hashes),0);assert_eq!(state.mapping_count(),1);
++        let (s,tree)=state.prepare(&j(vec![insert(7,1,1,7)],7),"e",128).unwrap();state=s;assert_eq!(tree.get(&hashes),2);
++        let (s,tree)=state.prepare(&j(vec![remove(8,1,&h),insert(9,1,1,9)],9),"e",128).unwrap();state=s;assert_eq!(tree.get(&hashes),0);
++        let (s,tree)=state.prepare(&j(vec![reset(10,"explicit_reset")],10),"e",128).unwrap();assert_eq!(s.mapping_count(),0);assert_eq!(tree.get(&hashes),0);
++    }
++    #[test]
++    fn kv_journal_request_full_occupancy_release_is_not_eviction() {
++        let mut occupancy=m(3,"request_blocks");occupancy["request_id"]=json!(101);occupancy["block_ids"]=json!([1,2]);
++        let mut release=m(4,"request_release");release["request_id"]=json!(101);release["block_ids"]=json!([]);
++        let (state,_)=KvJournalState::default().prepare(&j(vec![reset(1,"initial_empty"),insert(2,1,1,7),occupancy,release],4),"e",128).unwrap();
++        assert!(state.requests.is_empty());assert_eq!(state.mapping_count(),1);
++    }
++}
++
++#[cfg(test)]
++mod protocol_tests {
++    use serde_json::json;
++    #[test]
++    fn kv_journal_sse_sequence_rejects_duplicate_gap_downgrade_and_epoch() {
++        use crate::engine::vllm_http::MetricSequence;
++        let packet=|step:u64,seq:u64|json!({"lmetric_protocol":"request-kv-v1","engine_epoch":"e","step_id":step,"latency":0,"outputs":[],"prefill_tokens":0,"latency_kind":"schedule_to_completion_host_ms","execution_mode":"sync","event_kind":"control","kv_events":true,"block_size":128,"kv_groups":1,"kv_journal":{"version":"kv-journal-v1","observation_kind":"scheduler_cache_metadata","num_blocks":16,"mutation_seq":seq,"mutations":[{"mutation_seq":seq,"type":"cache_reset","group_id":0,"block_size":128,"reason":"initial_empty"}]}});
++        let first=packet(1,1);
++        let mut epoch=packet(2,2);epoch["engine_epoch"]=json!("other");
++        let mut downgrade=packet(2,2);downgrade["lmetric_protocol"]=json!("request-v1");
++        let mut group=packet(2,2);group["kv_journal"]["mutations"][0]["group_id"]=json!(1);
++        for bad in [packet(1,1),packet(2,1),packet(2,3),epoch,downgrade,group] {
++            let mut decoder=MetricSequence::default();assert!(decoder.parse(&first.to_string()).is_ok());
++            assert!(decoder.parse(&bad.to_string()).is_err());assert!(decoder.failed());
++            assert!(decoder.parse(&packet(2,2).to_string()).is_err());
++        }
++    }
++}
+--- before/router/src/engine/kv_journal_tests.rs
++++ after/router/src/engine/kv_journal_tests.rs
+@@ -0,0 +1,143 @@
++// CPU-negative and real-NPU integration drivers; events are never generated here.
++#[cfg(test)]
++mod kv_journal_integration_tests {
++    use super::*;
++    use crate::engine::client::{EngineClientError,EngineStepOutput};
++    use crate::engine::vllm_http::VllmClient;
++    use crate::scheduler::kvcache::{BlockHash,BlockHashState,PrefixBlockHash};
++    use crate::scheduler::policies::{lmetric::LmetricQ,policy_trait::Policy};
++    use crate::scheduler::state::LMetric;
++    use crate::gateway::validation::ValidGenerateRequest;
++    use crate::types::GenerationParams;
++    use serde_json::{json,Value};
++    fn entry(id:u64,tokens:Vec<u32>)->(Entry,mpsc::UnboundedReceiver<Result<InferStreamResponse,InferError>>) {
++        let (response_tx,rx)=mpsc::unbounded_channel();let n=tokens.len();
++        (Entry {block_hash_state:BlockHashState::new(&tokens,128),request:ValidGenerateRequest {request_id:id,messages:vec![],inputs:String::new(),input_length:n as u32,truncate:0,decoder_input_details:false,params:GenerationParams {temperature:1.0,repetition_penalty:1.0,top_k:0,top_p:1.0,seed:0,max_new_tokens:8,stop_sequences:vec![],ignore_eos_token:false},top_n_tokens:0,input_tokens:tokens},response_tx,span:tracing::Span::none(),temp_span:None,queue_time:tokio::time::Instant::now(),batch_time:Some(tokio::time::Instant::now()),generated_token_cnt:0,prev_token_time:None,time_of_per_token:None,max_time_between_tokens:Duration::ZERO},rx)
++    }
++    fn context()->Arc<Mutex<ScheduleContext>> {Arc::new(Mutex::new(ScheduleContext {lmetric:LMetric::default(),block_hash:PrefixBlockHash::new(16),kv_journal:Default::default()}))}
++    fn ledger(c:&ScheduleContext)->Value {json!({"bs":c.lmetric.bs,"waiting":c.lmetric.waiting_reqs,"prefill":c.lmetric.prefill_tokens,"all_tokens":c.lmetric.all_tokens})}
++    struct BadOnce {step:Option<EngineStepOutput>}
++    #[async_trait::async_trait]
++    impl EngineStepReceiver for BadOnce {async fn recv_step(&mut self)->Result<EngineStepOutput,EngineClientError> {self.step.take().ok_or(EngineClientError::StreamEnded)}}
++    #[tokio::test]
++    async fn kv_journal_failure_stops_before_accounting_and_disables_admission() {
++        let ctx=context();let (e,_rx)=entry(101,vec![7;313]);assert_eq!(LmetricQ::schedule(&e,&[ctx.clone()],&mut ()).await,Some(0));
++        let bad=crate::engine::client::lmetric_test_convert(json!({"lmetric_protocol":"request-kv-v1","engine_epoch":"e","block_size":128,"kv_journal":{"version":"kv-journal-v1","observation_kind":"scheduler_cache_metadata","num_blocks":16,"mutation_seq":2,"mutations":[{"mutation_seq":2,"type":"cache_reset","group_id":0,"block_size":128,"reason":"explicit_reset"}]},"prefill_tokens":313}));
++        let (tx,cq)=channel(8);tx.send(e).await.unwrap();let (_et,er)=mpsc::unbounded_channel();
++        completion_event_loop(0,Box::new(BadOnce {step:Some(bad)}),Arc::new(Mutex::new(())),cq,er,ctx.clone(),None).await;
++        assert_eq!(ledger(&*ctx.lock().await),json!({"bs":1,"waiting":1,"prefill":313,"all_tokens":313}));
++        assert!(!ctx.lock().await.kv_journal.routable());
++        let (e,_rx)=entry(102,vec![7;313]);assert_eq!(LmetricQ::schedule(&e,&[ctx.clone()],&mut ()).await,None);
++    }
++    #[tokio::test]
++    async fn kv_journal_admission_rechecks_after_observation() {
++        use crate::scheduler::policies::dsl_runtime::{capture_observations,apply_default_after};
++        let ctx=context();let (e,_rx)=entry(101,vec![7;313]);
++        let obs=capture_observations(&e,&[ctx.clone()]).await;
++        ctx.lock().await.invalidate_kv("stream failed after scoring".into());
++        assert!(!apply_default_after(&e,&[ctx.clone()],0,&obs[0]).await);
++        assert_eq!(ledger(&*ctx.lock().await),json!({"bs":0,"waiting":0,"prefill":0,"all_tokens":0}));
++    }
++
++    #[tokio::test]
++    async fn kv_journal_same_size_rebuild_must_invalidate_hit_observation() {
++        use crate::engine::kv_journal::KvJournal;
++        use crate::scheduler::policies::dsl_runtime::{capture_observations,apply_default_after};
++        let ctx=context();
++        let journal=|ms:Value,last:u64|serde_json::from_value::<KvJournal>(json!({"version":"kv-journal-v1","observation_kind":"scheduler_cache_metadata","num_blocks":16,"mutation_seq":last,"mutations":ms})).unwrap();
++        let first=journal(json!([{"mutation_seq":1,"type":"cache_reset","group_id":0,"block_size":128,"reason":"initial_empty"},{"mutation_seq":2,"type":"cache_insert","group_id":0,"block_size":128,"block_id":1,"cache_hash":"aa","logical_index":0,"prefix_token_ids":vec![7;128]}]),2);
++        {let mut c=ctx.lock().await;let (state,tree)=c.kv_journal.prepare(&first,"e",128).unwrap();c.kv_journal=state;c.block_hash=tree;}
++        let (e,_rx)=entry(101,vec![7;313]);let obs=capture_observations(&e,&[ctx.clone()]).await;assert_eq!(obs[0].hit_blocks,1);
++        let second=journal(json!([{"mutation_seq":3,"type":"cache_remove","group_id":0,"block_size":128,"block_id":1,"cache_hash":"aa"},{"mutation_seq":4,"type":"cache_insert","group_id":0,"block_size":128,"block_id":1,"cache_hash":"bb","logical_index":0,"prefix_token_ids":vec![9;128]}]),4);
++        {let mut c=ctx.lock().await;let (state,tree)=c.kv_journal.prepare(&second,"e",128).unwrap();c.kv_journal=state;c.block_hash=tree;}
++        assert!(apply_default_after(&e,&[ctx.clone()],0,&obs[0]).await);
++        assert_eq!(e.block_hash_state.pred_hit_tokens(),0,"a same-size rebuilt tree must not reuse stale predicted hits");
++    }
++
++    #[tokio::test]
++    async fn kv_gateway_final_frame_reports_all_actual_tokens() {
++        let ctx=context();let (e,mut responses)=entry(101,vec![7;313]);
++        assert_eq!(LmetricQ::schedule(&e,&[ctx.clone()],&mut ()).await,Some(0));
++        let step=crate::engine::client::lmetric_test_convert(json!({"lmetric_protocol":"request-v1","block_size":128,"prefill_tokens":313,"outputs":[{"request_id":101,"new_token_ids":[1,2,3,4,5,6,7,8],"state":"PREFILL","is_finished":true,"hit_token_cnt":0}]}));
++        let (tx,cq)=channel(8);tx.send(e).await.unwrap();let (_et,er)=mpsc::unbounded_channel();
++        completion_event_loop(0,Box::new(BadOnce {step:Some(step)}),Arc::new(Mutex::new(())),cq,er,ctx.clone(),None).await;
++        let mut tokens=0;let mut final_count=None;
++        while let Ok(item)=responses.try_recv() {match item.unwrap() {
++            InferStreamResponse::Intermediate {..}=>tokens+=1,
++            InferStreamResponse::End {generated_text,..}=>final_count=Some(generated_text.generated_tokens),
++            _=>{},
++        }}
++        assert_eq!(tokens,8);assert_eq!(final_count,Some(8));
++        assert_eq!(ledger(&*ctx.lock().await),json!({"bs":0,"waiting":0,"prefill":0,"all_tokens":0}));
++    }
++
++    struct Observed {inner:Box<dyn EngineStepReceiver>,ctx:Arc<Mutex<ScheduleContext>>,last:Option<u64>}
++    #[async_trait::async_trait]
++    impl EngineStepReceiver for Observed {
++      async fn recv_step(&mut self)->Result<EngineStepOutput,EngineClientError> {
++       if let Some(seq)=self.last {
++        let c=self.ctx.lock().await;
++        println!("KV_APPLIED {}",json!({"step_id":seq,"mutation_seq":c.kv_journal.last,"mappings":c.kv_journal.mapping_count(),"physical":c.kv_journal.mapping_view(),"requests":c.kv_journal.requests,"ledger":ledger(&c),"valid":c.kv_journal.routable()}));
++       }
++       let step=self.inner.recv_step().await?;
++       assert_eq!(step.lmetric_protocol.as_deref(),Some("request-kv-v1"));self.last=Some(step.step_id);
++       println!("KV_RECEIVED {}",serde_json::to_string(&step).unwrap());Ok(step)
++      }
++    }
++    async fn idle(ctx:&Arc<Mutex<ScheduleContext>>) {
++      tokio::time::timeout(Duration::from_secs(20),async {
++       loop {let c=ctx.lock().await;if !c.kv_journal.routable(){std::panic!("journal invalid: {:?}",c.kv_journal.failed);}
++        let done=c.lmetric.bs==0 && c.kv_journal.requests.is_empty();drop(c);
++        if done {return;}tokio::time::sleep(Duration::from_millis(10)).await;
++       }
++      }).await.expect("request drain timeout");
++    }
++    #[tokio::test]
++    #[ignore="requires bounded real single-card KV engine and fixture"]
++    async fn kv_journal_real_npu_cache_lifecycle() {
++      let url=std::env::var("LMETRIC_KV_URL").unwrap();
++      let fixture:Value=serde_json::from_str(&std::fs::read_to_string(std::env::var("LMETRIC_KV_FIXTURE").unwrap()).unwrap()).unwrap();
++      let receiver=crate::engine::client::lmetric_kv_connected_receiver(&url).await.unwrap();
++      println!("KV_REAL_SUBSCRIBED_BEFORE_REQUEST");
++      let ctx=context();let (tx,cq)=channel(32);let (_et,er)=mpsc::unbounded_channel();let taskctx=ctx.clone();
++      let task=tokio::spawn(async move {completion_event_loop(0,Box::new(Observed {inner:receiver,ctx:taskctx.clone(),last:None}),Arc::new(Mutex::new(())),cq,er,taskctx,None).await;});
++      let mut client=VllmClient::new(&url,"ascend-small");let _errors=client.get_error_rx();let http=reqwest::Client::new();
++      let mut results=vec![];
++      for (i,&prompt_index) in [0usize,0,1,2,3,4,0,0].iter().enumerate() {
++        if i==7 {
++         let before=ctx.lock().await.kv_journal.last;
++         let response=http.post(format!("{url}/reset_prefix_cache")).send().await.unwrap();
++         let status=response.status();let body=response.text().await.unwrap();println!("KV_REAL_RESET {}",json!({"status":status.as_u16(),"body":body}));assert!(status.is_success());
++         tokio::time::timeout(Duration::from_secs(10),async {loop {
++           let c=ctx.lock().await;assert!(c.kv_journal.routable());let reset=c.kv_journal.last>before && c.kv_journal.mapping_count()==0;drop(c);
++           if reset {break;}tokio::time::sleep(Duration::from_millis(10)).await;
++         }}).await.expect("idle reset must arrive over SSE without a new request");
++        }
++        let tokens:Vec<u32>=serde_json::from_value(fixture["prompts"][prompt_index]["tokens"].clone()).unwrap();
++        let hashes=BlockHashState::new(&tokens,128).get_hashes().to_vec();
++        let expected_before=ctx.lock().await.block_hash.get(&hashes)*128;
++        if i==1 {assert_eq!(expected_before,256,"first repeated request must have real predicted hits");}
++        if i==6 || i==7 {assert_eq!(expected_before,0,"evicted/reset prefix must not be predicted cached");}
++        let raw_path=std::env::var("LMETRIC_KV_SSE_FILE").unwrap();
++        let start_line=std::fs::read_to_string(&raw_path).unwrap_or_default().lines().count();
++        let rid=202610250100+i as u64;let (e,_rx)=entry(rid,tokens);
++        assert_eq!(LmetricQ::schedule(&e,&[ctx.clone()],&mut ()).await,Some(0));let predicted=e.block_hash_state.pred_hit_tokens();
++        let pending=client.add_request(rid,&e.request).await;tx.send(e).await.unwrap();
++        let response=tokio::time::timeout(Duration::from_secs(30),pending).await.unwrap().unwrap().unwrap();
++        assert!(response.status().is_success());let body:Value=response.json().await.unwrap();
++        idle(&ctx).await;assert_eq!(ledger(&*ctx.lock().await),json!({"bs":0,"waiting":0,"prefill":0,"all_tokens":0}));
++        let frames:Vec<Value>=std::fs::read_to_string(&raw_path).unwrap().lines().map(|s|serde_json::from_str(s).unwrap()).collect();
++        let first=frames.iter().flat_map(|f|f["outputs"].as_array().unwrap()).find(|o|o["request_id"]==rid && o["state"]=="PREFILL").expect("real first output missing");
++        let actual=first["hit_token_cnt"].as_u64().unwrap();
++        assert_eq!(actual,predicted as u64,"real backend hit must match current KV view");
++        let work:u64=frames[start_line..].iter().map(|f|f["prefill_tokens"].as_u64().unwrap()).sum();
++        assert_eq!(work,313-actual,"actual prompt work excludes cache hits");
++        let c=ctx.lock().await;let row=json!({"actual_hits":actual,"prefill_work":work,"index":i,"request_id":rid,"prompt":prompt_index,"predicted_hits":predicted,"physical":c.kv_journal.mapping_view(),"mutation_seq":c.kv_journal.last,"ledger":ledger(&c),"response":body});drop(c);
++        println!("KV_REAL_REQUEST {}",row);results.push(row);
++      }
++      tokio::time::sleep(Duration::from_millis(300)).await;
++      let c=ctx.lock().await;assert!(c.kv_journal.routable());assert_eq!(c.kv_journal.capacity,8);assert!(c.kv_journal.requests.is_empty());
++      println!("KV_REAL_RESULT {}",json!({"requests":results.len(),"ledger":ledger(&c),"last_mutation":c.kv_journal.last,"physical":c.kv_journal.mapping_view(),"valid":true}));drop(c);
++      task.abort();let _=task.await;
++    }
++}
+--- before/router/src/engine/mod.rs
++++ after/router/src/engine/mod.rs
+@@ -6,6 +6,7 @@
+ pub(crate) mod client;
+ pub(crate) mod colocation;
+ pub(crate) mod vllm_http;
++pub mod kv_journal;
+ #[cfg(feature = "zmq-backend")]
+ pub(crate) mod zmq;
+ 
+--- before/router/src/engine/vllm_http.rs
++++ after/router/src/engine/vllm_http.rs
+@@ -157,6 +157,7 @@
+     pub lmetric_protocol: Option<String>,
+     #[serde(default)]
+     pub engine_epoch: Option<String>,
++    pub kv_journal: Option<super::kv_journal::KvJournal>,
+     #[serde(default)]
+     pub kv_events: Option<bool>,
+     #[serde(default)]
+@@ -324,6 +325,8 @@
+ pub(super) struct MetricSequence {
+     epoch: Option<String>,
+     last: u64,
++    mutation_last: u64,
++    kv_mode: bool,
+     failed: bool,
+ }
+ 
+@@ -344,18 +347,43 @@
+     }
+ 
+     fn parse_inner(&mut self, data: &str) -> Result<VllmMetric, String> {
++        if data.len() > 20 * 1024 * 1024 { return Err("oversized SSE envelope".into()); }
+         let raw: serde_json::Value = serde_json::from_str(data).map_err(|e| e.to_string())?;
+         let metric: VllmMetric = serde_json::from_value(raw.clone()).map_err(|e| e.to_string())?;
+         match metric.lmetric_protocol.as_deref() {
+             None if self.epoch.is_none() => return Ok(metric),
+-            Some("request-v1") => {},
++            Some("request-v1" | "request-kv-v1") => {},
+             _ => return Err("Unsupported/missing LMetric protocol".into()),
+         }
++        let kv_mode = metric.lmetric_protocol.as_deref() == Some("request-kv-v1");
++        if self.versioned() && kv_mode != self.kv_mode { return Err("KV capability changed".into()); }
++        if kv_mode && !cfg!(all(feature="lmetric-q",feature="radixtree-blockhash",not(feature="simulator"))) {
++            return Err("KV journal requires lmetric-q/radixtree without simulator".into());
++        }
++        let mut mutation_last = self.mutation_last;
++        if kv_mode {
++            let j = metric.kv_journal.as_ref().ok_or("missing KV journal")?;
++            if j.version != "kv-journal-v1" || j.observation_kind != "scheduler_cache_metadata"
++                || !(2..=1_000_000).contains(&j.num_blocks) || j.mutations.len() > 8192 {
++                return Err("invalid KV journal capabilities/bounds".into());
++            }
++            for m in &j.mutations {
++                if m.mutation_seq != mutation_last + 1 || m.group_id != 0
++                    || Some(m.block_size) != metric.block_size {
++                    return Err("KV mutation sequence or group/block mismatch".into());
++                }
++                mutation_last = m.mutation_seq;
++            }
++            if mutation_last != j.mutation_seq { return Err("KV watermark mismatch".into()); }
++            if !matches!(raw["event_kind"].as_str(),Some("completion"|"control")) {
++                return Err("invalid KV envelope kind".into());
++            }
++        } else if metric.kv_journal.is_some() { return Err("unexpected KV journal".into()); }
+         for field in ["step_id", "latency", "outputs", "prefill_tokens"] {
+             if raw.get(field).is_none() { return Err(format!("Missing request-v1 field: {field}")); }
+         }
+         if metric.kv_groups != Some(1) || metric.block_size.unwrap_or(0) == 0
+-            || metric.kv_events != Some(false)
++            || metric.kv_events != Some(kv_mode)
+             || raw["latency_kind"] != "schedule_to_completion_host_ms"
+             || !matches!(raw["execution_mode"].as_str(), Some("sync" | "async")) {
+             return Err("Invalid request-v1 capabilities/timing semantics".into());
+@@ -386,6 +414,8 @@
+         }
+         self.epoch = Some(epoch.to_owned());
+         self.last = metric.step_id;
++        self.kv_mode = kv_mode;
++        self.mutation_last = mutation_last;
+         Ok(metric)
+     }
+ }
+--- before/router/src/gateway/server.rs
++++ after/router/src/gateway/server.rs
+@@ -276,7 +276,7 @@
+                     match response {
+                         Ok(response) => {
+                             match response {
+-                                InferStreamResponse::Prefill => {}
++                                InferStreamResponse::Prefill { .. } => {}
+                                 InferStreamResponse::Intermediate { token, .. } => {
+                                     let chunk = ChatCompletionChunk {
+                                         id: chat_id.clone(),
+--- before/router/src/scheduler/infer.rs
++++ after/router/src/scheduler/infer.rs
+@@ -48,6 +48,7 @@
+ 
+     /// Colocation controller
+     colocation_controller: Option<Arc<ColocationController>>,
++    shared_tokenizer: Option<Arc<tokenizers::Tokenizer>>,
+ }
+ 
+ impl Infer {
+@@ -63,7 +64,7 @@
+         let all_schedule_contexts: Vec<Arc<Mutex<ScheduleContext>>> = (0..num_replicas)
+             .map(|_| {
+                 Arc::new(Mutex::new(ScheduleContext {
+-                    lmetric: LMetric::default(),
++                    kv_journal: Default::default(), lmetric: LMetric::default(),
+                     // FIXME(@Healthcliff-Ding): a hack for Qwen2.5-7B
+                     block_hash: PrefixBlockHash::new(83000 + 1),
+                 }))
+@@ -76,7 +77,7 @@
+             queue.clone(),
+             all_engine_clients,
+             all_schedule_contexts.clone(),
+-            shared_tokenizer,
++            shared_tokenizer.clone(),
+         );
+ 
+         let semaphore = Arc::new(Semaphore::new(max_concurrent_requests));
+@@ -89,6 +90,7 @@
+             queue,
+             limit_concurrent_requests: semaphore,
+             colocation_controller: Some(controller),
++            shared_tokenizer,
+         }
+     }
+ 
+@@ -173,7 +175,8 @@
+         while let Some(response) = stream.next().await {
+             match response? {
+                 // Add prefill tokens
+-                InferStreamResponse::Prefill => {
++                InferStreamResponse::Prefill { input_length: actual_input_length } => {
++                    input_length = actual_input_length;
+                     first_token_time.get_or_insert(s.elapsed());
+                     interval = tokio::time::Instant::now();
+                 }
+@@ -214,6 +217,9 @@
+         if let (Some(mut generated_text), Some(queued), Some(start)) =
+             (result_generated_text, result_queued, result_start)
+         {
++            generated_text = assemble_generated_text(
++                generated_text, &result_tokens, self.shared_tokenizer.as_deref()
++            )?;
+             let mut max_time_between_tokens_except_first = Duration::from_micros(0);
+             let mut avg_time_between_tokens = Duration::from_micros(0);
+             let mut p90_time_between_tokens = Duration::from_micros(0);
+@@ -305,7 +311,7 @@
+ #[derive(Debug)]
+ pub(crate) enum InferStreamResponse {
+     // Optional first message
+-    Prefill,
++    Prefill { input_length: usize },
+     // Intermediate messages
+     Intermediate {
+         token: Token,
+@@ -365,3 +371,35 @@
+         }
+     }
+ }
++
++/// Build text/usage from all real token IDs, including the finishing event.
++fn assemble_generated_text(
++    mut metadata: GeneratedText,
++    tokens: &[Token],
++    tokenizer: Option<&tokenizers::Tokenizer>,
++) -> Result<GeneratedText, InferError> {
++    metadata.generated_tokens = tokens.len() as u32;
++    metadata.text = if let Some(tokenizer) = tokenizer {
++        let ids: Vec<u32> = tokens.iter().map(|t| t.id).collect();
++        tokenizer.decode(&ids, true).map_err(|e| InferError::GenerationError(e.to_string()))?
++    } else {
++        tokens.iter().map(|t|t.text.as_str()).collect()
++    };
++    Ok(metadata)
++}
++
++#[cfg(test)]
++mod gateway_aggregation_tests {
++    use super::*;
++    #[test]
++    fn gateway_aggregation_counts_and_decodes_complete_token_sequence() {
++        let model=tokenizers::models::wordlevel::WordLevel::builder()
++            .vocab([("hello".into(),0),("world".into(),1),("<unk>".into(),2)].into_iter().collect())
++            .unk_token("<unk>".into()).build().unwrap();
++        let tokenizer=tokenizers::Tokenizer::new(model);
++        // Per-token text may be partial/invalid. The final text must decode IDs.
++        let tokens=vec![Token {id:0,text:"wrong".into(),logprob:0.0},Token {id:1,text:"wrong".into(),logprob:0.0}];
++        let result=assemble_generated_text(GeneratedText::default(),&tokens,Some(&tokenizer)).unwrap();
++        assert_eq!(result.generated_tokens,2);assert_eq!(result.text,"hello world");
++    }
++}
+--- before/router/src/scheduler/kvcache.rs
++++ after/router/src/scheduler/kvcache.rs
+@@ -257,7 +257,11 @@
+     /// # Arguments:
+     /// `backend_bids` currently occupied blocks at backend, including prefix
+     pub fn set_bids(&mut self, backend_bids: Vec<u64>) {
+-        assert!(backend_bids.is_empty() == false);
++        if backend_bids.is_empty() {
++            self.block_indices.clear();
++            self.sync_nblks = 0;
++            return;
++        }
+         // `0` is an invalid bid at backend
+         let old = self.block_indices.get(self.sync_nblks).cloned().unwrap_or(0);
+         let new = backend_bids.get(self.sync_nblks).cloned().unwrap_or(0);
+--- before/router/src/scheduler/policies/dsl_runtime.rs
++++ after/router/src/scheduler/policies/dsl_runtime.rs
+@@ -26,6 +26,7 @@
+ #[derive(Debug, Clone, Copy)]
+ pub(crate) struct Observation {
+     pub idx: usize,
++    pub routing_enabled: bool,
+     pub bs: usize,
+     pub waiting: usize,
+     pub queued_tokens: isize,
+@@ -80,12 +81,13 @@
+         #[allow(unused_mut)]
+         let mut sctx = arc.lock().await;
+         let hit_blocks = sctx.block_hash.get(hashes);
+-        let epoch = sctx.block_hash.epoch();
++        let epoch = sctx.cache_epoch();
+         #[cfg(any(feature = "preble-q", feature = "preble-bs-q", feature = "preble-tps-q"))]
+         let now = std::time::Instant::now();
+         #[cfg(feature = "preble-tps-q")]
+         let bs_now = sctx.lmetric.bs;
+         Observation {
++            routing_enabled: sctx.kv_journal.routable(),
+             idx,
+             bs: sctx.lmetric.bs,
+             waiting: sctx.lmetric.waiting_reqs,
+@@ -410,7 +412,7 @@
+ 
+ #[inline]
+ pub(crate) fn root_target(observations: &[Observation]) -> Vec<&Observation> {
+-    observations.iter().collect()
++    observations.iter().filter(|o| o.routing_enabled).collect()
+ }
+ 
+ // =========================================================================
+@@ -517,11 +519,12 @@
+     all_sctx: &[Arc<Mutex<ScheduleContext>>],
+     chosen: usize,
+     cached: &Observation,
+-) {
++) -> bool {
+     let request = &entry.request;
+-    let ScheduleContext { lmetric, block_hash } =
+-        &mut *all_sctx[chosen].lock().await;
+-    let current_epoch = block_hash.epoch();
++    let mut context = all_sctx[chosen].lock().await;
++    if !context.kv_journal.routable() { return false; }
++    let current_epoch = context.cache_epoch();
++    let ScheduleContext { lmetric, block_hash, .. } = &mut *context;
+     let hit_nblks = if cached.epoch == current_epoch {
+         cached.hit_blocks
+     } else {
+@@ -548,4 +551,5 @@
+         prefill_tokens_inc: new_ntkns,
+         all_tokens_inc: request.input_tokens.len(),
+     };
+-}
++    true
++}
+--- before/router/src/scheduler/policies/lmetric.rs
++++ after/router/src/scheduler/policies/lmetric.rs
+@@ -54,7 +54,7 @@
+ 
+     fn pool(n: usize) -> Vec<Arc<Mutex<ScheduleContext>>> {
+         (0..n).map(|_| Arc::new(Mutex::new(ScheduleContext {
+-            lmetric: LMetric::default(), block_hash: PrefixBlockHash::new(1024),
++            kv_journal: Default::default(), lmetric: LMetric::default(), block_hash: PrefixBlockHash::new(1024),
+         }))).collect()
+     }
+ 
+--- before/router/src/scheduler/policies/paper_tests.rs
++++ after/router/src/scheduler/policies/paper_tests.rs
+@@ -54,7 +54,7 @@
+             cache.insert(&req.block_hash_state.get_hashes()[..s.hits],
+                 (1..=s.hits as u64).collect());
+         }
+-        Arc::new(Mutex::new(ScheduleContext { lmetric: metric, block_hash: cache }))
++        Arc::new(Mutex::new(ScheduleContext { kv_journal: Default::default(), lmetric: metric, block_hash: cache }))
+     }).collect()
+ }
+ 
+--- before/router/src/scheduler/policies/preble/mod.rs
++++ after/router/src/scheduler/policies/preble/mod.rs
+@@ -281,7 +281,7 @@
+         (0..n)
+             .map(|_| {
+                 Arc::new(Mutex::new(ScheduleContext {
+-                    lmetric: LMetric::default(),
++                    kv_journal: Default::default(), lmetric: LMetric::default(),
+                     block_hash: PrefixBlockHash::new(1024),
+                 }))
+             })
+--- before/router/src/scheduler/simulator/mirror.rs
++++ after/router/src/scheduler/simulator/mirror.rs
+@@ -162,6 +162,7 @@
+         preempted: Vec<u64>,
+     ) -> EngineStepOutput {
+         EngineStepOutput {
++            engine_epoch: None, kv_journal: None,
+             lmetric_protocol: None,
+             lmetric_block_size: None,
+             prefill_tokens: 0,
+--- before/router/src/scheduler/simulator/mod.rs
++++ after/router/src/scheduler/simulator/mod.rs
+@@ -219,6 +219,7 @@
+ 
+     fn empty_step(prefill_tokens: usize, latency_ms: u64, outputs: Vec<RequestStepOutput>) -> EngineStepOutput {
+         EngineStepOutput {
++            engine_epoch: None, kv_journal: None,
+             lmetric_protocol: None,
+             lmetric_block_size: None,
+             prefill_tokens,
+--- before/router/src/scheduler/simulator/pctx.rs
++++ after/router/src/scheduler/simulator/pctx.rs
+@@ -762,6 +762,7 @@
+         outputs: Vec<RequestStepOutput>,
+     ) -> EngineStepOutput {
+         EngineStepOutput {
++            engine_epoch: None, kv_journal: None,
+             lmetric_protocol: None,
+             lmetric_block_size: None,
+             prefill_tokens,
+--- before/router/src/scheduler/simulator/sched.rs
++++ after/router/src/scheduler/simulator/sched.rs
+@@ -281,6 +281,7 @@
+         aborted: Vec<u64>,
+     ) -> EngineStepOutput {
+         EngineStepOutput {
++            engine_epoch: None, kv_journal: None,
+             lmetric_protocol: None,
+             lmetric_block_size: None,
+             prefill_tokens,
+--- before/router/src/scheduler/state.rs
++++ after/router/src/scheduler/state.rs
+@@ -2,7 +2,7 @@
+ use std::time::{Duration, Instant};
+ use std::ops::{AddAssign, SubAssign};
+ 
+-use super::kvcache::PrefixBlockHash;
++use super::kvcache::{BlockHash, PrefixBlockHash};
+ 
+ use serde::Serialize;
+ 
+@@ -257,4 +257,15 @@
+ pub(crate) struct ScheduleContext {
+     pub lmetric: LMetric,
+     pub block_hash: PrefixBlockHash,
+-}
++    pub kv_journal: crate::engine::kv_journal::KvJournalState,
++}
++
++impl ScheduleContext {
++    pub fn cache_epoch(&self) -> u64 {
++        if self.kv_journal.active() { self.kv_journal.last } else { self.block_hash.epoch() }
++    }
++    pub fn invalidate_kv(&mut self, reason: String) {
++        self.kv_journal.invalidate(reason);
++        self.block_hash = PrefixBlockHash::new(self.kv_journal.capacity.max(2));
++    }
++}

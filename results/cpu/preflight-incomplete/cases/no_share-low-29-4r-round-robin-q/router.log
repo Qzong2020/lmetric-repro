@@ -1,0 +1,8 @@
+2026-10-23T02:53:57.640600Z  WARN router: router/src/main.rs:417: The shard info is not set properly by the st-server
+Blitz router is ready
+2026-10-23T02:53:57.643953Z  WARN router::scheduler::statistic: router/src/scheduler/statistic.rs:16: Statistic path is not set
+2026-10-23T02:54:04.019255Z ERROR router::engine::vllm_http: router/src/engine/vllm_http.rs:131: Request_274 POST error: error sending request for url (http://127.0.0.1:41817/v1/completions): connection closed before message completed
+2026-10-23T02:54:04.019278Z ERROR router::engine::vllm_http: router/src/engine/vllm_http.rs:131: Request_278 POST error: error sending request for url (http://127.0.0.1:41817/v1/completions): connection closed before message completed
+2026-10-23T02:54:04.019267Z ERROR router::engine::vllm_http: router/src/engine/vllm_http.rs:131: Request_275 POST error: error sending request for url (http://127.0.0.1:45221/v1/completions): connection closed before message completed
+2026-10-23T02:54:04.019475Z ERROR router::engine::vllm_http: router/src/engine/vllm_http.rs:131: Request_277 POST error: error sending request for url (http://127.0.0.1:39303/v1/completions): connection closed before message completed
+2026-10-23T02:54:04.020332Z ERROR router::engine::vllm_http: router/src/engine/vllm_http.rs:131: Request_276 POST error: error sending request for url (http://127.0.0.1:40443/v1/completions): connection closed before message completed

@@ -1,0 +1,11 @@
+{
+  "paper": "https://arxiv.org/abs/2603.15202v3",
+  "local_router_commit": "a005ceb3a6689d30514bd27e45ede0db933d0fea",
+  "sha256": {
+    "2603.15202v3.pdf": "798b36755318a7024821df40ad6724b81c70459d8b4d4d1ee4ed394aec560ee8",
+    "2603.15202v3.html": "984cbcee4704d6ad6e7bb6bc56fa593f801757f799adc074b87fdb9ef04ad631",
+    "2603.15202v3.txt": "7d1040cb4bda636aaec13505f01fbdb9b263d6556f21f3c6481efbc2d299e206",
+    "fig17-method.png": "13502912928daf1361db03777f93bdb32f017a2d37c51f7bb0b4a3d675bb2630",
+    "fig6-baselines.png": "694c11914a6d34fc01540bcd0768423494c21ce2ed56ee4116873ca982183b89"
+  }
+}

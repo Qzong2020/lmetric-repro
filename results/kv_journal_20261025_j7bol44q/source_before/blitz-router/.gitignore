@@ -1,0 +1,44 @@
+# Rust
+target/
+Cargo.lock
+
+# Build
+build/
+.cache/
+compile_commands.json
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+**/.DS_Store
+
+# Logs
+log/
+log_home
+log-home*/
+server_log
+log.*/
+*.log
+
+# Data
+dataset_home
+*.csv
+*.jsonl
+
+# Python
+__pycache__/
+
+# Temp
+temp/
+tmp/
+output/
+
+# Profiling
+*.nsys-rep
+spec/abort-recovery/states/
+
+# Project memory (untracked until user-reviewed; see CLAUDE.md "Memory Policy")
+.claude/memory/

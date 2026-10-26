@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/root/lmetric-repro/scripts/dual_npu/smoke_single.py", line 156, in <module>
+    main()
+  File "/root/lmetric-repro/scripts/dual_npu/smoke_single.py", line 121, in main
+    s.start_single()
+  File "/root/lmetric-repro/scripts/dual_npu/smoke_single.py", line 54, in start_single
+    self.reset([0])
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 130, in reset
+    wait(lambda idx=idx,last=last:any(s['engine']==idx and s['step_id']==last and not s['physical'] for s in self.states()),5,'Rust reset application')
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 51, in wait
+    raise TimeoutError(label)
+TimeoutError: Rust reset application

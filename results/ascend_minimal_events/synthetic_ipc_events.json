@@ -1,0 +1,87 @@
+[
+  {
+    "lmetric_protocol": "request-v1",
+    "engine_epoch": "63160e8f4d2a4b86aa5e45f2a360e60c",
+    "step_id": 1,
+    "latency": 0,
+    "latency_kind": "schedule_to_completion_host_ms",
+    "execution_mode": "sync",
+    "kv_events": false,
+    "block_size": 128,
+    "kv_groups": 1,
+    "prefill_tokens": 128,
+    "outputs": []
+  },
+  {
+    "lmetric_protocol": "request-v1",
+    "engine_epoch": "63160e8f4d2a4b86aa5e45f2a360e60c",
+    "step_id": 2,
+    "latency": 0,
+    "latency_kind": "schedule_to_completion_host_ms",
+    "execution_mode": "sync",
+    "kv_events": false,
+    "block_size": 128,
+    "kv_groups": 1,
+    "prefill_tokens": 128,
+    "outputs": [
+      {
+        "request_id": "engine-internal-uuid",
+        "new_token_ids": [
+          9
+        ],
+        "state": "PREFILL",
+        "is_finished": false,
+        "hit_token_cnt": 128,
+        "prev_computed_tokens": 256
+      }
+    ]
+  },
+  {
+    "lmetric_protocol": "request-v1",
+    "engine_epoch": "63160e8f4d2a4b86aa5e45f2a360e60c",
+    "step_id": 3,
+    "latency": 0,
+    "latency_kind": "schedule_to_completion_host_ms",
+    "execution_mode": "sync",
+    "kv_events": false,
+    "block_size": 128,
+    "kv_groups": 1,
+    "prefill_tokens": 0,
+    "outputs": [
+      {
+        "request_id": "engine-internal-uuid",
+        "new_token_ids": [
+          10
+        ],
+        "state": "DECODE",
+        "is_finished": false,
+        "hit_token_cnt": 128,
+        "prev_computed_tokens": 384
+      }
+    ]
+  },
+  {
+    "lmetric_protocol": "request-v1",
+    "engine_epoch": "63160e8f4d2a4b86aa5e45f2a360e60c",
+    "step_id": 4,
+    "latency": 0,
+    "latency_kind": "schedule_to_completion_host_ms",
+    "execution_mode": "sync",
+    "kv_events": false,
+    "block_size": 128,
+    "kv_groups": 1,
+    "prefill_tokens": 0,
+    "outputs": [
+      {
+        "request_id": "engine-internal-uuid",
+        "new_token_ids": [
+          11
+        ],
+        "state": "DECODE",
+        "is_finished": true,
+        "hit_token_cnt": 128,
+        "prev_computed_tokens": 385
+      }
+    ]
+  }
+]

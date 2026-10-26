@@ -1,0 +1,346 @@
+diff --git a/vllm/entrypoints/openai/api_server.py b/vllm/entrypoints/openai/api_server.py
+index c4ed8a5..ab48e16 100644
+--- a/vllm/entrypoints/openai/api_server.py
++++ b/vllm/entrypoints/openai/api_server.py
+@@ -188,6 +188,13 @@ def build_app(
+ 
+     register_models_api_router(app)
+ 
++    from vllm.v1.engine.lmetric_events import enabled as lmetric_enabled
++
++    if lmetric_enabled():
++        from vllm.entrypoints.openai.serving_metrics import router as lmetric_router
++
++        app.include_router(lmetric_router)
++
+     from vllm.entrypoints.serve.sagemaker.api_router import (
+         attach_router as register_sagemaker_api_router,
+     )
+diff --git a/vllm/entrypoints/openai/completion/serving.py b/vllm/entrypoints/openai/completion/serving.py
+index ed85323..7a28ec5 100644
+--- a/vllm/entrypoints/openai/completion/serving.py
++++ b/vllm/entrypoints/openai/completion/serving.py
+@@ -140,6 +140,22 @@ class OpenAIServingCompletion(OpenAIServing):
+             return result
+ 
+         engine_inputs = result
++        lmetric_hub = getattr(self.engine_client, "lmetric_hub", None)
++        if lmetric_hub is not None:
++            try:
++                lmetric_hub.require_ready()
++                from vllm.v1.engine.lmetric_kv_journal import kv_enabled
++
++                if kv_enabled() and request.cache_salt is not None:
++                    raise ValueError("LMetric KV journal excludes cache_salt")
++                if raw_request is None or not raw_request.headers.get("X-Request-Id"):
++                    raise ValueError("LMetric requires X-Request-Id")
++                if len(engine_inputs) != 1 or request.n != 1 or request.use_beam_search:
++                    raise ValueError("LMetric requires one prompt and n=1 without beam search")
++                if request.stop or request.echo:
++                    raise ValueError("LMetric request-v1 excludes stop strings and echo")
++            except ValueError as exc:
++                return self.create_error_response(str(exc))
+ 
+         request_id = f"cmpl-{self._base_request_id(raw_request, request.request_id)}"
+         created_time = int(time.time())
+@@ -192,6 +208,10 @@ class OpenAIServingCompletion(OpenAIServing):
+                 else await self._get_trace_headers(raw_request.headers)
+             )
+ 
++            if lmetric_hub is not None:
++                trace_headers = dict(trace_headers or {})
++                trace_headers["x-lmetric-request-id"] = raw_request.headers["X-Request-Id"]
++
+             if isinstance(sampling_params, BeamSearchParams):
+                 generator = self.beam_search(
+                     prompt=engine_input,
+diff --git a/vllm/v1/core/block_pool.py b/vllm/v1/core/block_pool.py
+index 4202f52..659fec1 100644
+--- a/vllm/v1/core/block_pool.py
++++ b/vllm/v1/core/block_pool.py
+@@ -180,6 +180,7 @@ class BlockPool:
+         self.kv_event_queue: list[KVCacheEvent] = []
+ 
+         self.metrics_collector = metrics_collector
++        self.lmetric_journal = None
+ 
+     def get_cached_block(
+         self, block_hash: BlockHash, kv_cache_group_ids: list[int]
+@@ -279,6 +280,12 @@ class BlockPool:
+             )
+             blk.block_hash = block_hash_with_group_id
+             self.cached_block_hash_to_block.insert(block_hash_with_group_id, blk)
++            if self.lmetric_journal is not None:
++                index = num_cached_blocks + i
++                self.lmetric_journal.insert(
++                    blk.block_id, block_hash, kv_cache_group_id, block_size,
++                    index, request.all_token_ids[: (index + 1) * block_size],
++                )
+             if new_hashes is not None:
+                 new_hashes.append(maybe_convert_block_hash(block_hash))
+ 
+@@ -387,6 +394,10 @@ class BlockPool:
+             # eviction is not needed
+             return False
+ 
++        if self.lmetric_journal is not None:
++            self.lmetric_journal.remove(
++                block.block_id, get_block_hash(block_hash), get_group_id(block_hash)
++            )
+         block.reset_hash()
+ 
+         if self.enable_kv_cache_events:
+@@ -487,6 +498,8 @@ class BlockPool:
+         if self.metrics_collector:
+             self.metrics_collector.reset()
+ 
++        if self.lmetric_journal is not None:
++            self.lmetric_journal.reset()
+         logger.info("Successfully reset prefix cache")
+ 
+         if self.enable_kv_cache_events:
+diff --git a/vllm/v1/core/kv_cache_manager.py b/vllm/v1/core/kv_cache_manager.py
+index 9f0bfc5..5f53faf 100644
+--- a/vllm/v1/core/kv_cache_manager.py
++++ b/vllm/v1/core/kv_cache_manager.py
+@@ -417,6 +417,13 @@ class KVCacheManager:
+             num_encoder_tokens,
+         )
+ 
++        # Observe successful full occupancy independently of cache registration.
++        journal = self.block_pool.lmetric_journal
++        if journal is not None:
++            journal.request_blocks(
++                request.request_id, self.get_block_ids(request.request_id)
++            )
++
+         # P/D: delay caching blocks if we have to recv from
+         # remote. Update state for locally cached blocks.
+         if not self.enable_caching or delay_cache_blocks:
+@@ -444,6 +451,8 @@ class KVCacheManager:
+             request: The request to free the blocks.
+         """
+         self.coordinator.free(request.request_id)
++        if self.block_pool.lmetric_journal is not None:
++            self.block_pool.lmetric_journal.release(request.request_id)
+ 
+     def remove_skipped_blocks(
+         self, request_id: str, total_computed_tokens: int
+diff --git a/vllm/v1/core/sched/output.py b/vllm/v1/core/sched/output.py
+index b2e9dd8..66ce4e8 100644
+--- a/vllm/v1/core/sched/output.py
++++ b/vllm/v1/core/sched/output.py
+@@ -240,6 +240,9 @@ class SchedulerOutput:
+     # preventing stale NaN/data from corrupting attention or SSM computation.
+     new_block_ids_to_zero: list[int] | None = None
+ 
++    # Private, per-schedule observation snapshot; never a cumulative metric.
++    lmetric_snapshot: dict | None = None
++
+     @classmethod
+     def make_empty(cls) -> "SchedulerOutput":
+         return cls(
+diff --git a/vllm/v1/engine/__init__.py b/vllm/v1/engine/__init__.py
+index 848f530..c43d0bf 100644
+--- a/vllm/v1/engine/__init__.py
++++ b/vllm/v1/engine/__init__.py
+@@ -227,6 +227,8 @@ class EngineCoreOutputs(
+     outputs: list[EngineCoreOutput] = []
+     scheduler_stats: SchedulerStats | None = None
+     timestamp: float = 0.0
++    # Optional request-v1 observation; survives empty-token steps and IPC.
++    lmetric_event: dict[str, Any] | None = None
+ 
+     utility_output: UtilityOutput | None = None
+     finished_requests: set[str] | None = None
+diff --git a/vllm/v1/engine/async_llm.py b/vllm/v1/engine/async_llm.py
+index 419e151..8608884 100644
+--- a/vllm/v1/engine/async_llm.py
++++ b/vllm/v1/engine/async_llm.py
+@@ -167,6 +167,11 @@ class AsyncLLM(EngineClient):
+ 
+         self._client_count = client_count
+ 
++        from vllm.v1.engine.lmetric_events import EventHub, enabled
++
++        if enabled() and client_count != 1:
++            raise ValueError("LMetric request-v1 requires one API frontend")
++        self.lmetric_hub = EventHub() if enabled() else None
+         self.output_handler: asyncio.Task | None = None
+         try:
+             # Start output handler eagerly if we are in the asyncio eventloop.
+@@ -405,6 +410,9 @@ class AsyncLLM(EngineClient):
+         index: int,
+         queue: RequestOutputCollector,
+     ):
++        if self.lmetric_hub is not None:
++            external = (request.trace_headers or {}).get("x-lmetric-request-id")
++            self.lmetric_hub.register(request.request_id, external)
+         # Add the request to OutputProcessor (this process).
+         self.output_processor.add_request(request, prompt, parent_req, index, queue)
+ 
+@@ -652,12 +660,15 @@ class AsyncLLM(EngineClient):
+         logger_ref = self._logger_ref
+         renderer = self.renderer
+         chunk_size = envs.VLLM_V1_OUTPUT_PROC_CHUNK_SIZE
++        lmetric_hub = self.lmetric_hub
+ 
+         async def output_handler():
+             try:
+                 while True:
+                     # 1) Pull EngineCoreOutputs from the EngineCore.
+                     outputs = await engine_core.get_output_async()
++                    if lmetric_hub is not None and outputs.lmetric_event is not None:
++                        lmetric_hub.publish(outputs.lmetric_event)
+                     num_outputs = len(outputs.outputs)
+ 
+                     iteration_stats = (
+@@ -701,6 +712,8 @@ class AsyncLLM(EngineClient):
+                             mm_cache_stats=renderer.stat_mm_cache(),
+                         )
+             except Exception as e:
++                if lmetric_hub is not None:
++                    lmetric_hub.failed = "Engine output failed; restart LMetric session"
+                 logger.exception("AsyncLLM output_handler failed.")
+                 output_processor.propagate_error(e)
+ 
+diff --git a/vllm/v1/engine/core.py b/vllm/v1/engine/core.py
+index 08c814a..107f82f 100644
+--- a/vllm/v1/engine/core.py
++++ b/vllm/v1/engine/core.py
+@@ -116,6 +116,15 @@ class EngineCore:
+                 vllm_config,
+             )
+ 
++        from vllm.v1.engine.lmetric_events import enabled, validate_config
++
++        from vllm.v1.engine.lmetric_kv_journal import kv_enabled
++
++        if kv_enabled() and not enabled():
++            raise ValueError("KV journal requires VLLM_LMETRIC_EVENTS=1")
++        self.lmetric_tracker = None
++        if enabled():
++            validate_config(vllm_config)
+         self.log_stats = log_stats
+ 
+         # Setup Model.
+@@ -218,6 +227,14 @@ class EngineCore:
+             self.step if self.batch_queue is None else self.step_with_batch_queue
+         )
+         self.async_scheduling = vllm_config.scheduler_config.async_scheduling
++        if enabled():
++            from vllm.v1.engine.lmetric_events import RequestEvents
++
++            self.lmetric_tracker = RequestEvents(
++                self.scheduler, scheduler_block_size, hash_block_size,
++                self.async_scheduling, self.batch_queue_size,
++            )
++            logger.info("LMetric effective runtime: %s", self.lmetric_tracker.runtime)
+ 
+         self.aborts_queue = queue.Queue[list[str]]()
+ 
+@@ -381,6 +398,8 @@ class EngineCore:
+         # TODO: The scheduler doesn't really need to know the
+         # specific finish reason, TBD whether we propagate that
+         # (i.e. client-aborted vs stop criteria met).
++        if self.lmetric_tracker is not None and request_ids:
++            raise RuntimeError("LMetric request-v1 abort requires session restart; ACK not implemented")
+         self.scheduler.finish_requests(request_ids, RequestStatus.FINISHED_ABORTED)
+ 
+     @contextmanager
+@@ -440,6 +459,20 @@ class EngineCore:
+         )
+         self._iteration_index += 1
+ 
++    def _schedule_with_lmetric(self) -> SchedulerOutput:
++        started = time.monotonic()
++        output = self.scheduler.schedule()
++        if self.lmetric_tracker is not None:
++            self.lmetric_tracker.capture(self.scheduler, output, started)
++        return output
++
++    def _complete_with_lmetric(self, scheduler_output, core_outputs):
++        if self.lmetric_tracker is not None:
++            return self.lmetric_tracker.complete(
++                scheduler_output, core_outputs, EngineCoreOutputs
++            )
++        return core_outputs
++
+     def step(self) -> tuple[dict[int, EngineCoreOutputs], bool]:
+         """Schedule, execute, and make output.
+ 
+@@ -451,7 +484,7 @@ class EngineCore:
+         # or finished and not yet removed from the batch.
+         if not self.scheduler.has_requests():
+             return {}, False
+-        scheduler_output = self.scheduler.schedule()
++        scheduler_output = self._schedule_with_lmetric()
+         future = self.model_executor.execute_model(scheduler_output, non_block=True)
+         grammar_output = self.scheduler.get_grammar_bitmask(scheduler_output)
+         with (
+@@ -468,6 +501,9 @@ class EngineCore:
+         engine_core_outputs = self.scheduler.update_from_output(
+             scheduler_output, model_output
+         )
++        engine_core_outputs = self._complete_with_lmetric(
++            scheduler_output, engine_core_outputs
++        )
+ 
+         return engine_core_outputs, scheduler_output.total_num_scheduled_tokens > 0
+ 
+@@ -509,7 +545,7 @@ class EngineCore:
+         model_executed = False
+         deferred_scheduler_output = None
+         if self.scheduler.has_requests():
+-            scheduler_output = self.scheduler.schedule()
++            scheduler_output = self._schedule_with_lmetric()
+             with self.log_error_detail(scheduler_output):
+                 exec_future = self.model_executor.execute_model(
+                     scheduler_output, non_block=True
+@@ -570,6 +606,9 @@ class EngineCore:
+         engine_core_outputs = self.scheduler.update_from_output(
+             scheduler_output, model_output
+         )
++        engine_core_outputs = self._complete_with_lmetric(
++            scheduler_output, engine_core_outputs
++        )
+ 
+         # NOTE(nick): We can either handle the deferred tasks here or save
+         # in a field and do it immediately once step_with_batch_queue is
+@@ -646,9 +685,19 @@ class EngineCore:
+     def reset_prefix_cache(
+         self, reset_running_requests: bool = False, reset_connector: bool = False
+     ) -> bool:
+-        return self.scheduler.reset_prefix_cache(
++        tracker = self.lmetric_tracker
++        journal = getattr(tracker, "kv_journal", None)
++        if journal is not None and (
++            self.scheduler.has_unfinished_requests() or self.batch_queue
++            or reset_running_requests or reset_connector
++        ):
++            raise ValueError("LMetric KV reset requires a fully drained engine")
++        result = self.scheduler.reset_prefix_cache(
+             reset_running_requests, reset_connector
+         )
++        if journal is not None and result:
++            self.output_queue.put_nowait((0, tracker.control_output(EngineCoreOutputs)))
++        return result
+ 
+     def reset_encoder_cache(self) -> None:
+         """Reset the encoder cache to invalidate all cached encoder outputs.
+diff --git a/vllm/v1/engine/core_client.py b/vllm/v1/engine/core_client.py
+index 32f2d09..115cffd 100644
+--- a/vllm/v1/engine/core_client.py
++++ b/vllm/v1/engine/core_client.py
+@@ -1024,7 +1024,10 @@ class AsyncMPClient(MPClient):
+                             return
+                         await output_handler(_self, outputs)
+ 
+-                    if outputs.outputs or outputs.scheduler_stats:
++                    if (
++                        outputs.outputs or outputs.scheduler_stats
++                        or outputs.lmetric_event is not None
++                    ):
+                         outputs_queue.put_nowait(outputs)
+             except Exception as e:
+                 outputs_queue.put_nowait(e)

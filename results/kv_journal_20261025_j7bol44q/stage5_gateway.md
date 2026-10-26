@@ -1,0 +1,7 @@
+# 阶段五：完整生产Router网关
+
+直接使用当前源码离线构建的router可执行文件，经真实HTTP聊天入口、真实接纳/路由/SSE消费和NPU，最多3条请求。首次网关试验因测试temperature=0被现有校验拒绝（未推理）；第二次实际推理后发现旧响应聚合仍返回默认GeneratedText/input_length，已停止，先用独立回归复现Some(0)而应为Some(8)。
+
+已修复：Prefill传实际输入长度；扣账结束后将最终token计入Entry响应元数据；非流式响应使用全部真实token IDs解码并统计usage，避免逐token解码破坏最终文本。未改变KV扣账或原始缓存策略。修复后Router43通过/3忽略，完整网关3条请求通过，预测/实际命中0/256/0，输入313输出8且总321，账本指标全0。随后启用项目实际LOG_LEVEL（而非RUST_LOG）补齐逐步生产消费日志，最终证据见gateway_release。
+
+额外保全问题：调用旧CPU回归时，测试固化路径重写了results/ascend_minimal_events/synthetic_ipc_events.json。当前未找到原随机epoch备份，不能逐字节恢复，已在history_integrity_issue.json明确标为未解决并请求用户提供原备份路径。旧真实单卡验收43个文件哈希单独核对。后续已使用安全包装重定向旧测试产物到新目录并核对该历史文件不再变化；不声称全部历史结果保全通过。

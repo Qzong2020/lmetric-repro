@@ -1,0 +1,257 @@
+[
+  {
+    "at": 0.002180284820497036,
+    "router_rss_bytes": 39055360,
+    "runner_rss_bytes": 75198464
+  },
+  {
+    "at": 0.10260902671143413,
+    "router_rss_bytes": 39866368,
+    "runner_rss_bytes": 75198464
+  },
+  {
+    "at": 0.21387874009087682,
+    "router_rss_bytes": 47267840,
+    "runner_rss_bytes": 74944512
+  },
+  {
+    "at": 0.3151152739301324,
+    "router_rss_bytes": 51441664,
+    "runner_rss_bytes": 74944512
+  },
+  {
+    "at": 0.41616516606882215,
+    "router_rss_bytes": 55877632,
+    "runner_rss_bytes": 74944512
+  },
+  {
+    "at": 0.5172865288332105,
+    "router_rss_bytes": 60145664,
+    "runner_rss_bytes": 74956800
+  },
+  {
+    "at": 0.6178412828594446,
+    "router_rss_bytes": 64229376,
+    "runner_rss_bytes": 75091968
+  },
+  {
+    "at": 0.7199129210785031,
+    "router_rss_bytes": 67039232,
+    "runner_rss_bytes": 75288576
+  },
+  {
+    "at": 0.8203284121118486,
+    "router_rss_bytes": 71266304,
+    "runner_rss_bytes": 75587584
+  },
+  {
+    "at": 0.9214759059250355,
+    "router_rss_bytes": 73416704,
+    "runner_rss_bytes": 75649024
+  },
+  {
+    "at": 1.022571997717023,
+    "router_rss_bytes": 74526720,
+    "runner_rss_bytes": 75689984
+  },
+  {
+    "at": 1.1230104598216712,
+    "router_rss_bytes": 74526720,
+    "runner_rss_bytes": 75689984
+  },
+  {
+    "at": 1.2240585219115019,
+    "router_rss_bytes": 74731520,
+    "runner_rss_bytes": 75689984
+  },
+  {
+    "at": 1.3246872466988862,
+    "router_rss_bytes": 74731520,
+    "runner_rss_bytes": 75689984
+  },
+  {
+    "at": 1.4258403899148107,
+    "router_rss_bytes": 74813440,
+    "runner_rss_bytes": 75689984
+  },
+  {
+    "at": 1.5264422348700464,
+    "router_rss_bytes": 74813440,
+    "runner_rss_bytes": 75689984
+  },
+  {
+    "at": 1.6269024168141186,
+    "router_rss_bytes": 74813440,
+    "runner_rss_bytes": 75689984
+  },
+  {
+    "at": 1.7275218721479177,
+    "router_rss_bytes": 74895360,
+    "runner_rss_bytes": 75689984
+  },
+  {
+    "at": 1.8285256819799542,
+    "router_rss_bytes": 75001856,
+    "runner_rss_bytes": 75689984
+  },
+  {
+    "at": 1.929114277008921,
+    "router_rss_bytes": 75001856,
+    "runner_rss_bytes": 75689984
+  },
+  {
+    "at": 2.030387601815164,
+    "router_rss_bytes": 75026432,
+    "runner_rss_bytes": 75689984
+  },
+  {
+    "at": 2.1316308761015534,
+    "router_rss_bytes": 75026432,
+    "runner_rss_bytes": 75689984
+  },
+  {
+    "at": 2.2321344488300383,
+    "router_rss_bytes": 75026432,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 2.332886605989188,
+    "router_rss_bytes": 75034624,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 2.434131819754839,
+    "router_rss_bytes": 75157504,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 2.5348205459304154,
+    "router_rss_bytes": 75374592,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 2.635327818803489,
+    "router_rss_bytes": 75403264,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 2.7366122137755156,
+    "router_rss_bytes": 75423744,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 2.8376948460936546,
+    "router_rss_bytes": 75509760,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 2.9385384637862444,
+    "router_rss_bytes": 75509760,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 3.0395187637768686,
+    "router_rss_bytes": 75501568,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 3.1400463567115366,
+    "router_rss_bytes": 75538432,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 3.2411444089375436,
+    "router_rss_bytes": 75538432,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 3.342507764697075,
+    "router_rss_bytes": 75608064,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 3.442877745721489,
+    "router_rss_bytes": 75608064,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 3.544119579717517,
+    "router_rss_bytes": 75554816,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 3.645150560885668,
+    "router_rss_bytes": 75583488,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 3.7455821321345866,
+    "router_rss_bytes": 75583488,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 3.8464331799186766,
+    "router_rss_bytes": 75304960,
+    "runner_rss_bytes": 76386304
+  },
+  {
+    "at": 3.94778175605461,
+    "router_rss_bytes": 75313152,
+    "runner_rss_bytes": 76619776
+  },
+  {
+    "at": 4.048133855685592,
+    "router_rss_bytes": 75313152,
+    "runner_rss_bytes": 76619776
+  },
+  {
+    "at": 4.148547996766865,
+    "router_rss_bytes": 75165696,
+    "runner_rss_bytes": 76619776
+  },
+  {
+    "at": 4.249416004866362,
+    "router_rss_bytes": 75210752,
+    "runner_rss_bytes": 76619776
+  },
+  {
+    "at": 4.350164991803467,
+    "router_rss_bytes": 75227136,
+    "runner_rss_bytes": 76619776
+  },
+  {
+    "at": 4.4509948790073395,
+    "router_rss_bytes": 75264000,
+    "runner_rss_bytes": 76619776
+  },
+  {
+    "at": 4.55154455313459,
+    "router_rss_bytes": 75091968,
+    "runner_rss_bytes": 76619776
+  },
+  {
+    "at": 4.652378259692341,
+    "router_rss_bytes": 75120640,
+    "runner_rss_bytes": 76619776
+  },
+  {
+    "at": 4.753482651896775,
+    "router_rss_bytes": 75194368,
+    "runner_rss_bytes": 76619776
+  },
+  {
+    "at": 4.854366719722748,
+    "router_rss_bytes": 75194368,
+    "runner_rss_bytes": 76619776
+  },
+  {
+    "at": 4.954953043721616,
+    "router_rss_bytes": 75194368,
+    "runner_rss_bytes": 76619776
+  },
+  {
+    "at": 5.055923853069544,
+    "router_rss_bytes": 75247616,
+    "runner_rss_bytes": 76619776
+  }
+]

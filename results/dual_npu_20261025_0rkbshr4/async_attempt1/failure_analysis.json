@@ -1,0 +1,10 @@
+{
+  "observer_failure": "complete JSON followed by another process log, not an SSE protocol payload change",
+  "completed_http_requests": 2,
+  "all_saved_completion_states_verified": true,
+  "events": [
+    13,
+    13
+  ],
+  "full_async_scenario_passed": false
+}

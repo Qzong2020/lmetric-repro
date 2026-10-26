@@ -1,0 +1,8 @@
+2026-10-25T11:15:06.847170Z  WARN router: router/src/main.rs:417: The shard info is not set properly by the st-server
+2026-10-25T11:15:06.847636Z  INFO router: router/src/main.rs:435: Loaded model config: type=qwen3, max_position_embeddings=40960
+2026-10-25T11:15:06.847682Z  WARN router: router/src/main.rs:447: --max-total-tokens=1024 overrides auto-discovered max_position_embeddings=40960 from config.json
+2026-10-25T11:15:06.847708Z  WARN router: router/src/main.rs:471: --max-input-length=512 overrides auto-discovered max_total_tokens-1=1023
+Blitz router is ready
+2026-10-25T11:15:06.958286Z  WARN router::scheduler::statistic: router/src/scheduler/statistic.rs:16: Statistic path is not set
+2026-10-25T11:15:07.059829Z ERROR chat_completions:chat_completions_non_stream:generate:generate_stream: router::scheduler::infer: router/src/scheduler/infer.rs:118: `temperature` must be strictly positive
+2026-10-25T11:15:07.060616Z  INFO router::gateway::server: router/src/gateway/server.rs:649: signal received, starting graceful shutdown

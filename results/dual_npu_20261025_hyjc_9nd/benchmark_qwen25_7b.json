@@ -1,0 +1,2454 @@
+{
+  "raw": [
+    {
+      "workload": "cache_friendly",
+      "repeat": 0,
+      "policy": "lmetric-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 7.10669981,
+      "request_throughput_rps": 1.1256983148131594,
+      "output_token_throughput_tps": 9.005586518505275,
+      "total_token_throughput_tps": 361.34915905502413,
+      "ttft_mean_ms": 306.18390125,
+      "tpot_mean_ms": 65.456884,
+      "actual_hits": 1536,
+      "predicted_hits": 1536,
+      "prefill_work": 968,
+      "distribution": {
+        "0": 7,
+        "1": 1
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.001706631,
+          "mean_us": 213.32887499999998
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 73.0,
+          "total_seconds": 0.004939893999999999,
+          "mean_us": 67.6697808219178
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 73.0,
+          "total_seconds": 0.022091577999999987,
+          "mean_us": 302.6243561643834
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "arrival_lateness_ms": [
+        0.31357817351818085,
+        0.09297676384448922,
+        0.11999346315860748,
+        0.10892659425731921,
+        0.12443587183952332,
+        0.09720869362350726,
+        0.12452900409698486,
+        0.11119343340393328
+      ],
+      "session": "benchmark_lmetric_attempt2",
+      "pair": "pair1"
+    },
+    {
+      "workload": "mixed",
+      "repeat": 0,
+      "policy": "lmetric-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.532619592,
+      "request_throughput_rps": 1.2246235812960835,
+      "output_token_throughput_tps": 9.796988650368668,
+      "total_token_throughput_tps": 393.1041695960428,
+      "ttft_mean_ms": 145.95009725,
+      "tpot_mean_ms": 60.50592353571429,
+      "actual_hits": 1024,
+      "predicted_hits": 1024,
+      "prefill_work": 1480,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0017192509999999998,
+          "mean_us": 214.90637499999997
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 80.0,
+          "total_seconds": 0.006240907999999998,
+          "mean_us": 78.01134999999998
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 80.0,
+          "total_seconds": 0.024725952000000027,
+          "mean_us": 309.07440000000037
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "arrival_lateness_ms": [
+        0.3087371587753296,
+        0.09300470352172768,
+        0.11852383613586426,
+        0.11550731956955218,
+        0.1135263592004776,
+        0.09354859590526843,
+        0.11861324310302734,
+        0.11254571378227496
+      ],
+      "session": "benchmark_lmetric_attempt2",
+      "pair": "pair1"
+    },
+    {
+      "workload": "low_hit",
+      "repeat": 0,
+      "policy": "lmetric-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.653824999,
+      "request_throughput_rps": 1.202315961300803,
+      "output_token_throughput_tps": 9.618527690406424,
+      "total_token_throughput_tps": 385.9434235775578,
+      "ttft_mean_ms": 205.649998,
+      "tpot_mean_ms": 59.658508857142856,
+      "actual_hits": 0,
+      "predicted_hits": 0,
+      "prefill_work": 2504,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.010678638,
+          "mean_us": 1334.82975
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.008277861000000006,
+          "mean_us": 94.06660227272734
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.046472184,
+          "mean_us": 528.093
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "arrival_lateness_ms": [
+        0.3366079181432724,
+        0.09572416543960488,
+        0.11746585369110107,
+        0.10982997715469622,
+        0.14022551476955414,
+        0.11357575654979968,
+        0.12257322669029236,
+        0.11994600296016955
+      ],
+      "session": "benchmark_lmetric_attempt2",
+      "pair": "pair1"
+    },
+    {
+      "workload": "cache_friendly",
+      "repeat": 1,
+      "policy": "lmetric-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 7.074568298,
+      "request_throughput_rps": 1.1308110492426262,
+      "output_token_throughput_tps": 9.04648839394101,
+      "total_token_throughput_tps": 362.990346806883,
+      "ttft_mean_ms": 298.153681625,
+      "tpot_mean_ms": 63.24956682142857,
+      "actual_hits": 1536,
+      "predicted_hits": 1536,
+      "prefill_work": 968,
+      "distribution": {
+        "0": 7,
+        "1": 1
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0017671810000000013,
+          "mean_us": 220.89762500000018
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 73.0,
+          "total_seconds": 0.005765347000000004,
+          "mean_us": 78.97735616438362
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 73.0,
+          "total_seconds": 0.024385404999999943,
+          "mean_us": 334.04664383561567
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "arrival_lateness_ms": [
+        0.33679790794849396,
+        0.0913748890161506,
+        0.12210942804813385,
+        0.10682180523868823,
+        0.11570937931537628,
+        0.11294059455391192,
+        0.12140162289142609,
+        0.10128229856487536
+      ],
+      "session": "benchmark_lmetric_attempt2",
+      "pair": "pair1"
+    },
+    {
+      "workload": "mixed",
+      "repeat": 1,
+      "policy": "lmetric-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.546321986,
+      "request_throughput_rps": 1.2220602679044574,
+      "output_token_throughput_tps": 9.77648214323566,
+      "total_token_throughput_tps": 392.28134599733085,
+      "ttft_mean_ms": 143.737655625,
+      "tpot_mean_ms": 60.65077971428572,
+      "actual_hits": 1024,
+      "predicted_hits": 1024,
+      "prefill_work": 1480,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0018670629999999987,
+          "mean_us": 233.38287499999984
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 80.0,
+          "total_seconds": 0.0066604929999999965,
+          "mean_us": 83.25616249999995
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 80.0,
+          "total_seconds": 0.026278997000000054,
+          "mean_us": 328.4874625000007
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41
+      ],
+      "arrival_lateness_ms": [
+        0.3356579691171646,
+        0.08310474455356515,
+        0.11740066111087799,
+        0.11739231646057391,
+        0.11963024735450745,
+        0.09861126542087817,
+        0.12358278036117554,
+        0.09944200515743518
+      ],
+      "session": "benchmark_lmetric_attempt2",
+      "pair": "pair1"
+    },
+    {
+      "workload": "low_hit",
+      "repeat": 1,
+      "policy": "lmetric-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.676937333,
+      "request_throughput_rps": 1.1981541238167557,
+      "output_token_throughput_tps": 9.585232990534045,
+      "total_token_throughput_tps": 384.6074737451786,
+      "ttft_mean_ms": 199.905940625,
+      "tpot_mean_ms": 60.273722017857146,
+      "actual_hits": 0,
+      "predicted_hits": 0,
+      "prefill_work": 2504,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0017977820000000012,
+          "mean_us": 224.72275000000016
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.00810423099999999,
+          "mean_us": 92.09353409090897
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.02918236900000007,
+          "mean_us": 331.6178295454553
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "arrival_lateness_ms": [
+        0.4030894488096237,
+        0.1294138282537452,
+        0.1318417489528656,
+        0.1127524673938396,
+        0.13657286763191223,
+        0.09906202554699206,
+        0.12227706611156464,
+        0.11761769652363085
+      ],
+      "session": "benchmark_lmetric_attempt2",
+      "pair": "pair1"
+    },
+    {
+      "workload": "cache_friendly",
+      "repeat": 0,
+      "policy": "join-shortest-weight-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.501637499,
+      "request_throughput_rps": 1.2304592498782745,
+      "output_token_throughput_tps": 9.843673999026196,
+      "total_token_throughput_tps": 394.9774192109261,
+      "ttft_mean_ms": 122.76880975,
+      "tpot_mean_ms": 56.3881185,
+      "actual_hits": 1280,
+      "predicted_hits": 1280,
+      "prefill_work": 1224,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0014892670000000003,
+          "mean_us": 186.15837500000004
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 78.0,
+          "total_seconds": 0.004846366,
+          "mean_us": 62.13289743589744
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 78.0,
+          "total_seconds": 0.020233342999999987,
+          "mean_us": 259.4018333333332
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "arrival_lateness_ms": [
+        0.3618728369474411,
+        0.09360074996948159,
+        0.17233751714229584,
+        0.118239820003474,
+        0.13710185885429382,
+        0.10286554694172168,
+        0.13318657875061035,
+        0.1027705520391109
+      ],
+      "session": "benchmark_baseline_attempt1",
+      "pair": "pair1"
+    },
+    {
+      "workload": "mixed",
+      "repeat": 0,
+      "policy": "join-shortest-weight-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.56197514,
+      "request_throughput_rps": 1.2191451246491616,
+      "output_token_throughput_tps": 9.753160997193293,
+      "total_token_throughput_tps": 391.34558501238087,
+      "ttft_mean_ms": 176.615710625,
+      "tpot_mean_ms": 55.17240248214286,
+      "actual_hits": 256,
+      "predicted_hits": 256,
+      "prefill_work": 2248,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0015040560000000001,
+          "mean_us": 188.007
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 86.0,
+          "total_seconds": 0.006123979999999999,
+          "mean_us": 71.20906976744185
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 86.0,
+          "total_seconds": 0.022144681999999992,
+          "mean_us": 257.4963023255813
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "arrival_lateness_ms": [
+        0.29015354812145233,
+        0.0870367884635917,
+        0.12282095849514008,
+        0.10316729545589709,
+        0.12944824993610382,
+        0.09257629513736987,
+        0.1210533082485199,
+        0.10276310145851397
+      ],
+      "session": "benchmark_baseline_attempt1",
+      "pair": "pair1"
+    },
+    {
+      "workload": "low_hit",
+      "repeat": 0,
+      "policy": "join-shortest-weight-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.623698407,
+      "request_throughput_rps": 1.207784459441195,
+      "output_token_throughput_tps": 9.66227567552956,
+      "total_token_throughput_tps": 387.69881148062365,
+      "ttft_mean_ms": 187.864820375,
+      "tpot_mean_ms": 54.24344283928571,
+      "actual_hits": 0,
+      "predicted_hits": 0,
+      "prefill_work": 2504,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0014660150000000002,
+          "mean_us": 183.251875
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.006467286000000003,
+          "mean_us": 73.4918863636364
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.022642155999999997,
+          "mean_us": 257.29722727272724
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "arrival_lateness_ms": [
+        0.26815198361873627,
+        0.0856714695692054,
+        0.12724846601486206,
+        0.09457118809219622,
+        0.12630410492420197,
+        0.09551741182800555,
+        0.13381429016590118,
+        0.09076952934261584
+      ],
+      "session": "benchmark_baseline_attempt1",
+      "pair": "pair1"
+    },
+    {
+      "workload": "cache_friendly",
+      "repeat": 1,
+      "policy": "join-shortest-weight-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.498196803,
+      "request_throughput_rps": 1.2311107592658117,
+      "output_token_throughput_tps": 9.848886074126494,
+      "total_token_throughput_tps": 395.18655372432556,
+      "ttft_mean_ms": 119.681274375,
+      "tpot_mean_ms": 54.0500515,
+      "actual_hits": 1280,
+      "predicted_hits": 1280,
+      "prefill_work": 1224,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0014532449999999997,
+          "mean_us": 181.65562499999996
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 78.0,
+          "total_seconds": 0.004564464999999979,
+          "mean_us": 58.51878205128178
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 78.0,
+          "total_seconds": 0.019103944000000025,
+          "mean_us": 244.9223589743593
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "arrival_lateness_ms": [
+        0.5856752395629883,
+        0.09515605866908944,
+        0.19175559282302856,
+        0.1323549449443462,
+        0.1887492835521698,
+        0.10845720767971301,
+        0.19725598394870758,
+        0.10149464011188769
+      ],
+      "session": "benchmark_baseline_attempt1",
+      "pair": "pair1"
+    },
+    {
+      "workload": "mixed",
+      "repeat": 1,
+      "policy": "join-shortest-weight-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.525482814,
+      "request_throughput_rps": 1.2259629253542004,
+      "output_token_throughput_tps": 9.807703402833603,
+      "total_token_throughput_tps": 393.53409903869834,
+      "ttft_mean_ms": 178.238882,
+      "tpot_mean_ms": 54.93616444642857,
+      "actual_hits": 256,
+      "predicted_hits": 256,
+      "prefill_work": 2248,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0014755180000000003,
+          "mean_us": 184.43975000000003
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 86.0,
+          "total_seconds": 0.006780344000000008,
+          "mean_us": 78.84120930232568
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 86.0,
+          "total_seconds": 0.02448262400000001,
+          "mean_us": 284.68167441860476
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41
+      ],
+      "arrival_lateness_ms": [
+        51.06524936854839,
+        11.625385880470276,
+        0.16604922711849213,
+        0.10900110006328845,
+        0.1373477280139923,
+        0.08845426142212176,
+        0.18309429287910461,
+        0.08845984935756945
+      ],
+      "session": "benchmark_baseline_attempt1",
+      "pair": "pair1"
+    },
+    {
+      "workload": "low_hit",
+      "repeat": 1,
+      "policy": "join-shortest-weight-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.629782506,
+      "request_throughput_rps": 1.2066760851898148,
+      "output_token_throughput_tps": 9.653408681518519,
+      "total_token_throughput_tps": 387.3430233459306,
+      "ttft_mean_ms": 191.868131,
+      "tpot_mean_ms": 54.99576176785715,
+      "actual_hits": 0,
+      "predicted_hits": 0,
+      "prefill_work": 2504,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0015913669999999998,
+          "mean_us": 198.92087499999997
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.006378770999999974,
+          "mean_us": 72.48603409090879
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.035184931000000086,
+          "mean_us": 399.82876136363734
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "arrival_lateness_ms": [
+        0.4729442298412323,
+        0.08959792554378426,
+        0.13768859207630157,
+        0.10117799043651843,
+        0.15076994895935059,
+        0.09910114109512591,
+        0.15525519847869873,
+        0.07754661142822528
+      ],
+      "session": "benchmark_baseline_attempt1",
+      "pair": "pair1"
+    },
+    {
+      "workload": "cache_friendly",
+      "repeat": 0,
+      "policy": "join-shortest-weight-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.563580974,
+      "request_throughput_rps": 1.2188468507800876,
+      "output_token_throughput_tps": 9.7507748062407,
+      "total_token_throughput_tps": 391.2498391004081,
+      "ttft_mean_ms": 124.631764875,
+      "tpot_mean_ms": 56.991427214285714,
+      "actual_hits": 1280,
+      "predicted_hits": 1280,
+      "prefill_work": 1224,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0020379989999999995,
+          "mean_us": 254.74987499999995
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 78.0,
+          "total_seconds": 0.007329897999999998,
+          "mean_us": 93.97305128205126
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 78.0,
+          "total_seconds": 0.02907988400000002,
+          "mean_us": 372.8190256410259
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "arrival_lateness_ms": [
+        0.4443470388650894,
+        0.1135291904211036,
+        0.16438588500022888,
+        0.1001535356044414,
+        0.12817047536373138,
+        0.11054895818229937,
+        0.12360885739326477,
+        0.10715894401069903
+      ],
+      "session": "benchmark_baseline_attempt2",
+      "pair": "pair2"
+    },
+    {
+      "workload": "mixed",
+      "repeat": 0,
+      "policy": "join-shortest-weight-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.589230978,
+      "request_throughput_rps": 1.2141022263008003,
+      "output_token_throughput_tps": 9.712817810406403,
+      "total_token_throughput_tps": 389.7268146425569,
+      "ttft_mean_ms": 181.638560875,
+      "tpot_mean_ms": 56.035079571428575,
+      "actual_hits": 256,
+      "predicted_hits": 256,
+      "prefill_work": 2248,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.002324441,
+          "mean_us": 290.555125
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 86.0,
+          "total_seconds": 0.009760229,
+          "mean_us": 113.49103488372094
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 86.0,
+          "total_seconds": 0.034386209000000015,
+          "mean_us": 399.83963953488393
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "arrival_lateness_ms": [
+        0.3847852349281311,
+        0.08917137980461037,
+        0.11689029633998871,
+        0.11646285653110766,
+        0.12229196727275848,
+        0.10601527988907122,
+        0.11930428445339203,
+        0.11080786585804248
+      ],
+      "session": "benchmark_baseline_attempt2",
+      "pair": "pair2"
+    },
+    {
+      "workload": "low_hit",
+      "repeat": 0,
+      "policy": "join-shortest-weight-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.660611991,
+      "request_throughput_rps": 1.2010908323153815,
+      "output_token_throughput_tps": 9.608726658523052,
+      "total_token_throughput_tps": 385.55015717323744,
+      "ttft_mean_ms": 195.25966025,
+      "tpot_mean_ms": 56.312327946428574,
+      "actual_hits": 0,
+      "predicted_hits": 0,
+      "prefill_work": 2504,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.001941056,
+          "mean_us": 242.632
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.008866240000000008,
+          "mean_us": 100.75272727272737
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.030786595000000055,
+          "mean_us": 349.84767045454606
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "arrival_lateness_ms": [
+        0.379195436835289,
+        0.057586506009101035,
+        0.11712126433849335,
+        0.12101516127582812,
+        0.1198500394821167,
+        0.11255502700802111,
+        0.12142956256866455,
+        0.11451639235016131
+      ],
+      "session": "benchmark_baseline_attempt2",
+      "pair": "pair2"
+    },
+    {
+      "workload": "cache_friendly",
+      "repeat": 1,
+      "policy": "join-shortest-weight-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.53489421,
+      "request_throughput_rps": 1.2241973233106094,
+      "output_token_throughput_tps": 9.793578586484875,
+      "total_token_throughput_tps": 392.96734078270566,
+      "ttft_mean_ms": 123.55741474999999,
+      "tpot_mean_ms": 56.417435285714284,
+      "actual_hits": 1280,
+      "predicted_hits": 1280,
+      "prefill_work": 1224,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.002211740000000001,
+          "mean_us": 276.46750000000014
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 78.0,
+          "total_seconds": 0.0073745120000000206,
+          "mean_us": 94.5450256410259
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 78.0,
+          "total_seconds": 0.028491850000000013,
+          "mean_us": 365.2801282051284
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "arrival_lateness_ms": [
+        0.5008373409509659,
+        0.08276946842670357,
+        0.12137554585933685,
+        0.09248316287990832,
+        0.13637728989124298,
+        0.1051174849271419,
+        0.11573173105716705,
+        0.11335223913189196
+      ],
+      "session": "benchmark_baseline_attempt2",
+      "pair": "pair2"
+    },
+    {
+      "workload": "mixed",
+      "repeat": 1,
+      "policy": "join-shortest-weight-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.605607078,
+      "request_throughput_rps": 1.211092319832954,
+      "output_token_throughput_tps": 9.688738558663632,
+      "total_token_throughput_tps": 388.76063466637817,
+      "ttft_mean_ms": 183.070892625,
+      "tpot_mean_ms": 56.21780182142857,
+      "actual_hits": 256,
+      "predicted_hits": 256,
+      "prefill_work": 2248,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.013259164,
+          "mean_us": 1657.3955
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 86.0,
+          "total_seconds": 0.008928721999999965,
+          "mean_us": 103.82234883720889
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 86.0,
+          "total_seconds": 0.03238093999999997,
+          "mean_us": 376.52255813953457
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41
+      ],
+      "arrival_lateness_ms": [
+        0.8300729095935822,
+        0.09082354605197823,
+        0.12117065489292145,
+        0.11506401002403521,
+        0.11751987040042877,
+        0.0939136743545177,
+        0.12055784463882446,
+        0.0921329855918529
+      ],
+      "session": "benchmark_baseline_attempt2",
+      "pair": "pair2"
+    },
+    {
+      "workload": "low_hit",
+      "repeat": 1,
+      "policy": "join-shortest-weight-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.671865872,
+      "request_throughput_rps": 1.199064872328117,
+      "output_token_throughput_tps": 9.592518978624936,
+      "total_token_throughput_tps": 384.8998240173255,
+      "ttft_mean_ms": 196.35093625,
+      "tpot_mean_ms": 56.43567144642857,
+      "actual_hits": 0,
+      "predicted_hits": 0,
+      "prefill_work": 2504,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0018039039999999985,
+          "mean_us": 225.48799999999983
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.008173474000000014,
+          "mean_us": 92.88038636363652
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.038632393000000015,
+          "mean_us": 439.0044659090911
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "arrival_lateness_ms": [
+        0.41415542364120483,
+        0.08116759359836495,
+        0.12278556823730469,
+        0.10465182363983416,
+        0.12348778545856476,
+        0.0950033217668178,
+        0.12344680726528168,
+        0.09283520281311297
+      ],
+      "session": "benchmark_baseline_attempt2",
+      "pair": "pair2"
+    },
+    {
+      "workload": "cache_friendly",
+      "repeat": 0,
+      "policy": "lmetric-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.899687883,
+      "request_throughput_rps": 1.159472737848191,
+      "output_token_throughput_tps": 9.275781902785528,
+      "total_token_throughput_tps": 372.19074884926937,
+      "ttft_mean_ms": 255.592615125,
+      "tpot_mean_ms": 54.74095855357143,
+      "actual_hits": 1536,
+      "predicted_hits": 1536,
+      "prefill_work": 968,
+      "distribution": {
+        "0": 7,
+        "1": 1
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.00186164,
+          "mean_us": 232.70499999999998
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 73.0,
+          "total_seconds": 0.006318633000000001,
+          "mean_us": 86.55661643835617
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 73.0,
+          "total_seconds": 0.026911138,
+          "mean_us": 368.6457260273973
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "arrival_lateness_ms": [
+        0.4300270229578018,
+        0.10593891143798745,
+        0.19884295761585236,
+        0.10980948805805468,
+        0.20937621593475342,
+        0.10997526347633624,
+        0.1990143209695816,
+        0.10573402047153735
+      ],
+      "session": "benchmark_lmetric_attempt3",
+      "pair": "pair2"
+    },
+    {
+      "workload": "mixed",
+      "repeat": 0,
+      "policy": "lmetric-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.553934513,
+      "request_throughput_rps": 1.2206408202785166,
+      "output_token_throughput_tps": 9.765126562228133,
+      "total_token_throughput_tps": 391.8257033094038,
+      "ttft_mean_ms": 135.402561125,
+      "tpot_mean_ms": 56.07865316071428,
+      "actual_hits": 1024,
+      "predicted_hits": 1024,
+      "prefill_work": 1480,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0019213100000000003,
+          "mean_us": 240.16375000000005
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 80.0,
+          "total_seconds": 0.006288246000000001,
+          "mean_us": 78.603075
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 80.0,
+          "total_seconds": 0.025183513000000025,
+          "mean_us": 314.7939125000003
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "arrival_lateness_ms": [
+        0.36976486444473267,
+        0.09201191365718758,
+        0.14620274305343628,
+        0.10643437504764819,
+        0.15780143439769745,
+        0.11272080242630267,
+        0.15303120017051697,
+        0.10307230055328631
+      ],
+      "session": "benchmark_lmetric_attempt3",
+      "pair": "pair2"
+    },
+    {
+      "workload": "low_hit",
+      "repeat": 0,
+      "policy": "lmetric-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.635224668,
+      "request_throughput_rps": 1.2056863784254306,
+      "output_token_throughput_tps": 9.645491027403445,
+      "total_token_throughput_tps": 387.0253274745632,
+      "ttft_mean_ms": 191.87180225,
+      "tpot_mean_ms": 55.171617285714284,
+      "actual_hits": 0,
+      "predicted_hits": 0,
+      "prefill_work": 2504,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0017260080000000002,
+          "mean_us": 215.75100000000003
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.007607486000000004,
+          "mean_us": 86.44870454545458
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.027576279999999953,
+          "mean_us": 313.3668181818176
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "arrival_lateness_ms": [
+        1.197049394249916,
+        0.0834754109382621,
+        0.1437012106180191,
+        0.11766612529751086,
+        0.1418665051460266,
+        0.12553952634331011,
+        0.14827214181423187,
+        0.1422772556542995
+      ],
+      "session": "benchmark_lmetric_attempt3",
+      "pair": "pair2"
+    },
+    {
+      "workload": "cache_friendly",
+      "repeat": 1,
+      "policy": "lmetric-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.881957523,
+      "request_throughput_rps": 1.1624599502777258,
+      "output_token_throughput_tps": 9.299679602221806,
+      "total_token_throughput_tps": 373.14964403914996,
+      "ttft_mean_ms": 253.289859875,
+      "tpot_mean_ms": 53.65365376785714,
+      "actual_hits": 1536,
+      "predicted_hits": 1536,
+      "prefill_work": 968,
+      "distribution": {
+        "0": 7,
+        "1": 1
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.001853927,
+          "mean_us": 231.740875
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 73.0,
+          "total_seconds": 0.0054927000000000135,
+          "mean_us": 75.24246575342484
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 73.0,
+          "total_seconds": 0.023957833999999983,
+          "mean_us": 328.18950684931485
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "arrival_lateness_ms": [
+        0.3970358520746231,
+        0.10882787406444466,
+        0.17611496150493622,
+        0.11089913547035479,
+        0.12904778122901917,
+        0.1179753243922832,
+        0.1763179898262024,
+        0.11422395706173205
+      ],
+      "session": "benchmark_lmetric_attempt3",
+      "pair": "pair2"
+    },
+    {
+      "workload": "mixed",
+      "repeat": 1,
+      "policy": "lmetric-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.49434082,
+      "request_throughput_rps": 1.2318417252391753,
+      "output_token_throughput_tps": 9.854733801913403,
+      "total_token_throughput_tps": 395.42119380177525,
+      "ttft_mean_ms": 135.804909625,
+      "tpot_mean_ms": 54.221205732142856,
+      "actual_hits": 1024,
+      "predicted_hits": 1024,
+      "prefill_work": 1480,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0019274210000000003,
+          "mean_us": 240.92762500000003
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 80.0,
+          "total_seconds": 0.0064311300000000175,
+          "mean_us": 80.38912500000022
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 80.0,
+          "total_seconds": 0.025861337999999984,
+          "mean_us": 323.26672499999984
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41
+      ],
+      "arrival_lateness_ms": [
+        0.5620084702968597,
+        0.11696018278598702,
+        0.16386248171329498,
+        0.0945097208022716,
+        0.1644957810640335,
+        0.10395333170887255,
+        0.16936101019382477,
+        0.14529101550575518
+      ],
+      "session": "benchmark_lmetric_attempt3",
+      "pair": "pair2"
+    },
+    {
+      "workload": "low_hit",
+      "repeat": 1,
+      "policy": "lmetric-q",
+      "requests": 8,
+      "planned_arrival_offsets_seconds": [
+        0,
+        0.04,
+        2,
+        2.04,
+        4,
+        4.04,
+        6,
+        6.04
+      ],
+      "elapsed_seconds": 6.625935345,
+      "request_throughput_rps": 1.2073767073560238,
+      "output_token_throughput_tps": 9.65901365884819,
+      "total_token_throughput_tps": 387.56792306128364,
+      "ttft_mean_ms": 189.375183125,
+      "tpot_mean_ms": 54.56254944642857,
+      "actual_hits": 0,
+      "predicted_hits": 0,
+      "prefill_work": 2504,
+      "distribution": {
+        "0": 4,
+        "1": 4
+      },
+      "instrumented_histograms": {
+        "blitz_policy_schedule_duration_seconds": {
+          "count": 8.0,
+          "total_seconds": 0.0018633690000000001,
+          "mean_us": 232.92112500000002
+        },
+        "blitz_kv_prepare_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.007285628999999981,
+          "mean_us": 82.79123863636342
+        },
+        "blitz_step_apply_duration_seconds": {
+          "count": 88.0,
+          "total_seconds": 0.026571920999999776,
+          "mean_us": 301.9536477272702
+        }
+      },
+      "failures": 0,
+      "request_ids": [
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "arrival_lateness_ms": [
+        0.34637562930583954,
+        0.1004422456026069,
+        0.12627802789211273,
+        0.07616639137264514,
+        0.1291036605834961,
+        0.10983556509014392,
+        0.12437254190444946,
+        0.12346453964706683
+      ],
+      "session": "benchmark_lmetric_attempt3",
+      "pair": "pair2"
+    }
+  ],
+  "summary": {
+    "cache_friendly": {
+      "lmetric-q": {
+        "request_throughput_rps": {
+          "values": [
+            1.1256983148131594,
+            1.1308110492426262,
+            1.159472737848191,
+            1.1624599502777258
+          ],
+          "mean": 1.1446105130454256,
+          "stdev": 0.019040173133133203
+        },
+        "output_token_throughput_tps": {
+          "values": [
+            9.005586518505275,
+            9.04648839394101,
+            9.275781902785528,
+            9.299679602221806
+          ],
+          "mean": 9.156884104363405,
+          "stdev": 0.15232138506506562
+        },
+        "total_token_throughput_tps": {
+          "values": [
+            361.34915905502413,
+            362.990346806883,
+            372.19074884926937,
+            373.14964403914996
+          ],
+          "mean": 367.4199746875816,
+          "stdev": 6.111895575735785
+        },
+        "ttft_mean_ms": {
+          "values": [
+            306.18390125,
+            298.153681625,
+            255.592615125,
+            253.289859875
+          ],
+          "mean": 278.30501446875,
+          "stdev": 27.765764046997045
+        },
+        "tpot_mean_ms": {
+          "values": [
+            65.456884,
+            63.24956682142857,
+            54.74095855357143,
+            53.65365376785714
+          ],
+          "mean": 59.27526578571429,
+          "stdev": 5.9489477003485645
+        },
+        "actual_hits": {
+          "values": [
+            1536,
+            1536,
+            1536,
+            1536
+          ],
+          "mean": 1536,
+          "stdev": 0.0
+        },
+        "prefill_work": {
+          "values": [
+            968,
+            968,
+            968,
+            968
+          ],
+          "mean": 968,
+          "stdev": 0.0
+        },
+        "elapsed_seconds": {
+          "values": [
+            7.10669981,
+            7.074568298,
+            6.899687883,
+            6.881957523
+          ],
+          "mean": 6.9907283785,
+          "stdev": 0.11632995580533438
+        },
+        "distribution": {
+          "0": [
+            7,
+            7,
+            7,
+            7
+          ],
+          "1": [
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "repeat_sessions": [
+          [
+            "pair1",
+            "benchmark_lmetric_attempt2",
+            0
+          ],
+          [
+            "pair1",
+            "benchmark_lmetric_attempt2",
+            1
+          ],
+          [
+            "pair2",
+            "benchmark_lmetric_attempt3",
+            0
+          ],
+          [
+            "pair2",
+            "benchmark_lmetric_attempt3",
+            1
+          ]
+        ]
+      },
+      "join-shortest-weight-q": {
+        "request_throughput_rps": {
+          "values": [
+            1.2304592498782745,
+            1.2311107592658117,
+            1.2188468507800876,
+            1.2241973233106094
+          ],
+          "mean": 1.2261535458086958,
+          "stdev": 0.005782953440855429
+        },
+        "output_token_throughput_tps": {
+          "values": [
+            9.843673999026196,
+            9.848886074126494,
+            9.7507748062407,
+            9.793578586484875
+          ],
+          "mean": 9.809228366469567,
+          "stdev": 0.04626362752684343
+        },
+        "total_token_throughput_tps": {
+          "values": [
+            394.9774192109261,
+            395.18655372432556,
+            391.2498391004081,
+            392.96734078270566
+          ],
+          "mean": 393.5952882045914,
+          "stdev": 1.856328054514585
+        },
+        "ttft_mean_ms": {
+          "values": [
+            122.76880975,
+            119.681274375,
+            124.631764875,
+            123.55741474999999
+          ],
+          "mean": 122.6598159375,
+          "stdev": 2.127428473612529
+        },
+        "tpot_mean_ms": {
+          "values": [
+            56.3881185,
+            54.0500515,
+            56.991427214285714,
+            56.417435285714284
+          ],
+          "mean": 55.961758125,
+          "stdev": 1.3043856149756385
+        },
+        "actual_hits": {
+          "values": [
+            1280,
+            1280,
+            1280,
+            1280
+          ],
+          "mean": 1280,
+          "stdev": 0.0
+        },
+        "prefill_work": {
+          "values": [
+            1224,
+            1224,
+            1224,
+            1224
+          ],
+          "mean": 1224,
+          "stdev": 0.0
+        },
+        "elapsed_seconds": {
+          "values": [
+            6.501637499,
+            6.498196803,
+            6.563580974,
+            6.53489421
+          ],
+          "mean": 6.5245773714999995,
+          "stdev": 0.03082147686983065
+        },
+        "distribution": {
+          "0": [
+            4,
+            4,
+            4,
+            4
+          ],
+          "1": [
+            4,
+            4,
+            4,
+            4
+          ]
+        },
+        "repeat_sessions": [
+          [
+            "pair1",
+            "benchmark_baseline_attempt1",
+            0
+          ],
+          [
+            "pair1",
+            "benchmark_baseline_attempt1",
+            1
+          ],
+          [
+            "pair2",
+            "benchmark_baseline_attempt2",
+            0
+          ],
+          [
+            "pair2",
+            "benchmark_baseline_attempt2",
+            1
+          ]
+        ]
+      }
+    },
+    "mixed": {
+      "lmetric-q": {
+        "request_throughput_rps": {
+          "values": [
+            1.2246235812960835,
+            1.2220602679044574,
+            1.2206408202785166,
+            1.2318417252391753
+          ],
+          "mean": 1.2247915986795581,
+          "stdev": 0.004980684139263556
+        },
+        "output_token_throughput_tps": {
+          "values": [
+            9.796988650368668,
+            9.77648214323566,
+            9.765126562228133,
+            9.854733801913403
+          ],
+          "mean": 9.798332789436465,
+          "stdev": 0.03984547311410845
+        },
+        "total_token_throughput_tps": {
+          "values": [
+            393.1041695960428,
+            392.28134599733085,
+            391.8257033094038,
+            395.42119380177525
+          ],
+          "mean": 393.1581031761382,
+          "stdev": 1.5987996087035843
+        },
+        "ttft_mean_ms": {
+          "values": [
+            145.95009725,
+            143.737655625,
+            135.402561125,
+            135.804909625
+          ],
+          "mean": 140.22380590625,
+          "stdev": 5.413212169763934
+        },
+        "tpot_mean_ms": {
+          "values": [
+            60.50592353571429,
+            60.65077971428572,
+            56.07865316071428,
+            54.221205732142856
+          ],
+          "mean": 57.864140535714284,
+          "stdev": 3.2250743908730075
+        },
+        "actual_hits": {
+          "values": [
+            1024,
+            1024,
+            1024,
+            1024
+          ],
+          "mean": 1024,
+          "stdev": 0.0
+        },
+        "prefill_work": {
+          "values": [
+            1480,
+            1480,
+            1480,
+            1480
+          ],
+          "mean": 1480,
+          "stdev": 0.0
+        },
+        "elapsed_seconds": {
+          "values": [
+            6.532619592,
+            6.546321986,
+            6.553934513,
+            6.49434082
+          ],
+          "mean": 6.5318042277499995,
+          "stdev": 0.026487019267021798
+        },
+        "distribution": {
+          "0": [
+            4,
+            4,
+            4,
+            4
+          ],
+          "1": [
+            4,
+            4,
+            4,
+            4
+          ]
+        },
+        "repeat_sessions": [
+          [
+            "pair1",
+            "benchmark_lmetric_attempt2",
+            0
+          ],
+          [
+            "pair1",
+            "benchmark_lmetric_attempt2",
+            1
+          ],
+          [
+            "pair2",
+            "benchmark_lmetric_attempt3",
+            0
+          ],
+          [
+            "pair2",
+            "benchmark_lmetric_attempt3",
+            1
+          ]
+        ]
+      },
+      "join-shortest-weight-q": {
+        "request_throughput_rps": {
+          "values": [
+            1.2191451246491616,
+            1.2259629253542004,
+            1.2141022263008003,
+            1.211092319832954
+          ],
+          "mean": 1.217575649034279,
+          "stdev": 0.006504046965559861
+        },
+        "output_token_throughput_tps": {
+          "values": [
+            9.753160997193293,
+            9.807703402833603,
+            9.712817810406403,
+            9.688738558663632
+          ],
+          "mean": 9.740605192274232,
+          "stdev": 0.052032375724478885
+        },
+        "total_token_throughput_tps": {
+          "values": [
+            391.34558501238087,
+            393.53409903869834,
+            389.7268146425569,
+            388.76063466637817
+          ],
+          "mean": 390.8417833400036,
+          "stdev": 2.0877990759447416
+        },
+        "ttft_mean_ms": {
+          "values": [
+            176.615710625,
+            178.238882,
+            181.638560875,
+            183.070892625
+          ],
+          "mean": 179.89101153125,
+          "stdev": 2.978965172323002
+        },
+        "tpot_mean_ms": {
+          "values": [
+            55.17240248214286,
+            54.93616444642857,
+            56.035079571428575,
+            56.21780182142857
+          ],
+          "mean": 55.590362080357146,
+          "stdev": 0.6309038610115497
+        },
+        "actual_hits": {
+          "values": [
+            256,
+            256,
+            256,
+            256
+          ],
+          "mean": 256,
+          "stdev": 0.0
+        },
+        "prefill_work": {
+          "values": [
+            2248,
+            2248,
+            2248,
+            2248
+          ],
+          "mean": 2248,
+          "stdev": 0.0
+        },
+        "elapsed_seconds": {
+          "values": [
+            6.56197514,
+            6.525482814,
+            6.589230978,
+            6.605607078
+          ],
+          "mean": 6.5705740025,
+          "stdev": 0.03503595691301883
+        },
+        "distribution": {
+          "0": [
+            4,
+            4,
+            4,
+            4
+          ],
+          "1": [
+            4,
+            4,
+            4,
+            4
+          ]
+        },
+        "repeat_sessions": [
+          [
+            "pair1",
+            "benchmark_baseline_attempt1",
+            0
+          ],
+          [
+            "pair1",
+            "benchmark_baseline_attempt1",
+            1
+          ],
+          [
+            "pair2",
+            "benchmark_baseline_attempt2",
+            0
+          ],
+          [
+            "pair2",
+            "benchmark_baseline_attempt2",
+            1
+          ]
+        ]
+      }
+    },
+    "low_hit": {
+      "lmetric-q": {
+        "request_throughput_rps": {
+          "values": [
+            1.202315961300803,
+            1.1981541238167557,
+            1.2056863784254306,
+            1.2073767073560238
+          ],
+          "mean": 1.2033832927247532,
+          "stdev": 0.004071648642291801
+        },
+        "output_token_throughput_tps": {
+          "values": [
+            9.618527690406424,
+            9.585232990534045,
+            9.645491027403445,
+            9.65901365884819
+          ],
+          "mean": 9.627066341798026,
+          "stdev": 0.03257318913833441
+        },
+        "total_token_throughput_tps": {
+          "values": [
+            385.9434235775578,
+            384.6074737451786,
+            387.0253274745632,
+            387.56792306128364
+          ],
+          "mean": 386.2860369646458,
+          "stdev": 1.3069992141756561
+        },
+        "ttft_mean_ms": {
+          "values": [
+            205.649998,
+            199.905940625,
+            191.87180225,
+            189.375183125
+          ],
+          "mean": 196.70073100000002,
+          "stdev": 7.468711471174826
+        },
+        "tpot_mean_ms": {
+          "values": [
+            59.658508857142856,
+            60.273722017857146,
+            55.171617285714284,
+            54.56254944642857
+          ],
+          "mean": 57.41659940178572,
+          "stdev": 2.9650662442538724
+        },
+        "actual_hits": {
+          "values": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mean": 0,
+          "stdev": 0.0
+        },
+        "prefill_work": {
+          "values": [
+            2504,
+            2504,
+            2504,
+            2504
+          ],
+          "mean": 2504,
+          "stdev": 0.0
+        },
+        "elapsed_seconds": {
+          "values": [
+            6.653824999,
+            6.676937333,
+            6.635224668,
+            6.625935345
+          ],
+          "mean": 6.64798058625,
+          "stdev": 0.022519298796864224
+        },
+        "distribution": {
+          "0": [
+            4,
+            4,
+            4,
+            4
+          ],
+          "1": [
+            4,
+            4,
+            4,
+            4
+          ]
+        },
+        "repeat_sessions": [
+          [
+            "pair1",
+            "benchmark_lmetric_attempt2",
+            0
+          ],
+          [
+            "pair1",
+            "benchmark_lmetric_attempt2",
+            1
+          ],
+          [
+            "pair2",
+            "benchmark_lmetric_attempt3",
+            0
+          ],
+          [
+            "pair2",
+            "benchmark_lmetric_attempt3",
+            1
+          ]
+        ]
+      },
+      "join-shortest-weight-q": {
+        "request_throughput_rps": {
+          "values": [
+            1.207784459441195,
+            1.2066760851898148,
+            1.2010908323153815,
+            1.199064872328117
+          ],
+          "mean": 1.2036540623186271,
+          "stdev": 0.004235705979827376
+        },
+        "output_token_throughput_tps": {
+          "values": [
+            9.66227567552956,
+            9.653408681518519,
+            9.608726658523052,
+            9.592518978624936
+          ],
+          "mean": 9.629232498549017,
+          "stdev": 0.033885647838619005
+        },
+        "total_token_throughput_tps": {
+          "values": [
+            387.69881148062365,
+            387.3430233459306,
+            385.55015717323744,
+            384.8998240173255
+          ],
+          "mean": 386.3729540042793,
+          "stdev": 1.3596616195246278
+        },
+        "ttft_mean_ms": {
+          "values": [
+            187.864820375,
+            191.868131,
+            195.25966025,
+            196.35093625
+          ],
+          "mean": 192.83588696875,
+          "stdev": 3.824408584477081
+        },
+        "tpot_mean_ms": {
+          "values": [
+            54.24344283928571,
+            54.99576176785715,
+            56.312327946428574,
+            56.43567144642857
+          ],
+          "mean": 55.496801000000005,
+          "stdev": 1.0596397039722985
+        },
+        "actual_hits": {
+          "values": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mean": 0,
+          "stdev": 0.0
+        },
+        "prefill_work": {
+          "values": [
+            2504,
+            2504,
+            2504,
+            2504
+          ],
+          "mean": 2504,
+          "stdev": 0.0
+        },
+        "elapsed_seconds": {
+          "values": [
+            6.623698407,
+            6.629782506,
+            6.660611991,
+            6.671865872
+          ],
+          "mean": 6.646489694,
+          "stdev": 0.023394889587454705
+        },
+        "distribution": {
+          "0": [
+            4,
+            4,
+            4,
+            4
+          ],
+          "1": [
+            4,
+            4,
+            4,
+            4
+          ]
+        },
+        "repeat_sessions": [
+          [
+            "pair1",
+            "benchmark_baseline_attempt1",
+            0
+          ],
+          [
+            "pair1",
+            "benchmark_baseline_attempt1",
+            1
+          ],
+          [
+            "pair2",
+            "benchmark_baseline_attempt2",
+            0
+          ],
+          [
+            "pair2",
+            "benchmark_baseline_attempt2",
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "host_histograms_all_repeats": {
+    "lmetric-q": {
+      "blitz_policy_schedule_duration_seconds": {
+        "calls": 96.0,
+        "total_seconds": 0.030690221000000004,
+        "mean_us": 319.68980208333335
+      },
+      "blitz_kv_prepare_duration_seconds": {
+        "calls": 964.0,
+        "total_seconds": 0.07941255800000001,
+        "mean_us": 82.37817219917012
+      },
+      "blitz_step_apply_duration_seconds": {
+        "calls": 964.0,
+        "total_seconds": 0.3291985089999998,
+        "mean_us": 341.4922292531118
+      }
+    },
+    "join-shortest-weight-q": {
+      "blitz_policy_schedule_duration_seconds": {
+        "calls": 96.0,
+        "total_seconds": 0.032557772,
+        "mean_us": 339.14345833333334
+      },
+      "blitz_kv_prepare_duration_seconds": {
+        "calls": 1008.0,
+        "total_seconds": 0.08559428699999996,
+        "mean_us": 84.91496726190472
+      },
+      "blitz_step_apply_duration_seconds": {
+        "calls": 1008.0,
+        "total_seconds": 0.33754955100000017,
+        "mean_us": 334.87058630952396
+      }
+    }
+  },
+  "arrival_lateness": {
+    "benchmark_lmetric_attempt2": {
+      "max_ms": 0.4030894488096237,
+      "mean_ms": 0.14122259182233263,
+      "n": 48
+    },
+    "benchmark_baseline_attempt1": {
+      "max_ms": 51.06524936854839,
+      "mean_ms": 1.4508555363863573,
+      "n": 48
+    },
+    "benchmark_baseline_attempt2": {
+      "max_ms": 0.8300729095935822,
+      "mean_ms": 0.15849447343497125,
+      "n": 48
+    },
+    "benchmark_lmetric_attempt3": {
+      "max_ms": 1.197049394249916,
+      "mean_ms": 0.18326101824639884,
+      "n": 48
+    }
+  },
+  "ordering": {
+    "seed": 4259862290,
+    "method": "python random.Random(seed).sample(...,2)",
+    "order": [
+      "lmetric-q",
+      "join-shortest-weight-q"
+    ],
+    "chosen_at_utc": "2026-10-26T03:09:11.668440+00:00",
+    "note": "order fixed before any benchmark session started; second independent pair may reverse it if resources allow"
+  },
+  "pairs": {
+    "pair1": [
+      "lmetric-q",
+      "join-shortest-weight-q"
+    ],
+    "pair2": [
+      "join-shortest-weight-q",
+      "lmetric-q"
+    ]
+  }
+}

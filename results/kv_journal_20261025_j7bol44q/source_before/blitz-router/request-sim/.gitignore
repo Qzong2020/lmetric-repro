@@ -1,0 +1,12 @@
+/target
+/data
+/tmp
+/log
+Cargo.lock
+*.csv
+*.jsonl
+*.png
+*.pdf
+*.log
+/pic
+/docs/paper/

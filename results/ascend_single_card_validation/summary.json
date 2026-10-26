@@ -1,0 +1,1799 @@
+{
+  "scope": "real single NPU request/execution events only; no KV journal or performance comparison",
+  "ordinary_inference": {
+    "request": {
+      "model": "ascend-small",
+      "prompt": "The capital of France is",
+      "max_tokens": 8,
+      "temperature": 0,
+      "n": 1
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "id": "cmpl-917e6f30f86e5617",
+        "object": "text_completion",
+        "created": 1792923670,
+        "model": "ascend-small",
+        "choices": [
+          {
+            "index": 0,
+            "text": " Paris. The capital of France is also",
+            "logprobs": null,
+            "finish_reason": "length",
+            "stop_reason": null,
+            "token_ids": null,
+            "prompt_logprobs": null,
+            "prompt_token_ids": null,
+            "routed_experts": null
+          }
+        ],
+        "service_tier": null,
+        "system_fingerprint": "vllm-0.23.0-f0beb0fd",
+        "usage": {
+          "prompt_tokens": 5,
+          "total_tokens": 13,
+          "completion_tokens": 8,
+          "prompt_tokens_details": null
+        },
+        "kv_transfer_params": null
+      }
+    }
+  },
+  "off": {
+    "event_flag": 0,
+    "metrics_status": 404,
+    "inference_status": 200,
+    "request": {
+      "model": "ascend-small",
+      "prompt": [
+        5501,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264,
+        4128,
+        1614,
+        44378,
+        3538,
+        13,
+        220
+      ],
+      "stream": false,
+      "max_tokens": 8,
+      "min_tokens": 8,
+      "temperature": null
+    },
+    "response": {
+      "id": "cmpl-2026102501",
+      "object": "text_completion",
+      "created": 1792924001,
+      "model": "ascend-small",
+      "choices": [
+        {
+          "index": 0,
+          "text": " Please explain how a request passes through a",
+          "logprobs": null,
+          "finish_reason": "length",
+          "stop_reason": null,
+          "token_ids": null,
+          "prompt_logprobs": null,
+          "prompt_token_ids": null,
+          "routed_experts": null
+        }
+      ],
+      "service_tier": null,
+      "system_fingerprint": "vllm-0.23.0-f0beb0fd",
+      "usage": {
+        "prompt_tokens": 313,
+        "total_tokens": 321,
+        "completion_tokens": 8,
+        "prompt_tokens_details": null
+      },
+      "kv_transfer_params": null
+    },
+    "sync_final_decoded": {
+      "prompt": " Please explain how a request passes through a"
+    }
+  },
+  "sync": {
+    "mode": "sync_final",
+    "runtime": {
+      "pid": 29888,
+      "scheduler": "vllm_ascend.patch.platform.patch_balance_schedule.BalanceScheduler",
+      "mro": [
+        "vllm_ascend.patch.platform.patch_balance_schedule.BalanceScheduler",
+        "vllm.v1.core.sched.scheduler.Scheduler",
+        "vllm.v1.core.sched.interface.SchedulerInterface",
+        "abc.ABC",
+        "builtins.object"
+      ],
+      "scheduler_source": "/vllm-workspace/vllm-ascend/vllm_ascend/patch/platform/patch_balance_schedule.py",
+      "engine_step_fn": "step",
+      "async_scheduling": false,
+      "enforce_eager": true,
+      "scheduler_block_size": 128,
+      "hash_block_size": 128,
+      "kv_groups": 1,
+      "kv_specs": [
+        "FullAttentionSpec(block_size=128, num_kv_heads=8, head_size=128, dtype=torch.bfloat16, kv_quant_mode=<KVQuantMode.NONE: 0>, page_size_padded=None, head_size_v=128, sliding_window=None, attention_chunk_size=None)"
+      ],
+      "num_blocks": 1029,
+      "cache_num_gpu_blocks": 1029,
+      "available_memory": 15106462208,
+      "batch_queue_size": 1,
+      "batch_queue_length": null,
+      "parallel": "ParallelConfig(pipeline_parallel_size=1, tensor_parallel_size=1, prefill_context_parallel_size=1, data_parallel_size=1, data_parallel_size_local=1, data_parallel_rank=0, data_parallel_rank_local=0, data_parallel_master_ip='127.0.0.1', data_parallel_rpc_port=29550, data_parallel_master_port=0, data_parallel_backend='mp', data_parallel_external_lb=False, data_parallel_hybrid_lb=False, is_moe_model=False, enable_expert_parallel=False, enable_ep_weight_filter=False, enable_eplb=False, eplb_config=EPLBConfig(window_size=1000, step_interval=3000, num_redundant_experts=0, log_balancedness=False, log_balancedness_interval=1, use_async=True, policy='default', communicator=None), expert_placement_strategy='linear', all2all_backend='flashinfer_all2allv', max_parallel_loading_workers=None, disable_custom_all_reduce=True, enable_elastic_ep=False, enable_dbo=False, ubatch_size=0, dbo_decode_token_threshold=32, dbo_prefill_token_threshold=512, disable_nccl_for_dp_synchronization=False, ray_workers_use_nsight=False, ray_runtime_env=None, placement_group=None, distributed_executor_backend='uni', worker_cls='vllm_ascend.worker.worker.NPUWorker', sd_worker_cls='auto', worker_extension_cls='', master_addr='127.0.0.1', master_port=29501, node_rank=0, nnodes=1, numa_bind=False, numa_bind_nodes=None, numa_bind_cpus=None, distributed_timeout_seconds=None, cpu_distributed_timeout_seconds=None, world_size=1, rank=0, _data_parallel_master_port_list=[], _coord_store_port=0, decode_context_parallel_size=1, dcp_kv_cache_interleave_size=1, dcp_comm_backend='ag_rs', cp_kv_cache_interleave_size=1, data_parallel_index=0, _api_process_count=1, _api_process_rank=0)",
+      "speculative": "None",
+      "kv_transfer": "None",
+      "ec_transfer": "None",
+      "lora": "None"
+    },
+    "imports": [
+      {
+        "pid": 28854,
+        "vllm": "/root/lmetric-repro/engines/vllm/vllm/__init__.py",
+        "ascend": "/vllm-workspace/vllm-ascend/vllm_ascend/__init__.py",
+        "core": "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core.py",
+        "events": "1"
+      },
+      {
+        "pid": 29888,
+        "vllm": "/root/lmetric-repro/engines/vllm/vllm/__init__.py",
+        "ascend": "/vllm-workspace/vllm-ascend/vllm_ascend/__init__.py",
+        "core": "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core.py",
+        "events": "1"
+      }
+    ],
+    "identity_map": [
+      {
+        "pid": 28854,
+        "internal_id": "cmpl-2026102501-0-855b44da",
+        "external_id": "2026102501"
+      }
+    ],
+    "hub_states": [
+      {
+        "pid": 28854,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 0
+      },
+      {
+        "pid": 28854,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 28854,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 28854,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 28854,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 28854,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 28854,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 28854,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 28854,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 28854,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 28854,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 0
+      },
+      {
+        "pid": 28854,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 0
+      },
+      {
+        "pid": 28854,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 0
+      },
+      {
+        "pid": 28854,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 0
+      }
+    ],
+    "step_calls": [
+      {
+        "pid": 29888,
+        "path": "step",
+        "queue_length": null,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-855b44da"
+        ],
+        "seq": 1
+      },
+      {
+        "pid": 29888,
+        "path": "step",
+        "queue_length": null,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-855b44da"
+        ],
+        "seq": 2
+      },
+      {
+        "pid": 29888,
+        "path": "step",
+        "queue_length": null,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-855b44da"
+        ],
+        "seq": 3
+      },
+      {
+        "pid": 29888,
+        "path": "step",
+        "queue_length": null,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-855b44da"
+        ],
+        "seq": 4
+      },
+      {
+        "pid": 29888,
+        "path": "step",
+        "queue_length": null,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-855b44da"
+        ],
+        "seq": 5
+      },
+      {
+        "pid": 29888,
+        "path": "step",
+        "queue_length": null,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-855b44da"
+        ],
+        "seq": 6
+      },
+      {
+        "pid": 29888,
+        "path": "step",
+        "queue_length": null,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-855b44da"
+        ],
+        "seq": 7
+      },
+      {
+        "pid": 29888,
+        "path": "step",
+        "queue_length": null,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-855b44da"
+        ],
+        "seq": 8
+      },
+      {
+        "pid": 29888,
+        "path": "step",
+        "queue_length": null,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-855b44da"
+        ],
+        "seq": 9
+      },
+      {
+        "pid": 29888,
+        "path": "step",
+        "queue_length": null,
+        "running": 0,
+        "waiting": 0,
+        "requests": [],
+        "seq": 10
+      },
+      {
+        "pid": 29888,
+        "path": "step",
+        "queue_length": null,
+        "running": 0,
+        "waiting": 0,
+        "requests": [],
+        "seq": 11
+      }
+    ],
+    "events": [
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "77d357596ba44f3995b327ff94a21169",
+        "step_id": 1,
+        "latency": 274,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "sync",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 128,
+        "outputs": []
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "77d357596ba44f3995b327ff94a21169",
+        "step_id": 2,
+        "latency": 64,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "sync",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 128,
+        "outputs": []
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "77d357596ba44f3995b327ff94a21169",
+        "step_id": 3,
+        "latency": 74,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "sync",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 57,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              5209
+            ],
+            "state": "PREFILL",
+            "is_finished": false,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 256
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "77d357596ba44f3995b327ff94a21169",
+        "step_id": 4,
+        "latency": 74,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "sync",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              10339
+            ],
+            "state": "DECODE",
+            "is_finished": false,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 313
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "77d357596ba44f3995b327ff94a21169",
+        "step_id": 5,
+        "latency": 60,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "sync",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              1246
+            ],
+            "state": "DECODE",
+            "is_finished": false,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 314
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "77d357596ba44f3995b327ff94a21169",
+        "step_id": 6,
+        "latency": 60,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "sync",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              264
+            ],
+            "state": "DECODE",
+            "is_finished": false,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 315
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "77d357596ba44f3995b327ff94a21169",
+        "step_id": 7,
+        "latency": 62,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "sync",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              1681
+            ],
+            "state": "DECODE",
+            "is_finished": false,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 316
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "77d357596ba44f3995b327ff94a21169",
+        "step_id": 8,
+        "latency": 61,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "sync",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              16211
+            ],
+            "state": "DECODE",
+            "is_finished": false,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 317
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "77d357596ba44f3995b327ff94a21169",
+        "step_id": 9,
+        "latency": 60,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "sync",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              1526
+            ],
+            "state": "DECODE",
+            "is_finished": false,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 318
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "77d357596ba44f3995b327ff94a21169",
+        "step_id": 10,
+        "latency": 61,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "sync",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              264
+            ],
+            "state": "DECODE",
+            "is_finished": true,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 319
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "77d357596ba44f3995b327ff94a21169",
+        "step_id": 11,
+        "latency": 0,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "sync",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": []
+      }
+    ],
+    "ledger_after_each_event": [
+      {
+        "ledger": {
+          "all_tokens": 313,
+          "bs": 1,
+          "prefill": 185,
+          "waiting": 1
+        },
+        "step_id": 1
+      },
+      {
+        "ledger": {
+          "all_tokens": 313,
+          "bs": 1,
+          "prefill": 57,
+          "waiting": 1
+        },
+        "step_id": 2
+      },
+      {
+        "ledger": {
+          "all_tokens": 314,
+          "bs": 1,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 3
+      },
+      {
+        "ledger": {
+          "all_tokens": 315,
+          "bs": 1,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 4
+      },
+      {
+        "ledger": {
+          "all_tokens": 316,
+          "bs": 1,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 5
+      },
+      {
+        "ledger": {
+          "all_tokens": 317,
+          "bs": 1,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 6
+      },
+      {
+        "ledger": {
+          "all_tokens": 318,
+          "bs": 1,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 7
+      },
+      {
+        "ledger": {
+          "all_tokens": 319,
+          "bs": 1,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 8
+      },
+      {
+        "ledger": {
+          "all_tokens": 320,
+          "bs": 1,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 9
+      },
+      {
+        "ledger": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 10
+      },
+      {
+        "ledger": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 11
+      }
+    ],
+    "http_response": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "prompt_logprobs": null,
+          "prompt_token_ids": null,
+          "routed_experts": null,
+          "stop_reason": null,
+          "text": " Please explain how a request passes through a",
+          "token_ids": null
+        }
+      ],
+      "created": 1792923912,
+      "id": "cmpl-2026102501",
+      "kv_transfer_params": null,
+      "model": "ascend-small",
+      "object": "text_completion",
+      "service_tier": null,
+      "system_fingerprint": "vllm-0.23.0-f0beb0fd",
+      "usage": {
+        "completion_tokens": 8,
+        "prompt_tokens": 313,
+        "prompt_tokens_details": null,
+        "total_tokens": 321
+      }
+    },
+    "result": {
+      "completion_tokens": [
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264
+      ],
+      "events": 11,
+      "ledger": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      },
+      "npu": true,
+      "prompt_tokens": 313
+    },
+    "complete_sequence_and_ledger_verified": true,
+    "latency_semantics": "host schedule to completion; no device or performance claim"
+  },
+  "async": {
+    "mode": "async",
+    "runtime": {
+      "pid": 35426,
+      "scheduler": "vllm.v1.core.sched.async_scheduler.AsyncScheduler",
+      "mro": [
+        "vllm.v1.core.sched.async_scheduler.AsyncScheduler",
+        "vllm_ascend.patch.platform.patch_balance_schedule.BalanceScheduler",
+        "vllm.v1.core.sched.scheduler.Scheduler",
+        "vllm.v1.core.sched.interface.SchedulerInterface",
+        "abc.ABC",
+        "builtins.object"
+      ],
+      "scheduler_source": "/root/lmetric-repro/engines/vllm/vllm/v1/core/sched/async_scheduler.py",
+      "engine_step_fn": "step_with_batch_queue",
+      "async_scheduling": true,
+      "enforce_eager": true,
+      "scheduler_block_size": 128,
+      "hash_block_size": 128,
+      "kv_groups": 1,
+      "kv_specs": [
+        "FullAttentionSpec(block_size=128, num_kv_heads=8, head_size=128, dtype=torch.bfloat16, kv_quant_mode=<KVQuantMode.NONE: 0>, page_size_padded=None, head_size_v=128, sliding_window=None, attention_chunk_size=None)"
+      ],
+      "num_blocks": 1028,
+      "cache_num_gpu_blocks": 1028,
+      "available_memory": 15095464448,
+      "batch_queue_size": 2,
+      "batch_queue_length": 0,
+      "parallel": "ParallelConfig(pipeline_parallel_size=1, tensor_parallel_size=1, prefill_context_parallel_size=1, data_parallel_size=1, data_parallel_size_local=1, data_parallel_rank=0, data_parallel_rank_local=0, data_parallel_master_ip='127.0.0.1', data_parallel_rpc_port=29550, data_parallel_master_port=0, data_parallel_backend='mp', data_parallel_external_lb=False, data_parallel_hybrid_lb=False, is_moe_model=False, enable_expert_parallel=False, enable_ep_weight_filter=False, enable_eplb=False, eplb_config=EPLBConfig(window_size=1000, step_interval=3000, num_redundant_experts=0, log_balancedness=False, log_balancedness_interval=1, use_async=True, policy='default', communicator=None), expert_placement_strategy='linear', all2all_backend='flashinfer_all2allv', max_parallel_loading_workers=None, disable_custom_all_reduce=True, enable_elastic_ep=False, enable_dbo=False, ubatch_size=0, dbo_decode_token_threshold=32, dbo_prefill_token_threshold=512, disable_nccl_for_dp_synchronization=True, ray_workers_use_nsight=False, ray_runtime_env=None, placement_group=None, distributed_executor_backend='uni', worker_cls='vllm_ascend.worker.worker.NPUWorker', sd_worker_cls='auto', worker_extension_cls='', master_addr='127.0.0.1', master_port=29501, node_rank=0, nnodes=1, numa_bind=False, numa_bind_nodes=None, numa_bind_cpus=None, distributed_timeout_seconds=None, cpu_distributed_timeout_seconds=None, world_size=1, rank=0, _data_parallel_master_port_list=[], _coord_store_port=0, decode_context_parallel_size=1, dcp_kv_cache_interleave_size=1, dcp_comm_backend='ag_rs', cp_kv_cache_interleave_size=1, data_parallel_index=0, _api_process_count=1, _api_process_rank=0)",
+      "speculative": "None",
+      "kv_transfer": "None",
+      "ec_transfer": "None",
+      "lora": "None"
+    },
+    "imports": [
+      {
+        "pid": 34626,
+        "vllm": "/root/lmetric-repro/engines/vllm/vllm/__init__.py",
+        "ascend": "/vllm-workspace/vllm-ascend/vllm_ascend/__init__.py",
+        "core": "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core.py",
+        "events": "1"
+      },
+      {
+        "pid": 35426,
+        "vllm": "/root/lmetric-repro/engines/vllm/vllm/__init__.py",
+        "ascend": "/vllm-workspace/vllm-ascend/vllm_ascend/__init__.py",
+        "core": "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core.py",
+        "events": "1"
+      }
+    ],
+    "identity_map": [
+      {
+        "pid": 34626,
+        "internal_id": "cmpl-2026102501-0-883b4ca6",
+        "external_id": "2026102501"
+      }
+    ],
+    "hub_states": [
+      {
+        "pid": 34626,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 0
+      },
+      {
+        "pid": 34626,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 34626,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 34626,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 34626,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 34626,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 34626,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 34626,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 34626,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 34626,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 1
+      },
+      {
+        "pid": 34626,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 0
+      },
+      {
+        "pid": 34626,
+        "queue_size": 1,
+        "active": true,
+        "failed": null,
+        "identities": 0
+      },
+      {
+        "pid": 34626,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 0
+      },
+      {
+        "pid": 34626,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 0
+      },
+      {
+        "pid": 34626,
+        "queue_size": 0,
+        "active": true,
+        "failed": null,
+        "identities": 0
+      }
+    ],
+    "step_calls": [
+      {
+        "pid": 35426,
+        "path": "step_with_batch_queue",
+        "queue_length": 1,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-883b4ca6"
+        ],
+        "seq": 0
+      },
+      {
+        "pid": 35426,
+        "path": "step_with_batch_queue",
+        "queue_length": 1,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-883b4ca6"
+        ],
+        "seq": 1
+      },
+      {
+        "pid": 35426,
+        "path": "step_with_batch_queue",
+        "queue_length": 1,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-883b4ca6"
+        ],
+        "seq": 2
+      },
+      {
+        "pid": 35426,
+        "path": "step_with_batch_queue",
+        "queue_length": 1,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-883b4ca6"
+        ],
+        "seq": 3
+      },
+      {
+        "pid": 35426,
+        "path": "step_with_batch_queue",
+        "queue_length": 1,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-883b4ca6"
+        ],
+        "seq": 4
+      },
+      {
+        "pid": 35426,
+        "path": "step_with_batch_queue",
+        "queue_length": 1,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-883b4ca6"
+        ],
+        "seq": 5
+      },
+      {
+        "pid": 35426,
+        "path": "step_with_batch_queue",
+        "queue_length": 1,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-883b4ca6"
+        ],
+        "seq": 6
+      },
+      {
+        "pid": 35426,
+        "path": "step_with_batch_queue",
+        "queue_length": 1,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-883b4ca6"
+        ],
+        "seq": 7
+      },
+      {
+        "pid": 35426,
+        "path": "step_with_batch_queue",
+        "queue_length": 1,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-883b4ca6"
+        ],
+        "seq": 8
+      },
+      {
+        "pid": 35426,
+        "path": "step_with_batch_queue",
+        "queue_length": 1,
+        "running": 1,
+        "waiting": 0,
+        "requests": [
+          "cmpl-2026102501-0-883b4ca6"
+        ],
+        "seq": 9
+      },
+      {
+        "pid": 35426,
+        "path": "step_with_batch_queue",
+        "queue_length": 1,
+        "running": 0,
+        "waiting": 0,
+        "requests": [],
+        "seq": 10
+      },
+      {
+        "pid": 35426,
+        "path": "step_with_batch_queue",
+        "queue_length": 1,
+        "running": 0,
+        "waiting": 0,
+        "requests": [],
+        "seq": 11
+      },
+      {
+        "pid": 35426,
+        "path": "step_with_batch_queue",
+        "queue_length": 0,
+        "running": 0,
+        "waiting": 0,
+        "requests": [],
+        "seq": 12
+      }
+    ],
+    "events": [
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "82d5d44b38594b9e8be4cce0054fc447",
+        "step_id": 1,
+        "latency": 325,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "async",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 128,
+        "outputs": []
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "82d5d44b38594b9e8be4cce0054fc447",
+        "step_id": 2,
+        "latency": 146,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "async",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 128,
+        "outputs": []
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "82d5d44b38594b9e8be4cce0054fc447",
+        "step_id": 3,
+        "latency": 157,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "async",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 57,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              5209
+            ],
+            "state": "PREFILL",
+            "is_finished": false,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 256
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "82d5d44b38594b9e8be4cce0054fc447",
+        "step_id": 4,
+        "latency": 145,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "async",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              10339
+            ],
+            "state": "DECODE",
+            "is_finished": false,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 313
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "82d5d44b38594b9e8be4cce0054fc447",
+        "step_id": 5,
+        "latency": 131,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "async",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              1246
+            ],
+            "state": "DECODE",
+            "is_finished": false,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 314
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "82d5d44b38594b9e8be4cce0054fc447",
+        "step_id": 6,
+        "latency": 130,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "async",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              264
+            ],
+            "state": "DECODE",
+            "is_finished": false,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 315
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "82d5d44b38594b9e8be4cce0054fc447",
+        "step_id": 7,
+        "latency": 129,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "async",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              1681
+            ],
+            "state": "DECODE",
+            "is_finished": false,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 316
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "82d5d44b38594b9e8be4cce0054fc447",
+        "step_id": 8,
+        "latency": 129,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "async",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              16211
+            ],
+            "state": "DECODE",
+            "is_finished": false,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 317
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "82d5d44b38594b9e8be4cce0054fc447",
+        "step_id": 9,
+        "latency": 129,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "async",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              1526
+            ],
+            "state": "DECODE",
+            "is_finished": false,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 318
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "82d5d44b38594b9e8be4cce0054fc447",
+        "step_id": 10,
+        "latency": 66,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "async",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": [
+          {
+            "request_id": 2026102501,
+            "new_token_ids": [
+              264
+            ],
+            "state": "DECODE",
+            "is_finished": true,
+            "hit_token_cnt": 0,
+            "prev_computed_tokens": 319
+          }
+        ]
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "82d5d44b38594b9e8be4cce0054fc447",
+        "step_id": 11,
+        "latency": 2,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "async",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": []
+      },
+      {
+        "lmetric_protocol": "request-v1",
+        "engine_epoch": "82d5d44b38594b9e8be4cce0054fc447",
+        "step_id": 12,
+        "latency": 0,
+        "latency_kind": "schedule_to_completion_host_ms",
+        "execution_mode": "async",
+        "kv_events": false,
+        "block_size": 128,
+        "kv_groups": 1,
+        "prefill_tokens": 0,
+        "outputs": []
+      }
+    ],
+    "ledger_after_each_event": [
+      {
+        "ledger": {
+          "all_tokens": 313,
+          "bs": 1,
+          "prefill": 185,
+          "waiting": 1
+        },
+        "step_id": 1
+      },
+      {
+        "ledger": {
+          "all_tokens": 313,
+          "bs": 1,
+          "prefill": 57,
+          "waiting": 1
+        },
+        "step_id": 2
+      },
+      {
+        "ledger": {
+          "all_tokens": 314,
+          "bs": 1,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 3
+      },
+      {
+        "ledger": {
+          "all_tokens": 315,
+          "bs": 1,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 4
+      },
+      {
+        "ledger": {
+          "all_tokens": 316,
+          "bs": 1,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 5
+      },
+      {
+        "ledger": {
+          "all_tokens": 317,
+          "bs": 1,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 6
+      },
+      {
+        "ledger": {
+          "all_tokens": 318,
+          "bs": 1,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 7
+      },
+      {
+        "ledger": {
+          "all_tokens": 319,
+          "bs": 1,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 8
+      },
+      {
+        "ledger": {
+          "all_tokens": 320,
+          "bs": 1,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 9
+      },
+      {
+        "ledger": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 10
+      },
+      {
+        "ledger": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 11
+      },
+      {
+        "ledger": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "step_id": 12
+      }
+    ],
+    "http_response": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "prompt_logprobs": null,
+          "prompt_token_ids": null,
+          "routed_experts": null,
+          "stop_reason": null,
+          "text": " Please explain how a request passes through a",
+          "token_ids": null
+        }
+      ],
+      "created": 1792924090,
+      "id": "cmpl-2026102501",
+      "kv_transfer_params": null,
+      "model": "ascend-small",
+      "object": "text_completion",
+      "service_tier": null,
+      "system_fingerprint": "vllm-0.23.0-67bb5a87",
+      "usage": {
+        "completion_tokens": 8,
+        "prompt_tokens": 313,
+        "prompt_tokens_details": null,
+        "total_tokens": 321
+      }
+    },
+    "result": {
+      "completion_tokens": [
+        5209,
+        10339,
+        1246,
+        264,
+        1681,
+        16211,
+        1526,
+        264
+      ],
+      "events": 12,
+      "ledger": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      },
+      "npu": true,
+      "prompt_tokens": 313
+    },
+    "complete_sequence_and_ledger_verified": true,
+    "latency_semantics": "host schedule to completion; no device or performance claim"
+  },
+  "preservation": {
+    "engines/vllm": {
+      "head_unchanged": true,
+      "status_unchanged": true,
+      "diff_unchanged": true,
+      "captured_worktree_hashes_unchanged": true
+    },
+    "blitz-router": {
+      "head_unchanged": true,
+      "status_unchanged": true,
+      "diff_unchanged": true,
+      "captured_worktree_hashes_unchanged": true
+    },
+    "/vllm-workspace/vllm": {
+      "head_unchanged": true,
+      "status_unchanged": true,
+      "diff_unchanged": true,
+      "captured_worktree_hashes_unchanged": true
+    },
+    "/vllm-workspace/vllm-ascend": {
+      "head_unchanged": true,
+      "status_unchanged": true,
+      "diff_unchanged": true,
+      "captured_worktree_hashes_unchanged": true
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "npu_used": false,
+  "production_replay_source_hashes_match": {
+    "blitz-router/router/src/engine/colocation.rs": true,
+    "blitz-router/router/src/engine/client.rs": true,
+    "blitz-router/router/src/engine/vllm_http.rs": true,
+    "blitz-router/router/src/scheduler/kvcache.rs": true,
+    "blitz-router/router/src/scheduler/state.rs": true,
+    "scripts/ascend_audit/router_replay.rs": true
+  },
+  "engine_sources_unchanged": {
+    "/vllm-workspace/vllm": true,
+    "/vllm-workspace/vllm-ascend": true
+  },
+  "markdown_references_resolved": true,
+  "missing_refs": [],
+  "rust_tests_passed": true,
+  "target_method_probe_count": 7,
+  "author_serializer_cases": 3,
+  "source_file_count": 50,
+  "required_fields_in_report": true
+}

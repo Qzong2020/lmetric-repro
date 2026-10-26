@@ -1,0 +1,11 @@
+[W1025 10:47:51.126774664 FunctionLoader.cpp:48] Warning: LD_PRELOAD detected, FunctionLoader prefers RTLD_DEFAULT for symbol resolution. (function operator())
+INFO 10-25 10:47:57 [__init__.py:44] Available plugins for group vllm.platform_plugins:
+INFO 10-25 10:47:57 [__init__.py:46] - ascend -> vllm_ascend:register
+INFO 10-25 10:47:57 [__init__.py:49] All plugins in this group will be loaded. Set `VLLM_PLUGINS` to control which plugins to load.
+INFO 10-25 10:47:57 [__init__.py:238] Platform plugin ascend is activated
+INFO 10-25 10:47:57 [platform.py:62] Breakable cudagraph is force disabled on Ascend because DeepSeek V4 PIECEWISE cudagraph is not supported yet.
+Traceback (most recent call last):
+  File "/root/lmetric-repro/scripts/kv_journal/test_journal.py", line 8, in <module>
+    from vllm.v1.engine.lmetric_kv_journal import KVJournal
+ModuleNotFoundError: No module named 'vllm.v1.engine.lmetric_kv_journal'
+[ERROR] 2026-10-25-10:48:05 (PID:70006, Device:-1, RankID:-1) ERR99999 UNKNOWN applicaiton exception

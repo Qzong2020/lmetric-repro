@@ -1,0 +1,11 @@
+{
+  "bookkeeping_and_matching_hit_feedback_checked": true,
+  "decisions": 10000,
+  "first_mismatch": null,
+  "lmetric_mismatches": 0,
+  "scope": "CPU policy conformance, not model latency reproduction",
+  "seed": 260315202,
+  "states": 5000,
+  "tie_cases": 107,
+  "vllm_mismatches": 0
+}

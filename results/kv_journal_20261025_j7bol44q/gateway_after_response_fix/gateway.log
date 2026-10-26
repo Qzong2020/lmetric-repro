@@ -1,0 +1,22 @@
+2026-10-25T11:30:17.604671Z  WARN router: router/src/main.rs:417: The shard info is not set properly by the st-server
+2026-10-25T11:30:17.605261Z  INFO router: router/src/main.rs:435: Loaded model config: type=qwen3, max_position_embeddings=40960
+2026-10-25T11:30:17.605310Z  WARN router: router/src/main.rs:447: --max-total-tokens=1024 overrides auto-discovered max_position_embeddings=40960 from config.json
+2026-10-25T11:30:17.605337Z  WARN router: router/src/main.rs:471: --max-input-length=512 overrides auto-discovered max_total_tokens-1=1023
+Blitz router is ready
+2026-10-25T11:30:17.717480Z  WARN router::scheduler::statistic: router/src/scheduler/statistic.rs:16: Statistic path is not set
+2026-10-25T11:30:17.917439Z  INFO scheduling: router/src/scheduler/policies/dsl_runtime.rs:538: DECISION request_id=0 engine=0 predicted_hits=0 radix_epoch=0 new_tokens=313
+2026-10-25T11:30:17.918125Z  INFO lifecycle: router/src/engine/colocation.rs:205: REQUEST_ADMIT request_id=0 queue_time_us=405 input_length=313 max_new_tokens=8 engine=0
+2026-10-25T11:30:18.397096Z  INFO correction: router/src/engine/colocation.rs:556: CORRECTION request_id=0 engine=0 predicted=0 actual=0 diff=0 decision_epoch=0 current_epoch=5
+2026-10-25T11:30:18.397267Z  INFO lifecycle: router/src/engine/colocation.rs:296: PREFILL_DONE engine=0 request_id=0 hit_token_cnt=0
+2026-10-25T11:30:18.850197Z  INFO lifecycle: router/src/engine/colocation.rs:368: REQUEST_FINISH engine=0 request_id=0 generated_tokens=8
+2026-10-25T11:30:18.966447Z  INFO scheduling: router/src/scheduler/policies/dsl_runtime.rs:538: DECISION request_id=1 engine=0 predicted_hits=2 radix_epoch=7 new_tokens=57
+2026-10-25T11:30:18.967062Z  INFO lifecycle: router/src/engine/colocation.rs:205: REQUEST_ADMIT request_id=1 queue_time_us=300 input_length=313 max_new_tokens=8 engine=0
+2026-10-25T11:30:19.037868Z  INFO correction: router/src/engine/colocation.rs:556: CORRECTION request_id=1 engine=0 predicted=256 actual=256 diff=0 decision_epoch=7 current_epoch=7
+2026-10-25T11:30:19.038035Z  INFO lifecycle: router/src/engine/colocation.rs:296: PREFILL_DONE engine=0 request_id=1 hit_token_cnt=256
+2026-10-25T11:30:19.463120Z  INFO lifecycle: router/src/engine/colocation.rs:368: REQUEST_FINISH engine=0 request_id=1 generated_tokens=8
+2026-10-25T11:30:19.685831Z  INFO scheduling: router/src/scheduler/policies/dsl_runtime.rs:538: DECISION request_id=2 engine=0 predicted_hits=0 radix_epoch=10 new_tokens=313
+2026-10-25T11:30:19.686424Z  INFO lifecycle: router/src/engine/colocation.rs:205: REQUEST_ADMIT request_id=2 queue_time_us=282 input_length=313 max_new_tokens=8 engine=0
+2026-10-25T11:30:19.883609Z  INFO correction: router/src/engine/colocation.rs:556: CORRECTION request_id=2 engine=0 predicted=0 actual=0 diff=0 decision_epoch=10 current_epoch=14
+2026-10-25T11:30:19.883843Z  INFO lifecycle: router/src/engine/colocation.rs:296: PREFILL_DONE engine=0 request_id=2 hit_token_cnt=0
+2026-10-25T11:30:20.338280Z  INFO lifecycle: router/src/engine/colocation.rs:368: REQUEST_FINISH engine=0 request_id=2 generated_tokens=8
+2026-10-25T11:30:20.445671Z  INFO router::gateway::server: router/src/gateway/server.rs:649: signal received, starting graceful shutdown

@@ -1,0 +1,127 @@
+   Compiling syn v2.0.119
+   Compiling syn v3.0.9
+   Compiling either v1.19.0
+   Compiling regex-syntax v0.8.11
+   Compiling clap_builder v4.6.7
+   Compiling regex-automata v0.4.18
+   Compiling serde_derive v1.0.229
+   Compiling serde_json v1.0.154
+   Compiling zerocopy-derive v0.8.63
+   Compiling itertools v0.10.5
+   Compiling serde v1.0.229
+   Compiling criterion-plot v0.5.0
+   Compiling rayon v1.12.0
+   Compiling zerocopy v0.8.63
+   Compiling tinytemplate v1.2.1
+   Compiling regex v1.13.1
+   Compiling clap v4.6.7
+   Compiling smallvec v1.16.3
+   Compiling half v2.7.1
+   Compiling ciborium-ll v0.2.2
+   Compiling ciborium v0.2.2
+   Compiling criterion v0.5.1
+   Compiling radixtree v0.1.0 (/root/lmetric-repro/blitz-router/radixtree)
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:174:17
+    |
+174 |                 (*node).payload[i].push(alias_bid);
+    |                 ^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+    = note: `#[warn(dangerous_implicit_autorefs)]` on by default
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+174 |                 (&mut (*node).payload)[i].push(alias_bid);
+    |                 +++++                +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:356:47
+    |
+356 |                     !(*n).value.is_empty() && (*n).value[0] == key[consumed]
+    |                                               ^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+356 |                     !(*n).value.is_empty() && (&(*n).value)[0] == key[consumed]
+    |                                               ++          +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:366:58
+    |
+366 |             while i < val_len && consumed < key.len() && (*child).value[i] == key[consumed] {
+    |                                                          ^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+366 |             while i < val_len && consumed < key.len() && (&(*child).value)[i] == key[consumed] {
+    |                                                          ++              +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:369:21
+    |
+369 |                     (*child).payload[i].push(alias_bid);
+    |                     ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+369 |                     (&mut (*child).payload)[i].push(alias_bid);
+    |                     +++++                 +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:459:41
+    |
+459 | ...                   for bids in (*node).payload[new_start..].iter() {
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+459 |                             for bids in (&(*node).payload)[new_start..].iter() {
+    |                                         ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:685:51
+    |
+685 |             while pos < (*node).payload.len() && !(*node).payload[pos].contains(&block_id) {
+    |                                                   ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+685 |             while pos < (*node).payload.len() && !(&(*node).payload)[pos].contains(&block_id) {
+    |                                                   ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:691:36
+    |
+691 |             let bids_at_pos = &mut (*node).payload[pos];
+    |                                    ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+691 |             let bids_at_pos = &mut (&mut (*node).payload)[pos];
+    |                                    +++++                +
+
+warning: `radixtree` (lib test) generated 7 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 25.91s
+     Running unittests src/lib.rs (target/debug/deps/radixtree-db419fa151de3417)
+
+running 1 test
+
+thread 'block_hash::kv_parent_regression::kv_parent_only_removal_preserves_unrelated_prefix_and_allows_reuse' panicked at radixtree/src/block_hash.rs:736:9:
+assertion failed: nblock_canary <= block_indices.len()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test block_hash::kv_parent_regression::kv_parent_only_removal_preserves_unrelated_prefix_and_allows_reuse ... FAILED
+
+failures:
+
+failures:
+    block_hash::kv_parent_regression::kv_parent_only_removal_preserves_unrelated_prefix_and_allows_reuse
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 16 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p radixtree --lib`

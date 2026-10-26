@@ -1,0 +1,14 @@
+test_async_snapshot_not_future_state (__main__.ContractTests.test_async_snapshot_not_future_state) ... ok
+test_config_and_preemption_rejected (__main__.ContractTests.test_config_and_preemption_rejected) ... ok
+test_config_validation_and_first_finish_after_free (__main__.ContractTests.test_config_validation_and_first_finish_after_free) ... ok
+test_core_client_filter_keeps_metric_only_packets (__main__.ContractTests.test_core_client_filter_keeps_metric_only_packets) ... ok
+test_real_struct_and_zmq_subprocess (__main__.ContractTests.test_real_struct_and_zmq_subprocess) ... ok
+test_rewritten_scheduler_dispatch_and_both_core_paths (__main__.ContractTests.test_rewritten_scheduler_dispatch_and_both_core_paths) ... ok
+test_id_mapping_frames_and_disconnect (__main__.HubTests.test_id_mapping_frames_and_disconnect) ... ok
+test_overflow_and_invalid_identity_fail_closed (__main__.HubTests.test_overflow_and_invalid_identity_fail_closed) ... ok
+test_real_async_llm_output_handler_publishes_empty_event (__main__.HubTests.test_real_async_llm_output_handler_publishes_empty_event) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.347s
+
+OK

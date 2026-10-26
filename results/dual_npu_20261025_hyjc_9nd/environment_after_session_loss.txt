@@ -1,0 +1,8 @@
+UTC=2026-10-26T02:31:20Z
+uptime:
+8680600.32 1591472523.35
+devices:
+NONE
+npu-smi:
+DrvMngGetConsoleLogLevel failed. (ret=4)
+dcmi module initialize failed. ret is -8005

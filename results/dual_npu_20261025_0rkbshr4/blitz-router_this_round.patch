@@ -1,0 +1,276 @@
+--- a/docs/ascend-request-events.md
++++ b/docs/ascend-request-events.md
+@@ -15,10 +15,28 @@
+ completion loop. No model or NPU is initialized. The network test is ignored in
+ ordinary cargo test and enabled explicitly by this driver.
+ 
+-The receiver stops on invalid sequences or block-size mismatch. Automatic
+-replica removal, stream recovery, abort ACKs and KV events are not implemented;
+-stop and restart the experimental session on failure. This is not a completed
+-cache-aware routing integration or a performance result.
++The receiver stops on invalid sequences or block-size mismatch. The original
++`request-v1` path above is compute-only. The opt-in `request-kv-v1` extension
++now maintains independent physical mappings, prefix trees and request ledgers
++for each registered backend. A failed journal session is latched invalid,
++excluded during scoring and rechecked under the admission lock. Its idle
++sender exits when the completion receiver closes. Stream recovery and safe
++in-flight cancellation remain unsupported; restart affected sessions.
++
++The journal capability gate permits `lmetric-q` and the existing
++`join-shortest-weight-q` comparison baseline with `radixtree-blockhash`, with
++`simulator` disabled. Other policy builds remain rejected. Both consume the
++same journal and retain sequence/epoch validation. The baseline minimizes
++`3 * waiting + bs`; LMetric minimizes `(max(0, prefill) + uncached_tokens) *
++(bs + 1)`. The engine still requires `max_num_seqs=1` per instance.
++
++Dual-instance validation and any bounded preliminary timing are documented in
++[the dual-NPU report](../../docs/dual_npu_validation.md). Production debug
++records `CANDIDATE` and `KV_STATE` support score/state reconciliation. Histogram
++`blitz_kv_prepare_duration_seconds` covers journal staging/tree rebuilding;
++`blitz_step_apply_duration_seconds` covers completion application excluding
++receive wait and the final debug snapshot. These instrumented host durations
++do not establish isolated incremental event-collection overhead.
+ 
+ See the [full implementation/validation report](../../docs/ascend_minimal_events.md)
+ and [machine-readable results](../../results/ascend_minimal_events/tests.json).
+--- a/router/src/engine/colocation.rs
++++ b/router/src/engine/colocation.rs
+@@ -217,7 +217,8 @@
+                     }
+                 }
+                 Err(SendError(_)) => {
+-                    unreachable!("engine#{replica_index} WQ channel closed by receiver at CQ");
++                    tracing::info!(engine = replica_index, "WORK_LOOP_STOPPED");
++                    break;
+                 }
+             }
+         }
+@@ -433,6 +434,7 @@
+                 }
+             };
+ 
++            let apply_started = std::time::Instant::now();
+             // Adds newly posted requests
+             {
+                 let _g = wqe_mtx.lock().await;
+@@ -464,6 +466,7 @@
+ 
+             // Stage journal before applying request accounting. No partial cache
+             // view or untrusted physical ID becomes visible to a policy.
++            let kv_started = std::time::Instant::now();
+             let prepared_kv = if let Some(journal) = &m.kv_journal {
+                 let mut context = schedule_context.lock().await;
+                 match context.kv_journal.prepare(journal, m.engine_epoch.as_deref().unwrap_or(""), m.lmetric_block_size.unwrap_or(0)) {
+@@ -479,6 +482,7 @@
+                 if context.kv_journal.active() { context.invalidate_kv("KV capability disappeared".into()); break; }
+                 None
+             };
++            metrics::histogram!("blitz_kv_prepare_duration_seconds", kv_started.elapsed().as_secs_f64());
+             tracing::trace!(engine = replica_index, step = ?m, "STEP_RECEIVED");
+ 
+             let current_epoch = schedule_context.lock().await.cache_epoch();
+@@ -918,6 +922,19 @@
+             skipped_fault_entries.0.clear();
+             skipped_fault_entries.1.clear();
+ 
++            metrics::histogram!("blitz_step_apply_duration_seconds", apply_started.elapsed().as_secs_f64());
++            if tracing::enabled!(target: "cache_tracking", tracing::Level::DEBUG) {
++                let c = schedule_context.lock().await;
++                let state = serde_json::json!({"engine":replica_index,"step_id":m.step_id,
++                    "engine_epoch":c.kv_journal.epoch,"mutation_seq":c.kv_journal.last,
++                    "physical":c.kv_journal.mapping_view(),"requests":c.kv_journal.requests,
++                    "valid":c.kv_journal.routable(),"active_entries":entries.len(),
++                    "exception_entries":except_context.entries.len(),
++                    "bs":c.lmetric.bs,"waiting":c.lmetric.waiting_reqs,
++                    "prefill":c.lmetric.prefill_tokens,"all_tokens":c.lmetric.all_tokens});
++                tracing::debug!(target: "cache_tracking", state = %state, "KV_STATE");
++            }
++
+             // Invariant checks at event loop boundary
+             #[cfg(debug_assertions)]
+             {
+--- a/router/src/engine/dual_replica_tests.rs
++++ b/router/src/engine/dual_replica_tests.rs
+@@ -0,0 +1,116 @@
++// CPU fixtures exercise production policy, protocol and completion consumption.
++use crate::engine::kv_journal::KvJournal;
++use crate::scheduler::policies::dsl_runtime::{capture_observations, apply_default_after, prefill_tokens};
++fn journal(ms:Vec<Value>,last:u64)->KvJournal {
++    serde_json::from_value(json!({"version":"kv-journal-v1","observation_kind":"scheduler_cache_metadata","num_blocks":16,"mutation_seq":last,"mutations":ms})).unwrap()
++}
++fn reset(seq:u64)->Value {json!({"mutation_seq":seq,"type":"cache_reset","group_id":0,"block_size":128,"reason":if seq==1 {"initial_empty"} else {"explicit_reset"}})}
++fn insert(seq:u64,bid:u64,n:usize,seed:u32)->Value {json!({"mutation_seq":seq,"type":"cache_insert","group_id":0,"block_size":128,"block_id":bid,"cache_hash":format!("{:064x}",seed+n as u32),"logical_index":n-1,"prefix_token_ids":vec![seed;n*128]})}
++async fn populate(ctx:&Arc<Mutex<ScheduleContext>>,epoch:&str,seed:Option<u32>) {
++    let ms=match seed {Some(seed)=>vec![reset(1),insert(2,1,1,seed),insert(3,2,2,seed)],None=>vec![reset(1)]};
++    let j=journal(ms.clone(),ms.len() as u64);let mut c=ctx.lock().await;
++    let (s,t)=c.kv_journal.prepare(&j,epoch,128).unwrap();c.kv_journal=s;c.block_hash=t;
++}
++async fn decision(name:&str,p:&[Arc<Mutex<ScheduleContext>>],id:u64,seed:u32,expected:usize)->Entry {
++    let (e,_rx)=entry(id,vec![seed;313]);let obs=capture_observations(&e,p).await;
++    let rows:Vec<_>=obs.iter().map(|o|json!({"engine":o.idx,"enabled":o.routing_enabled,"hits":o.hit_blocks*128,"bs":o.bs,"waiting":o.waiting,"prefill":o.queued_tokens,"all_tokens":o.all_tokens,"work":prefill_tokens(&e.request,o),"score":prefill_tokens(&e.request,o)*(o.bs+1)})).collect();
++    let actual=LmetricQ::schedule(&e,p,&mut ()).await;println!("DUAL_CPU {}",json!({"scenario":name,"candidates":rows,"expected":expected,"actual":actual,"predicted_hits":e.block_hash_state.pred_hit_tokens()}));
++    assert_eq!(actual,Some(expected));e
++}
++#[tokio::test]
++async fn dual_cpu_a_only_cache() {
++    let p=vec![context(),context()];populate(&p[0],"A",Some(7)).await;populate(&p[1],"B",None).await;
++    let e=decision("A_only",&p,101,7,0).await;assert_eq!(e.block_hash_state.pred_hit_tokens(),256);
++    assert_eq!(ledger(&*p[1].lock().await),json!({"bs":0,"waiting":0,"prefill":0,"all_tokens":0}));
++}
++#[tokio::test]
++async fn dual_cpu_b_only_cache() {
++    let p=vec![context(),context()];populate(&p[0],"A",None).await;populate(&p[1],"B",Some(7)).await;
++    let e=decision("B_only",&p,102,7,1).await;assert_eq!(e.block_hash_state.pred_hit_tokens(),256);
++}
++#[tokio::test]
++async fn dual_cpu_cache_load_conflict() {
++    let p=vec![context(),context()];populate(&p[0],"A",Some(7)).await;populate(&p[1],"B",None).await;
++    {let mut c=p[0].lock().await;c.lmetric.bs=2;c.lmetric.waiting_reqs=1;c.lmetric.prefill_tokens=128;c.lmetric.all_tokens=600;}
++    let e=decision("cache_load_conflict",&p,103,7,1).await;assert_eq!(e.block_hash_state.pred_hit_tokens(),0);
++}
++#[tokio::test]
++async fn dual_cpu_physical_namespace_and_reset_isolation() {
++    let p=vec![context(),context()];populate(&p[0],"A",Some(7)).await;populate(&p[1],"B",Some(9)).await;
++    assert_ne!(p[0].lock().await.kv_journal.mapping_view(),p[1].lock().await.kv_journal.mapping_view());
++    decision("same_bids_distinct_tokens_A",&p,104,7,0).await;
++    decision("same_bids_distinct_tokens_B",&p,105,9,1).await;
++    {let mut c=p[0].lock().await;let (s,t)=c.kv_journal.prepare(&journal(vec![reset(4)],4),"A",128).unwrap();c.kv_journal=s;c.block_hash=t;}
++    let e=decision("A_reset_B_preserved",&p,106,9,1).await;assert_eq!(e.block_hash_state.pred_hit_tokens(),256);
++    assert_eq!(p[1].lock().await.kv_journal.last,3);
++}
++struct ChannelSteps {rx:mpsc::UnboundedReceiver<EngineStepOutput>}
++#[async_trait::async_trait]
++impl EngineStepReceiver for ChannelSteps {
++    async fn recv_step(&mut self)->Result<EngineStepOutput,EngineClientError> {self.rx.recv().await.ok_or(EngineClientError::StreamEnded)}
++}
++#[tokio::test]
++async fn dual_cpu_failure_latches_and_admission_rechecks() {
++    let p=vec![context(),context()];populate(&p[0],"A",Some(7)).await;populate(&p[1],"B",None).await;
++    let (e,_)=entry(107,vec![7;313]);let obs=capture_observations(&e,&p).await;
++    let bad=crate::engine::client::lmetric_test_convert(json!({"lmetric_protocol":"request-kv-v1","engine_epoch":"A","block_size":128,"kv_journal":journal(vec![reset(5)],5)}));
++    let (_tx,cq)=channel(8);let (_et,er)=mpsc::unbounded_channel();
++    completion_event_loop(0,Box::new(BadOnce {step:Some(bad)}),Arc::new(Mutex::new(())),cq,er,p[0].clone(),None).await;
++    assert!(!p[0].lock().await.kv_journal.routable());
++    assert!(!apply_default_after(&e,&p,0,&obs[0]).await);
++    let e=decision("invalid_A_healthy_B",&p,108,7,1).await;assert_eq!(e.block_hash_state.pred_hit_tokens(),0);
++    assert!(p[1].lock().await.kv_journal.routable());
++    assert_eq!(ledger(&*p[0].lock().await),json!({"bs":0,"waiting":0,"prefill":0,"all_tokens":0}));
++}
++#[tokio::test]
++async fn dual_cpu_independent_sequences_and_multiple_requests_complete() {
++    use crate::engine::vllm_http::MetricSequence;
++    let p=vec![context(),context()];let mut wqs=vec![];let mut sends=vec![];let mut tasks=vec![];
++    let mut decoders=[MetricSequence::default(),MetricSequence::default()];
++    for idx in 0..2 {
++        let (tx,cq)=channel(8);wqs.push(tx);let (_et,er)=mpsc::unbounded_channel();let (stx,rx)=mpsc::unbounded_channel();sends.push(stx);
++        let ctx=p[idx].clone();tasks.push(tokio::spawn(completion_event_loop(idx,Box::new(ChannelSteps{rx}),Arc::new(Mutex::new(())),cq,er,ctx,None)));
++    }
++    for wave in 0..2u64 {
++        let mut responses=vec![];
++        for idx in 0..2 {
++            let rid=200+wave*2+idx as u64;let seed=7+idx as u32;
++            let (e,rx)=entry(rid,vec![seed;313]);assert_eq!(LmetricQ::schedule(&e,&p,&mut ()).await,Some(idx));wqs[idx].send(e).await.unwrap();responses.push(rx);
++        }
++        for idx in 0..2 {
++            let rid=200+wave*2+idx as u64;let seed=7+idx as u32;let seq=1+wave*4;
++            let mut ms=if wave==0 {vec![reset(1),insert(2,1,1,seed),insert(3,2,2,seed)]} else {vec![]};
++            let b=if wave==0 {4}else {6};
++            ms.push(json!({"mutation_seq":b,"type":"request_blocks","group_id":0,"block_size":128,"request_id":rid,"block_ids":[1,2,3]}));
++            ms.push(json!({"mutation_seq":b+1,"type":"request_release","group_id":0,"block_size":128,"request_id":rid,"block_ids":[]}));
++            let packet=json!({"lmetric_protocol":"request-kv-v1","engine_epoch":format!("engine-{idx}"),"step_id":wave+1,"block_size":128,"kv_groups":1,"kv_events":true,"event_kind":"completion","execution_mode":"sync","latency_kind":"schedule_to_completion_host_ms","latency":1,"prefill_tokens":if wave==0 {313}else {57},"kv_journal":journal(ms,b+1),"outputs":[{"request_id":rid,"new_token_ids":[1,2,3,4,5,6,7,8],"state":"PREFILL","is_finished":true,"hit_token_cnt":if wave==0 {0}else {256},"prev_computed_tokens":0}]});
++            let _=seq;decoders[idx].parse(&packet.to_string()).unwrap();
++            sends[idx].send(crate::engine::client::lmetric_test_convert(packet)).unwrap();
++        }
++        for rx in &mut responses {
++            let count=tokio::time::timeout(Duration::from_secs(3),async {let mut n=0;loop {match rx.recv().await.unwrap().unwrap(){InferStreamResponse::Intermediate {..}=>n+=1,InferStreamResponse::End {generated_text,..}=>{assert_eq!(generated_text.generated_tokens,8);return n},_=>{}}}}).await.unwrap();assert_eq!(count,8);
++        }
++        for ctx in &p {let c=ctx.lock().await;assert!(c.kv_journal.requests.is_empty());assert_eq!(c.kv_journal.mapping_count(),2);assert_eq!(ledger(&c),json!({"bs":0,"waiting":0,"prefill":0,"all_tokens":0}));}
++    }
++    assert_ne!(p[0].lock().await.kv_journal.epoch,p[1].lock().await.kv_journal.epoch);
++    println!("DUAL_CPU {}",json!({"scenario":"multiple_requests","requests":4,"per_backend":2,"same_step_ids":true,"same_mutation_ids":true,"same_physical_ids":true,"distinct_epochs":true,"ledgers_zero":true,"responses_verified":true}));
++    for t in tasks {t.abort();let _=t.await;}
++}
++
++struct DisconnectedEngine;
++#[async_trait::async_trait]
++impl crate::engine::client::EngineClient for DisconnectedEngine {
++    async fn add_request(&mut self,_:u64,_:&crate::gateway::validation::ValidGenerateRequest)->Result<(),EngineClientError> {unreachable!()}
++    async fn abort_request(&mut self,_:u64)->Result<(),EngineClientError> {unreachable!()}
++    fn get_error_rx(&mut self)->mpsc::UnboundedReceiver<u64> {mpsc::unbounded_channel().1}
++    fn take_step_receiver(&mut self)->Box<dyn EngineStepReceiver> {Box::new(BadOnce {step:None})}
++}
++#[tokio::test]
++async fn dual_cpu_disconnected_idle_work_loop_exits_without_panic() {
++    let ctx=context();populate(&ctx,"A",None).await;
++    let q=crate::scheduler::queue::TaskAssigner::new(1,vec![ctx.clone()]);
++    let t=tokio::spawn(work_event_loop(0,Box::new(DisconnectedEngine),q,ctx.clone(),None));
++    let exit=tokio::time::timeout(Duration::from_secs(3),t).await.expect("closed receiver must stop the idle work loop");
++    assert!(exit.is_ok(),"an expected SSE disconnection must not panic the worker");
++    assert!(!ctx.lock().await.kv_journal.routable());
++}
+--- a/router/src/engine/kv_journal_tests.rs
++++ b/router/src/engine/kv_journal_tests.rs
+@@ -1,5 +1,5 @@
+ // CPU-negative and real-NPU integration drivers; events are never generated here.
+-#[cfg(test)]
++#[cfg(all(test, feature = "lmetric-q", feature = "vllm-backend"))]
+ mod kv_journal_integration_tests {
+     use super::*;
+     use crate::engine::client::{EngineClientError,EngineStepOutput};
+@@ -71,6 +71,8 @@
+         assert_eq!(ledger(&*ctx.lock().await),json!({"bs":0,"waiting":0,"prefill":0,"all_tokens":0}));
+     }
+ 
++    include!("dual_replica_tests.rs");
++
+     struct Observed {inner:Box<dyn EngineStepReceiver>,ctx:Arc<Mutex<ScheduleContext>>,last:Option<u64>}
+     #[async_trait::async_trait]
+     impl EngineStepReceiver for Observed {
+--- a/router/src/engine/vllm_http.rs
++++ b/router/src/engine/vllm_http.rs
+@@ -357,8 +357,8 @@
+         }
+         let kv_mode = metric.lmetric_protocol.as_deref() == Some("request-kv-v1");
+         if self.versioned() && kv_mode != self.kv_mode { return Err("KV capability changed".into()); }
+-        if kv_mode && !cfg!(all(feature="lmetric-q",feature="radixtree-blockhash",not(feature="simulator"))) {
+-            return Err("KV journal requires lmetric-q/radixtree without simulator".into());
++        if kv_mode && !cfg!(all(any(feature="lmetric-q",feature="join-shortest-weight-q"),feature="radixtree-blockhash",not(feature="simulator"))) {
++            return Err("KV journal requires lmetric-q or join-shortest-weight-q/radixtree without simulator".into());
+         }
+         let mut mutation_last = self.mutation_last;
+         if kv_mode {
+@@ -419,3 +419,15 @@
+         Ok(metric)
+     }
+ }
++
++#[cfg(all(test, feature="join-shortest-weight-q", not(feature="lmetric-q")))]
++mod dual_baseline_tests {
++    use super::*;
++    #[test]
++    fn dual_baseline_accepts_same_kv_protocol_as_lmetric() {
++        let packet=json!({"lmetric_protocol":"request-kv-v1","engine_epoch":"baseline","step_id":1,"latency":0,"outputs":[],"prefill_tokens":0,"latency_kind":"schedule_to_completion_host_ms","execution_mode":"sync","event_kind":"control","kv_events":true,"block_size":128,"kv_groups":1,"kv_journal":{"version":"kv-journal-v1","observation_kind":"scheduler_cache_metadata","num_blocks":8,"mutation_seq":1,"mutations":[{"mutation_seq":1,"type":"cache_reset","group_id":0,"block_size":128,"reason":"initial_empty"}]}});
++        let mut seq=MetricSequence::default();
++        assert!(seq.parse(&packet.to_string()).is_ok(),"the comparison baseline must consume exactly the same journal contract");
++        assert!(seq.parse(&packet.to_string()).is_err(),"baseline must retain duplicate rejection");
++    }
++}
+--- a/router/src/scheduler/policies/dsl_runtime.rs
++++ b/router/src/scheduler/policies/dsl_runtime.rs
+@@ -86,6 +86,16 @@
+         let now = std::time::Instant::now();
+         #[cfg(feature = "preble-tps-q")]
+         let bs_now = sctx.lmetric.bs;
++        tracing::debug!(target: "scheduling", request_id = entry.request.request_id,
++            engine = idx, routing_enabled = sctx.kv_journal.routable(),
++            bs = sctx.lmetric.bs, waiting = sctx.lmetric.waiting_reqs,
++            prefill = sctx.lmetric.prefill_tokens, all_tokens = sctx.lmetric.all_tokens,
++            hit_tokens = hit_blocks * block_size, cache_epoch = epoch,
++            lmetric_score = (sctx.lmetric.prefill_tokens.max(0) as usize
++                + entry.request.input_tokens.len().saturating_sub(hit_blocks * block_size))
++                * (sctx.lmetric.bs + 1),
++            shortest_weight_score = 3 * sctx.lmetric.waiting_reqs + sctx.lmetric.bs,
++            "CANDIDATE");
+         Observation {
+             routing_enabled: sctx.kv_journal.routable(),
+             idx,

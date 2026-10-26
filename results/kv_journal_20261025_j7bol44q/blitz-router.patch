@@ -1,0 +1,695 @@
+diff --git a/.cargo/config.toml b/.cargo/config.toml
+index 86a4b01..10c3fb2 100644
+--- a/.cargo/config.toml
++++ b/.cargo/config.toml
+@@ -7,4 +7,8 @@ registry = "sparse+https://rsproxy.cn/index/"
+ [registries.rsproxy]
+ index = "https://rsproxy.cn/crates.io-index"
+ [net]
+-git-fetch-with-cli = true
+\ No newline at end of file
++git-fetch-with-cli = true
++
++[resolver]
++# Keep freshly resolved dependencies compatible with rust-toolchain.toml.
++incompatible-rust-versions = "fallback"
+diff --git a/CLAUDE.md b/CLAUDE.md
+index 7930437..cd9e1ee 100644
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -79,7 +79,7 @@ blitz-router/
+ │   │   │   │                        # `apply_default_after`, Observation schema
+ │   │   │   ├── simple.rs            # random-q, round-robin-q, least-wait-token-q,
+ │   │   │   │                        # bounded-most-hit-q (no upstream-system origin)
+-│   │   │   ├── vllm.rs              # join-shortest-weight-q (vLLM 4·waiting + bs)
++│   │   │   ├── vllm.rs              # join-shortest-weight-q (vLLM 3·waiting + bs)
+ │   │   │   ├── lmetric.rs           # lmetric-q
+ │   │   │   ├── bailian.rs           # bailian-impl-q
+ │   │   │   ├── aibrix.rs            # aibrix-q
+@@ -141,7 +141,7 @@ Policies are organized under `router/src/scheduler/policies/` by their upstream
+ - `bounded-most-hit-q` — `Filter (queued_tokens < BOUND) (max hit) (min prefill_tokens)`, with the attention-black-hole fallback fix.
+ 
+ **`vllm.rs`** — vLLM baseline
+-- `join-shortest-weight-q` — `Select min by 4·sctx.waiting + sctx.bs`. The "weight" qualifier names the formula's defining feature (waiting carries weight 4 vs weight 1 on bs); also serves as the catch-all default when no policy feature is selected.
++- `join-shortest-weight-q` — `Select min by 3·sctx.waiting + sctx.bs`. The "weight" qualifier names the formula's defining feature (the paper weights queued requests by 4 and running requests by 1; since bs includes both, this is 3·waiting + bs); also serves as the catch-all default when no policy feature is selected.
+ 
+ **`bailian.rs`** — Bailian baseline
+ - `bailian-impl-q` — Per-component normalize then weighted-sample `(α, β, γ)` over `(hit_pct, 1-bs/M_bs, 1-tok/M_tok)`.
+diff --git a/README.md b/README.md
+index 46d83c8..95db1f6 100644
+--- a/README.md
++++ b/README.md
+@@ -4,6 +4,21 @@ Distributed LLM inference router written in Rust. Routes client requests to back
+ 
+ ## Build
+ 
++Install the system build dependencies first:
++
++```bash
++# openEuler
++sudo dnf install -y gcc gcc-c++ make cmake perl pkgconf openssl-devel
++
++# Debian / Ubuntu
++sudo apt-get install -y build-essential cmake perl pkg-config libssl-dev
++```
++
++The pinned Rust toolchain is selected automatically by rustup. Cargo is
++configured to prefer dependencies compatible with that toolchain when resolving
++a new lockfile. If an existing lockfile selects packages requiring a newer Rust
++version, run `cargo update` once to resolve compatible versions.
++
+ ```bash
+ # Default build (lmetric scheduling policy)
+ cargo build -p router --features lmetric-q
+@@ -46,3 +61,9 @@ Copyright 2022-present Hugging Face Inc.
+ Licensed under the **Apache License, Version 2.0**.
+ The full license text is provided in `LICENSES/Apache-2.0.txt`.
+ Modification details in `NOTICE` and individual source files.
++
++### Experimental Ascend request events
++
++The local vLLM-Ascend 0.23.0 request/execution prototype uses versioned SSE,
++with CPU synthetic replay validation and no KV mutation export or NPU result.
++See [scope, configuration and tests](docs/ascend-request-events.md).
+diff --git a/docs/dsl/policies.md b/docs/dsl/policies.md
+index d1567e1..d6a349b 100644
+--- a/docs/dsl/policies.md
++++ b/docs/dsl/policies.md
+@@ -43,8 +43,9 @@ policy round-robin-q (gctx: RRGCtx):
+     after: default; gctx.next_replica_id <- (gctx.next_replica_id + 1) % Count
+ 
+ policy join-shortest-weight-q (gctx: ()):
+-    Select min by 4 · sctx.waiting + sctx.bs
++    Select min by 3 · sctx.waiting + sctx.bs
+     after: default
++    # Paper Fig.6(a): 4*queued + running; bs = queued + running.
+ 
+ policy least-wait-token-q (gctx: ()):
+     Select min by prefill_tokens(req, sctx)
+diff --git a/router/src/engine/client.rs b/router/src/engine/client.rs
+index ae2d31f..ac24efc 100644
+--- a/router/src/engine/client.rs
++++ b/router/src/engine/client.rs
+@@ -78,6 +78,11 @@ pub struct RequestStepOutput {
+ /// `EngineCoreOutputs` (ZMQ) for the event loop.
+ #[derive(Debug, Clone, Serialize, Deserialize)]
+ pub struct EngineStepOutput {
++    /// Versioned compute-only Prefill semantics. None preserves yaullm behavior.
++    #[serde(default)]
++    pub lmetric_protocol: Option<String>,
++    #[serde(default)]
++    pub lmetric_block_size: Option<usize>,
+     /// Number of prefill tokens processed in this step.
+     pub prefill_tokens: usize,
+     /// Remaining prefill token budget after this step.
+@@ -169,6 +174,7 @@ mod vllm_impl {
+     /// Internal state for the SSE stream, lazily initialized on the first
+     /// call to `recv_step`.
+     struct SseState {
++        sequence: super::super::vllm_http::MetricSequence,
+         stream: Box<dyn futures::Stream<Item = Result<es::SSE, es::Error>> + Unpin + Send>,
+     }
+ 
+@@ -218,6 +224,7 @@ mod vllm_impl {
+             }
+ 
+             self.sse_state = Some(SseState {
++                sequence: Default::default(),
+                 stream: Box::new(stream),
+             });
+ 
+@@ -231,11 +238,14 @@ mod vllm_impl {
+             self.ensure_sse_connected().await?;
+ 
+             let sse_state = self.sse_state.as_mut().unwrap();
++            if sse_state.sequence.failed() {
++                return Err(EngineClientError::StreamEnded);
++            }
+ 
+             loop {
+                 match sse_state.stream.next().await {
+                     Some(Ok(es::SSE::Event(e))) => {
+-                        let m: VllmMetric = serde_json::from_str(&e.data).map_err(|err| {
++                        let m = sse_state.sequence.parse(&e.data).map_err(|err| {
+                             EngineClientError::Json(format!(
+                                 "Failed to parse SSE event data: {} (raw: {:?})",
+                                 err, e.data
+@@ -245,10 +255,19 @@ mod vllm_impl {
+                     }
+                     Some(Ok(es::SSE::Comment(_))) => continue,
+                     Some(Ok(es::SSE::Connected(_))) => {
++                        if sse_state.sequence.versioned() {
++                            sse_state.sequence.invalidate();
++                            return Err(EngineClientError::Sse(
++                                "request-v1 reconnect requires a fresh Router/engine session".into()
++                            ));
++                        }
+                         tracing::debug!("SSE reconnected");
+                         continue;
+                     }
+                     Some(Err(e)) => {
++                        if sse_state.sequence.versioned() {
++                            sse_state.sequence.invalidate();
++                        }
+                         return Err(EngineClientError::Sse(format!("SSE stream error: {}", e)));
+                     }
+                     None => {
+@@ -275,7 +294,7 @@ mod vllm_impl {
+     }
+ 
+     /// Convert `VllmMetric` (from SSE JSON) into the unified `EngineStepOutput`.
+-    fn vllm_metric_to_step_output(m: VllmMetric) -> EngineStepOutput {
++    pub(super) fn vllm_metric_to_step_output(m: VllmMetric) -> EngineStepOutput {
+         let outputs = m
+             .outputs
+             .into_iter()
+@@ -290,6 +309,8 @@ mod vllm_impl {
+             .collect();
+ 
+         EngineStepOutput {
++            lmetric_protocol: m.lmetric_protocol,
++            lmetric_block_size: m.block_size,
+             prefill_tokens: m.prefill_tokens,
+             prefill_token_budget: m.prefill_token_budget,
+             latency: m.latency,
+@@ -463,6 +484,8 @@ mod zmq_impl {
+                 .unwrap_or(0);
+ 
+             Ok(EngineStepOutput {
++                lmetric_protocol: None,
++                lmetric_block_size: None,
+                 prefill_tokens: outputs.prefill_tokens.unwrap_or(0) as usize,
+                 prefill_token_budget: outputs.prefill_token_budget.unwrap_or(0) as usize,
+                 latency: latency_ms,
+@@ -516,3 +539,8 @@ mod zmq_impl {
+ 
+ #[cfg(feature = "zmq-backend")]
+ pub use zmq_impl::ZmqEngineClientAdapter;
++
++#[cfg(all(test, feature = "vllm-backend"))]
++pub(crate) fn lmetric_test_convert(v: serde_json::Value) -> EngineStepOutput {
++    vllm_impl::vllm_metric_to_step_output(serde_json::from_value(v).unwrap())
++}
+diff --git a/router/src/engine/colocation.rs b/router/src/engine/colocation.rs
+index 94ce634..34971b5 100644
+--- a/router/src/engine/colocation.rs
++++ b/router/src/engine/colocation.rs
+@@ -443,6 +443,15 @@ mod task_assignment {
+             }
+             // postcond: all requests in step output are visible to CQ
+ 
++            // Never apply a request-v1 step using a different token/block unit.
++            // This also catches a Router left at its legacy CLI default of 16.
++            if m.lmetric_protocol.as_deref() == Some("request-v1")
++                && entries.values().chain(except_context.entries.values()).any(|entry|
++                    m.lmetric_block_size != Some(entry.block_hash_state.get_block_size())) {
++                tracing::error!(engine = replica_index, "LMetric block-size mismatch; stop consumer and restart session");
++                break;
++            }
++
+             tracing::trace!(engine = replica_index, step = ?m, "STEP_RECEIVED");
+ 
+             let current_epoch = schedule_context.lock().await.block_hash.epoch();
+@@ -476,6 +485,16 @@ mod task_assignment {
+                         if is_known {
+                             metric_delta.waiting_reqs_dec += 1;
+                         }
++                        // request-v1 excludes hits from reported prompt work.
++                        // Apply H_actual-H_pred even when the first output finishes.
++                        if is_finished && m.lmetric_protocol.as_deref() == Some("request-v1") {
++                            if let Some(entry) = entries.get_mut(&request_id)
++                                .or_else(|| except_context.entries.get_mut(&request_id)) {
++                                metric_delta.prefill_tokens_dec += entry.block_hash_state
++                                    .set_real_token_hits_get_diff(hit_token_cnt)
++                                    * entry.block_hash_state.get_block_size() as isize;
++                            }
++                        }
+                         if is_finished {
+                             if let Some(entry) = entries.get_mut(&request_id) {
+                                 let input_length = entry.request.input_length as isize;
+@@ -691,6 +710,16 @@ mod task_assignment {
+             #[cfg(any(feature = "preble-bs-q", feature = "preble-tps-q"))]
+             let pre_step_bs = sctx.lmetric.bs;
+             sctx.lmetric -= metric_delta;
++            // State after this engine step. These gauges also make drain
++            // checks possible without parsing periodic statistics files.
++            metrics::gauge!("blitz_replica_active_requests", sctx.lmetric.bs as f64,
++                "engine" => replica_index.to_string());
++            metrics::gauge!("blitz_replica_waiting_requests", sctx.lmetric.waiting_reqs as f64,
++                "engine" => replica_index.to_string());
++            metrics::gauge!("blitz_replica_pending_prefill_tokens", sctx.lmetric.prefill_tokens as f64,
++                "engine" => replica_index.to_string());
++            metrics::gauge!("blitz_replica_context_tokens", sctx.lmetric.all_tokens as f64,
++                "engine" => replica_index.to_string());
+             #[cfg(any(feature = "preble-bs-q", feature = "preble-tps-q"))]
+             sctx.block_hash.update_with_step(pre_step_bs, std::time::Instant::now());
+             drop(sctx);
+@@ -874,6 +903,9 @@ mod task_assignment {
+             }
+         }
+     }
++    #[cfg(all(test, feature = "lmetric-q", feature = "vllm-backend"))]
++    include!("ascend_request_tests.rs");
++
+ }
+ 
+ mod except_management {
+diff --git a/router/src/engine/vllm_http.rs b/router/src/engine/vllm_http.rs
+index e486cdc..4047c73 100644
+--- a/router/src/engine/vllm_http.rs
++++ b/router/src/engine/vllm_http.rs
+@@ -153,6 +153,16 @@ impl VllmClient {
+ 
+ #[derive(Serialize, Deserialize, Debug)]
+ pub(crate) struct VllmMetric {
++    #[serde(default)]
++    pub lmetric_protocol: Option<String>,
++    #[serde(default)]
++    pub engine_epoch: Option<String>,
++    #[serde(default)]
++    pub kv_events: Option<bool>,
++    #[serde(default)]
++    pub block_size: Option<usize>,
++    #[serde(default)]
++    pub kv_groups: Option<usize>,
+     #[serde(default)]
+     pub prefill_tokens: usize,
+     #[serde(default)]
+@@ -307,3 +317,75 @@ struct Request2Vllm {
+     #[serde(skip_serializing_if = "Option::is_none")]
+     temperature: Option<f32>,
+ }
++
++/// New request-v1 sessions are contiguous and cannot silently reconnect.
++/// Legacy yaullm JSON keeps its existing permissive parsing behavior.
++#[derive(Default)]
++pub(super) struct MetricSequence {
++    epoch: Option<String>,
++    last: u64,
++    failed: bool,
++}
++
++impl MetricSequence {
++    pub(super) fn versioned(&self) -> bool { self.epoch.is_some() }
++
++    pub(super) fn failed(&self) -> bool { self.failed }
++
++    pub(super) fn invalidate(&mut self) { self.failed = true; }
++
++    pub(super) fn parse(&mut self, data: &str) -> Result<VllmMetric, String> {
++        if self.failed { return Err("LMetric session invalid; restart required".into()); }
++        let result = self.parse_inner(data);
++        if result.is_err() && (self.versioned() || data.contains("lmetric_protocol")) {
++            self.failed = true;
++        }
++        result
++    }
++
++    fn parse_inner(&mut self, data: &str) -> Result<VllmMetric, String> {
++        let raw: serde_json::Value = serde_json::from_str(data).map_err(|e| e.to_string())?;
++        let metric: VllmMetric = serde_json::from_value(raw.clone()).map_err(|e| e.to_string())?;
++        match metric.lmetric_protocol.as_deref() {
++            None if self.epoch.is_none() => return Ok(metric),
++            Some("request-v1") => {},
++            _ => return Err("Unsupported/missing LMetric protocol".into()),
++        }
++        for field in ["step_id", "latency", "outputs", "prefill_tokens"] {
++            if raw.get(field).is_none() { return Err(format!("Missing request-v1 field: {field}")); }
++        }
++        if metric.kv_groups != Some(1) || metric.block_size.unwrap_or(0) == 0
++            || metric.kv_events != Some(false)
++            || raw["latency_kind"] != "schedule_to_completion_host_ms"
++            || !matches!(raw["execution_mode"].as_str(), Some("sync" | "async")) {
++            return Err("Invalid request-v1 capabilities/timing semantics".into());
++        }
++        if !metric.evicted_block_ids.is_empty() || !metric.cur_used_block_ids.is_empty()
++            || !metric.new_block_hashes_ids.is_empty() || !metric.new_block_hashes.is_empty()
++            || !metric.evicted_block_hashes.is_empty() || !metric.preempted_ids.is_empty()
++            || !metric.aborted_requests.is_empty() {
++            return Err("request-v1 does not support KV/preempt/abort events".into());
++        }
++        let epoch = metric.engine_epoch.as_deref().filter(|s| !s.is_empty())
++            .ok_or("Missing request-v1 engine_epoch")?;
++        if self.epoch.as_deref().map_or(false, |e| e != epoch) || metric.step_id != self.last + 1 {
++            return Err("LMetric epoch changed or step sequence duplicated/gapped".into());
++        }
++        let mut seen = std::collections::HashSet::new();
++        for (i, status) in metric.outputs.iter().enumerate() {
++            for field in ["request_id", "new_token_ids", "state", "is_finished", "hit_token_cnt", "prev_computed_tokens"] {
++                if raw["outputs"][i].get(field).is_none() {
++                    return Err(format!("Missing request-v1 output field: {field}"));
++                }
++            }
++            if !matches!(status.state.as_str(), "PREFILL" | "DECODE")
++                || !seen.insert(status.request_id)
++                || (status.new_token_ids.is_empty() && !status.is_finished) {
++                return Err("Invalid request-v1 request output".into());
++            }
++        }
++        self.epoch = Some(epoch.to_owned());
++        self.last = metric.step_id;
++        Ok(metric)
++    }
++}
+diff --git a/router/src/gateway/server.rs b/router/src/gateway/server.rs
+index 8067439..9e91534 100644
+--- a/router/src/gateway/server.rs
++++ b/router/src/gateway/server.rs
+@@ -490,6 +490,12 @@ pub async fn run(
+ 
+     // Prometheus handler
+     let builder = PrometheusBuilder::new()
++        .set_buckets_for_metric(
++            Matcher::Full("blitz_policy_schedule_duration_seconds".into()),
++            &[0.000001, 0.000002, 0.000005, 0.000010, 0.000020, 0.000050,
++              0.000100, 0.000200, 0.000500, 0.001, 0.002, 0.005, 0.01, 0.1],
++        )
++        .unwrap()
+         .set_buckets_for_metric(duration_matcher, &duration_buckets)
+         .unwrap()
+         .set_buckets_for_metric(input_length_matcher, &input_length_buckets)
+diff --git a/router/src/scheduler/kvcache.rs b/router/src/scheduler/kvcache.rs
+index 149894a..93d88dd 100644
+--- a/router/src/scheduler/kvcache.rs
++++ b/router/src/scheduler/kvcache.rs
+@@ -183,7 +183,7 @@ impl BlockHashState {
+         let mut token_in_last_block = Vec::with_capacity(block_size);
+ 
+         for block in input_tokens.chunks(block_size) {
+-            if block.len() < 16 {
++            if block.len() < block_size {
+                 token_in_last_block.extend_from_slice(block);
+                 break;
+             }
+@@ -243,7 +243,7 @@ impl BlockHashState {
+ 
+     pub fn append_tokens(&mut self, new_tokens: &[u32]) {
+         self.token_in_last_block.extend_from_slice(new_tokens);
+-        if self.token_in_last_block.len() >= self.block_size {
++        while self.token_in_last_block.len() >= self.block_size {
+             let block = self.token_in_last_block.drain(..self.block_size).collect::<Vec<_>>();
+             let len = block.len() * std::mem::size_of::<u32>();
+             let ptr = block.as_ptr() as *const u8;
+diff --git a/router/src/scheduler/policies/llm_d/least_bs.rs b/router/src/scheduler/policies/llm_d/least_bs.rs
+index 38f975c..8c0f79e 100644
+--- a/router/src/scheduler/policies/llm_d/least_bs.rs
++++ b/router/src/scheduler/policies/llm_d/least_bs.rs
+@@ -26,7 +26,7 @@
+ //! signal versus queue-aware composite signal.
+ //!
+ //! Distinct from:
+-//!   - `join-shortest-weight-q` (in `vllm.rs`, `4·waiting + bs`,
++//!   - `join-shortest-weight-q` (in `vllm.rs`, `3·waiting + bs`,
+ //!     additionally weights `sctx.waiting`)
+ //!   - `least-waiting-q` (`sctx.waiting` only — different "queue")
+ 
+diff --git a/router/src/scheduler/policies/llm_d/least_waiting.rs b/router/src/scheduler/policies/llm_d/least_waiting.rs
+index b5347ac..3d5d068 100644
+--- a/router/src/scheduler/policies/llm_d/least_waiting.rs
++++ b/router/src/scheduler/policies/llm_d/least_waiting.rs
+@@ -23,7 +23,7 @@
+ //! labels ("load-aware" tells the reader nothing about which signal).
+ //!
+ //! Distinct from `join-shortest-weight-q` in `vllm.rs` which uses
+-//! `4·waiting + bs` (combines waiting AND batch size). This one uses
++//! `3·waiting + bs` (combines waiting AND batch size). This one uses
+ //! `waiting` only.
+ 
+ use policy_dsl::policy;
+diff --git a/router/src/scheduler/policies/lmetric.rs b/router/src/scheduler/policies/lmetric.rs
+index 89e21b8..da669bd 100644
+--- a/router/src/scheduler/policies/lmetric.rs
++++ b/router/src/scheduler/policies/lmetric.rs
+@@ -17,3 +17,83 @@ policy! {
+     gctx: (),
+     body: { select_min_by(&root_target(&observations), |o| prefill_tokens(req, o) * (o.bs + 1)) },
+ }
++
++#[cfg(test)]
++mod tests {
++    use super::LmetricQ;
++    use crate::gateway::validation::ValidGenerateRequest;
++    use crate::scheduler::kvcache::{BlockHash, BlockHashState, PrefixBlockHash};
++    use crate::scheduler::policies::{policy_trait::Policy, Entry};
++    use crate::scheduler::state::LMetric;
++    use crate::types::GenerationParams;
++    use crate::ScheduleContext;
++    use std::{sync::Arc, time::Duration};
++    use tokio::sync::{mpsc, Mutex};
++
++    fn entry(id: u64) -> Entry {
++        let tokens: Vec<u32> = (0..64).collect();
++        let (response_tx, _) = mpsc::unbounded_channel();
++        Entry {
++            block_hash_state: BlockHashState::new(&tokens, 16),
++            request: ValidGenerateRequest {
++                request_id: id, messages: vec![], inputs: String::new(),
++                input_length: 64, truncate: 0, decoder_input_details: false,
++                params: GenerationParams {
++                    temperature: 1.0, repetition_penalty: 1.0, top_k: 0,
++                    top_p: 1.0, seed: 0, max_new_tokens: 8,
++                    stop_sequences: vec![], ignore_eos_token: false,
++                },
++                top_n_tokens: 0, input_tokens: tokens,
++            },
++            response_tx, span: tracing::Span::none(), temp_span: None,
++            queue_time: tokio::time::Instant::now(), batch_time: None,
++            generated_token_cnt: 0, prev_token_time: None, time_of_per_token: None,
++            max_time_between_tokens: Duration::ZERO,
++        }
++    }
++
++    fn pool(n: usize) -> Vec<Arc<Mutex<ScheduleContext>>> {
++        (0..n).map(|_| Arc::new(Mutex::new(ScheduleContext {
++            lmetric: LMetric::default(), block_hash: PrefixBlockHash::new(1024),
++        }))).collect()
++    }
++
++    #[tokio::test]
++    async fn balances_cache_affinity_against_pending_work_and_active_requests() {
++        let req = entry(0);
++        let p = pool(2);
++        {
++            let mut cached = p[0].lock().await;
++            cached.block_hash.insert(&req.block_hash_state.get_hashes()[..3], vec![1, 2, 3]);
++        }
++        assert_eq!(LmetricQ::schedule(&req, &p, &mut ()).await, Some(0));
++        assert_eq!(req.block_hash_state.pred_hit_tokens(), 48);
++        let cached = p[0].lock().await;
++        assert_eq!(cached.lmetric.bs, 1);
++        assert_eq!(cached.lmetric.waiting_reqs, 1);
++        assert_eq!(cached.lmetric.prefill_tokens, 16);
++        drop(cached);
++        // Cached but busy: (128 + 16) * (8 + 1) > (0 + 64) * (0 + 1).
++        {
++            let mut cached = p[0].lock().await;
++            cached.lmetric.bs = 8;
++            cached.lmetric.prefill_tokens = 128;
++        }
++        assert_eq!(LmetricQ::schedule(&entry(1), &p, &mut ()).await, Some(1));
++    }
++
++    #[tokio::test]
++    async fn admission_updates_prevent_burst_concentration() {
++        let p = pool(4);
++        let mut counts = [0; 4];
++        for id in 0..100 {
++            counts[LmetricQ::schedule(&entry(id), &p, &mut ()).await.unwrap()] += 1;
++        }
++        assert_eq!(counts, [25; 4]);
++    }
++
++    #[tokio::test]
++    async fn no_replicas_returns_none() {
++        assert_eq!(LmetricQ::schedule(&entry(0), &[], &mut ()).await, None);
++    }
++}
+diff --git a/router/src/scheduler/policies/mod.rs b/router/src/scheduler/policies/mod.rs
+index 64277c8..f8a3a72 100644
+--- a/router/src/scheduler/policies/mod.rs
++++ b/router/src/scheduler/policies/mod.rs
+@@ -10,7 +10,7 @@
+ // for trivial policies with no upstream origin:
+ //
+ //   simple.rs   — random / round-robin / least-wait-token / bounded-most-hit
+-//   vllm.rs     — vLLM 4·waiting + bs                                   (1)
++//   vllm.rs     — vLLM 3·waiting + bs                                   (1)
+ //   bailian.rs  — Bailian                                               (1)
+ //   aibrix.rs   — AIBrix                                                (1)
+ //   dynamo.rs   — AI-Dynamo Decode-node + Prefill-node logits           (2)
+@@ -63,6 +63,9 @@ pub(crate) mod simple;
+ // is selected.
+ pub(crate) mod vllm;
+ 
++#[cfg(all(test, feature = "lmetric-q"))]
++mod paper_tests;
++
+ // Re-export concrete policy structs (each emitted by `policy!`).
+ // Each `pub(crate) use` is feature-gated identically to its `mod`,
+ // so the unused-import warnings the older `#[allow(unused_imports)]`
+@@ -163,7 +166,14 @@ pub(crate) struct Entry {
+ 
+ impl Entry {
+     pub fn append_state(&mut self, new_tokens: &Vec<u32>, tbt: &Duration) {
+-        self.append_tbt_to_tpot(tbt);
++        // A completion may contain multiple tokens. Account for each token;
++        // divide the observed interval across them for the existing TPOT average.
++        if !new_tokens.is_empty() {
++            let per_token = *tbt / new_tokens.len() as u32;
++            for _ in new_tokens {
++                self.append_tbt_to_tpot(&per_token);
++            }
++        }
+         self.block_hash_state.append_tokens(new_tokens);
+     }
+ 
+@@ -243,7 +253,7 @@ pub(crate) type TaskAssigner = PolicyRunner<RandomQ>;
+ #[cfg(feature = "least-ttft-q")]
+ pub(crate) type TaskAssigner = PolicyRunner<LeastTtftQ>;
+ // `join-shortest-weight-q` is also the catch-all default — vLLM's
+-// `4·sctx.waiting + sctx.bs` formula.
++// `3·sctx.waiting + sctx.bs` formula.
+ #[cfg(any(
+     feature = "join-shortest-weight-q",
+     not(any(
+diff --git a/router/src/scheduler/policies/policy_runner.rs b/router/src/scheduler/policies/policy_runner.rs
+index 430b274..508242f 100644
+--- a/router/src/scheduler/policies/policy_runner.rs
++++ b/router/src/scheduler/policies/policy_runner.rs
+@@ -68,6 +68,22 @@ where
+         }
+     }
+ 
++    /// Wall time of the policy call, including snapshot locks and admission
++    /// bookkeeping; excludes the time waiting in the command queue.
++    async fn schedule_measured(
++        entry: &Entry,
++        all_sctx: &[Arc<Mutex<ScheduleContext>>],
++        gctx: &mut P::GlobalContext,
++    ) -> Option<usize> {
++        let started = std::time::Instant::now();
++        let chosen = P::schedule(entry, all_sctx, gctx).await;
++        metrics::histogram!(
++            "blitz_policy_schedule_duration_seconds",
++            started.elapsed().as_secs_f64()
++        );
++        chosen
++    }
++
+     async fn queue_task(
+         num_replicas: usize,
+         mut receiver: mpsc::UnboundedReceiver<PolicyCommand>,
+@@ -85,7 +101,7 @@ where
+                     uncommit_buffer.push_back(*entry);
+                     let entry = uncommit_buffer.front().unwrap();
+                     if let Some(replica_idx) =
+-                        P::schedule(entry, &all_schedule_context, &mut gctx).await
++                        Self::schedule_measured(entry, &all_schedule_context, &mut gctx).await
+                     {
+                         let entry = uncommit_buffer.pop_front().unwrap();
+                         let request_id = entry.request.request_id;
+@@ -99,7 +115,7 @@ where
+                     'ineligible: while all_commit_req_buffers[replica_idx].is_empty() {
+                         if let Some(entry) = uncommit_buffer.front() {
+                             if let Some(tmp_replica_idx) =
+-                                P::schedule(entry, &all_schedule_context, &mut gctx).await
++                                Self::schedule_measured(entry, &all_schedule_context, &mut gctx).await
+                             {
+                                 let entry = uncommit_buffer.pop_front().unwrap();
+                                 let request_id = entry.request.request_id;
+diff --git a/router/src/scheduler/policies/vllm.rs b/router/src/scheduler/policies/vllm.rs
+index fac4b8f..4777770 100644
+--- a/router/src/scheduler/policies/vllm.rs
++++ b/router/src/scheduler/policies/vllm.rs
+@@ -1,30 +1,28 @@
+ //! Scheduling policies derived from the vLLM baseline.
+ //!
+-//! Currently one policy: `join-shortest-weight-q`. The "weight" qualifier
+-//! names the formula's defining feature — `sctx.waiting` carries weight 4
+-//! in the score versus weight 1 on `sctx.bs`, so the policy weights the
+-//! waiting queue more than the active batch. Without "weight" the name
++//! Currently one policy: `join-shortest-weight-q`. Figure 6(a) of
++//! arXiv:2603.15202v3 uses 4 * queued + running. Here `bs` includes both
++//! queued and running requests, so the equivalent expression is
++//! 3 * waiting + bs. Without "weight" the name
+ //! would be ambiguous with other "shortest"-style policies (`least-bs-q`,
+ //! `least-waiting-q`) that drop one term entirely.
+ //!
+ //! Spec-form DSL (`docs/dsl/policies.md` §2):
+ //!
+ //! ```text
+-//! Select min by 4 · sctx.waiting + sctx.bs
++//! Select min by 3 · sctx.waiting + sctx.bs
+ //! ```
+ //!
+ //! ## vLLM origin
+ //!
+-//! Mirrors vLLM's stock dispatch tendency to pick the engine with the
+-//! lowest combined queue+batch pressure, with the `4×` weight on waiting
+-//! reflecting that a request stuck in the waiting queue costs more than
+-//! an extra slot in the active batch (the latter only adds parallelism
+-//! pressure; the former adds head-of-line latency).
++//! Matches the paper's Figure 6(a), https://arxiv.org/html/2603.15202v3#S4.F6.
++//! State invariant: bs = waiting + running. Applying weight four to waiting
++//! AND adding bs would count waiting once more, yielding 5 * queued + running.
+ 
+ use policy_dsl::policy;
+ 
+ policy! {
+     name: JShortestWeightQ,
+     gctx: (),
+-    body: { select_min_by(&root_target(&observations), |o| 4 * o.waiting + o.bs) },
++    body: { select_min_by(&root_target(&observations), |o| 3 * o.waiting + o.bs) },
+ }
+diff --git a/router/src/scheduler/simulator/mirror.rs b/router/src/scheduler/simulator/mirror.rs
+index 6dad2cf..734c824 100644
+--- a/router/src/scheduler/simulator/mirror.rs
++++ b/router/src/scheduler/simulator/mirror.rs
+@@ -162,6 +162,8 @@ mod tests {
+         preempted: Vec<u64>,
+     ) -> EngineStepOutput {
+         EngineStepOutput {
++            lmetric_protocol: None,
++            lmetric_block_size: None,
+             prefill_tokens: 0,
+             prefill_token_budget: 1024,
+             latency: 1,
+diff --git a/router/src/scheduler/simulator/mod.rs b/router/src/scheduler/simulator/mod.rs
+index d717501..b98d0a7 100644
+--- a/router/src/scheduler/simulator/mod.rs
++++ b/router/src/scheduler/simulator/mod.rs
+@@ -219,6 +219,8 @@ mod tests {
+ 
+     fn empty_step(prefill_tokens: usize, latency_ms: u64, outputs: Vec<RequestStepOutput>) -> EngineStepOutput {
+         EngineStepOutput {
++            lmetric_protocol: None,
++            lmetric_block_size: None,
+             prefill_tokens,
+             prefill_token_budget: 1024,
+             latency: latency_ms,
+diff --git a/router/src/scheduler/simulator/pctx.rs b/router/src/scheduler/simulator/pctx.rs
+index 11cb8f7..2763c13 100644
+--- a/router/src/scheduler/simulator/pctx.rs
++++ b/router/src/scheduler/simulator/pctx.rs
+@@ -762,6 +762,8 @@ mod tests {
+         outputs: Vec<RequestStepOutput>,
+     ) -> EngineStepOutput {
+         EngineStepOutput {
++            lmetric_protocol: None,
++            lmetric_block_size: None,
+             prefill_tokens,
+             prefill_token_budget: 1024,
+             latency: 1,
+diff --git a/router/src/scheduler/simulator/sched.rs b/router/src/scheduler/simulator/sched.rs
+index 1392a63..adcae5c 100644
+--- a/router/src/scheduler/simulator/sched.rs
++++ b/router/src/scheduler/simulator/sched.rs
+@@ -281,6 +281,8 @@ mod tests {
+         aborted: Vec<u64>,
+     ) -> EngineStepOutput {
+         EngineStepOutput {
++            lmetric_protocol: None,
++            lmetric_block_size: None,
+             prefill_tokens,
+             prefill_token_budget: 1024,
+             latency: 1,

@@ -1,0 +1,191 @@
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:174:17
+    |
+174 |                 (*node).payload[i].push(alias_bid);
+    |                 ^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+    = note: `#[warn(dangerous_implicit_autorefs)]` on by default
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+174 |                 (&mut (*node).payload)[i].push(alias_bid);
+    |                 +++++                +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:356:47
+    |
+356 |                     !(*n).value.is_empty() && (*n).value[0] == key[consumed]
+    |                                               ^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+356 |                     !(*n).value.is_empty() && (&(*n).value)[0] == key[consumed]
+    |                                               ++          +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:366:58
+    |
+366 |             while i < val_len && consumed < key.len() && (*child).value[i] == key[consumed] {
+    |                                                          ^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+366 |             while i < val_len && consumed < key.len() && (&(*child).value)[i] == key[consumed] {
+    |                                                          ++              +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:369:21
+    |
+369 |                     (*child).payload[i].push(alias_bid);
+    |                     ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+369 |                     (&mut (*child).payload)[i].push(alias_bid);
+    |                     +++++                 +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:459:41
+    |
+459 | ...                   for bids in (*node).payload[new_start..].iter() {
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+459 |                             for bids in (&(*node).payload)[new_start..].iter() {
+    |                                         ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:685:51
+    |
+685 |             while pos < (*node).payload.len() && !(*node).payload[pos].contains(&block_id) {
+    |                                                   ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+685 |             while pos < (*node).payload.len() && !(&(*node).payload)[pos].contains(&block_id) {
+    |                                                   ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:691:36
+    |
+691 |             let bids_at_pos = &mut (*node).payload[pos];
+    |                                    ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+691 |             let bids_at_pos = &mut (&mut (*node).payload)[pos];
+    |                                    +++++                +
+
+warning: `radixtree` (lib) generated 7 warnings
+   Compiling router v0.1.0 (/root/lmetric-repro/blitz-router/router)
+warning: unused import: `vllm::JShortestWeightQ`
+   --> router/src/scheduler/policies/mod.rs:117:16
+    |
+117 | pub(crate) use vllm::JShortestWeightQ;
+    |                ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `std::sync::OnceLock`
+ --> router/src/scheduler/state.rs:1:5
+  |
+1 | use std::sync::OnceLock;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: field `hashes` is never read
+    --> router/src/scheduler/kvcache.rs:1053:50
+     |
+1053 |             struct SeqState { indices: Vec<u64>, hashes: Vec<u64>, removed: bool }
+     |                    -------- field in this struct ^^^^^^
+     |
+     = note: `#[warn(dead_code)]` on by default
+
+warning: function `new_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:128:15
+    |
+128 | pub(crate) fn new_blocks(req: &ValidGenerateRequest, sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^
+
+warning: function `match_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:157:15
+    |
+157 | pub(crate) fn match_blocks(req: &ValidGenerateRequest, sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `hit_pct` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:163:15
+    |
+163 | pub(crate) fn hit_pct(req: &ValidGenerateRequest, sctx: &Observation) -> f32 {
+    |               ^^^^^^^
+
+warning: function `decode_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:172:15
+    |
+172 | pub(crate) fn decode_blocks(sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^^^^
+
+warning: function `mean_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:423:15
+    |
+423 | pub(crate) fn mean_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> f32 {
+    |               ^^^^^^^^^^^^^
+
+warning: function `std_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:429:15
+    |
+429 | pub(crate) fn std_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize + Copy) -> f32 {
+    |               ^^^^^^^^^^^^
+
+warning: function `min_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:439:15
+    |
+439 | pub(crate) fn min_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `max_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:444:15
+    |
+444 | pub(crate) fn max_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `min_of_f32` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:475:15
+    |
+475 | pub(crate) fn min_of_f32(obs: &[Observation], proj: impl Fn(&Observation) -> f32) -> f32 {
+    |               ^^^^^^^^^^
+
+warning: function `max_of_f32` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:480:15
+    |
+480 | pub(crate) fn max_of_f32(obs: &[Observation], proj: impl Fn(&Observation) -> f32) -> f32 {
+    |               ^^^^^^^^^^
+
+warning: `router` (lib test) generated 13 warnings (run `cargo fix --lib -p router --tests` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 16.25s
+     Running unittests src/lib.rs (target/debug/deps/router-edaf117dc4e07598)
+
+running 1 test
+
+thread 'engine::colocation::task_assignment::kv_journal_integration_tests::dual_cpu_disconnected_idle_work_loop_exits_without_panic' panicked at router/src/engine/colocation.rs:220:21:
+internal error: entered unreachable code: engine#0 WQ channel closed by receiver at CQ
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'engine::colocation::task_assignment::kv_journal_integration_tests::dual_cpu_disconnected_idle_work_loop_exits_without_panic' panicked at router/src/engine/dual_replica_tests.rs:114:5:
+an expected SSE disconnection must not panic the worker
+test engine::colocation::task_assignment::kv_journal_integration_tests::dual_cpu_disconnected_idle_work_loop_exits_without_panic ... FAILED
+
+failures:
+
+failures:
+    engine::colocation::task_assignment::kv_journal_integration_tests::dual_cpu_disconnected_idle_work_loop_exits_without_panic
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 52 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p router --lib`

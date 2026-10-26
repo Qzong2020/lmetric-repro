@@ -1,0 +1,362 @@
+   Compiling serde_core v1.0.229
+   Compiling smallvec v1.16.3
+   Compiling parking_lot_core v0.9.12
+   Compiling parking_lot v0.12.5
+   Compiling getrandom v0.2.17
+   Compiling tokio v1.54.1
+   Compiling serde v1.0.229
+   Compiling serde_json v1.0.154
+   Compiling indexmap v2.14.2
+   Compiling rand_core v0.6.4
+   Compiling tokio-util v0.7.20
+   Compiling rand_chacha v0.3.1
+   Compiling libm v0.2.16
+   Compiling rand v0.8.8
+   Compiling num-traits v0.2.19
+   Compiling ring v0.17.14
+   Compiling openssl-src v300.6.1+3.6.3
+   Compiling openssl-sys v0.9.117
+   Compiling h2 v0.3.27
+   Compiling hyper v0.14.32
+   Compiling openssl v0.10.81
+   Compiling native-tls v0.2.18
+   Compiling icu_normalizer v2.2.0
+   Compiling serde_urlencoded v0.7.1
+   Compiling idna_adapter v1.2.2
+   Compiling tokio-stream v0.1.19
+   Compiling idna v1.1.0
+   Compiling ordered-float v3.9.2
+   Compiling opentelemetry_sdk v0.20.0
+   Compiling url v2.5.8
+   Compiling tower v0.4.13
+   Compiling serde_path_to_error v0.1.20
+   Compiling axum v0.6.20
+   Compiling sct v0.7.1
+   Compiling tracing-serde v0.2.0
+   Compiling tracing-subscriber v0.3.23
+   Compiling ahash v0.8.12
+   Compiling opentelemetry v0.20.0
+   Compiling rustls-webpki v0.103.16
+   Compiling http-body v1.1.0
+   Compiling tokio-io-timeout v1.2.1
+   Compiling rustls v0.23.46
+   Compiling hyper-timeout v0.4.1
+   Compiling atomic-waker v1.1.2
+   Compiling h2 v0.4.20
+   Compiling rustls-webpki v0.101.7
+   Compiling tracing-opentelemetry v0.21.0
+   Compiling rustls v0.21.12
+   Compiling tonic v0.9.2
+   Compiling hyper v1.12.0
+   Compiling webpki v0.22.4
+   Compiling sync_wrapper v1.0.2
+   Compiling base64 v0.23.1
+   Compiling spm_precompiled v0.1.4
+   Compiling hyper-util v0.1.21
+   Compiling compact_str v0.9.1
+   Compiling awaitdrop v0.1.2
+   Compiling monostate v0.1.18
+   Compiling metrics v0.21.1
+   Compiling tower v0.5.3
+   Compiling rustls v0.20.9
+   Compiling opentelemetry-proto v0.3.0
+   Compiling tokio-rustls v0.24.1
+   Compiling ciborium v0.2.2
+   Compiling plotters v0.3.7
+   Compiling http-body-util v0.1.5
+   Compiling opentelemetry-semantic-conventions v0.12.0
+   Compiling hashbrown v0.13.1
+   Compiling tinytemplate v1.2.1
+   Compiling serde_spanned v0.6.9
+   Compiling toml_datetime v0.6.11
+   Compiling dary_heap v0.3.9
+   Compiling unicode-normalization-alignments v0.1.12
+   Compiling toml_edit v0.22.27
+   Compiling metrics-util v0.15.1
+   Compiling criterion v0.5.1
+   Compiling tracing-opentelemetry-instrumentation-sdk v0.14.2
+   Compiling opentelemetry-otlp v0.13.0
+   Compiling hyper-rustls v0.24.2
+   Compiling utoipa v3.5.0
+   Compiling async-rustls v0.3.0
+   Compiling tower-http v0.6.11
+   Compiling muxado v0.4.0
+   Compiling tokio-retry v0.3.2
+   Compiling crossbeam-queue v0.3.14
+   Compiling nanorand v0.7.0
+   Compiling spin v0.9.9
+   Compiling csv-core v0.1.13
+   Compiling hashbrown v0.14.5
+   Compiling iana-time-zone v0.1.65
+   Compiling proptest v1.12.0
+   Compiling chrono v0.4.45
+   Compiling dashmap v6.2.1
+   Compiling tracing-appender v0.2.5
+   Compiling csv v1.4.0
+   Compiling flume v0.11.1
+   Compiling crossbeam v0.8.5
+   Compiling ngrok v0.13.1
+   Compiling utoipa-swagger-ui v3.1.5
+   Compiling eventsource-client v0.15.1
+   Compiling init-tracing-opentelemetry v0.14.1
+   Compiling axum-tracing-opentelemetry v0.14.1
+   Compiling metrics-exporter-prometheus v0.12.2
+   Compiling toml v0.8.23
+   Compiling radixtree v0.1.0 (/root/lmetric-repro/blitz-router/radixtree)
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:174:17
+    |
+174 |                 (*node).payload[i].push(alias_bid);
+    |                 ^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+    = note: `#[warn(dangerous_implicit_autorefs)]` on by default
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+174 |                 (&mut (*node).payload)[i].push(alias_bid);
+    |                 +++++                +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:356:47
+    |
+356 |                     !(*n).value.is_empty() && (*n).value[0] == key[consumed]
+    |                                               ^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+356 |                     !(*n).value.is_empty() && (&(*n).value)[0] == key[consumed]
+    |                                               ++          +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:366:58
+    |
+366 |             while i < val_len && consumed < key.len() && (*child).value[i] == key[consumed] {
+    |                                                          ^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+366 |             while i < val_len && consumed < key.len() && (&(*child).value)[i] == key[consumed] {
+    |                                                          ++              +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:369:21
+    |
+369 |                     (*child).payload[i].push(alias_bid);
+    |                     ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+369 |                     (&mut (*child).payload)[i].push(alias_bid);
+    |                     +++++                 +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:459:41
+    |
+459 | ...                   for bids in (*node).payload[new_start..].iter() {
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+459 |                             for bids in (&(*node).payload)[new_start..].iter() {
+    |                                         ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:685:51
+    |
+685 |             while pos < (*node).payload.len() && !(*node).payload[pos].contains(&block_id) {
+    |                                                   ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+685 |             while pos < (*node).payload.len() && !(&(*node).payload)[pos].contains(&block_id) {
+    |                                                   ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:691:36
+    |
+691 |             let bids_at_pos = &mut (*node).payload[pos];
+    |                                    ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+691 |             let bids_at_pos = &mut (&mut (*node).payload)[pos];
+    |                                    +++++                +
+
+warning: `radixtree` (lib) generated 7 warnings
+   Compiling uuid v1.26.1
+   Compiling rand_distr v0.4.3
+   Compiling request-sim-macros v0.1.0 (/root/lmetric-repro/blitz-router/request-sim/request-sim-macros)
+warning: `radixtree` (lib test) generated 7 warnings (7 duplicates)
+   Compiling policy-dsl v0.1.0 (/root/lmetric-repro/blitz-router/policy-dsl)
+   Compiling tokio-native-tls v0.3.1
+   Compiling ureq v2.12.1
+   Compiling hf-hub v0.4.3
+   Compiling tokenizers v0.21.4
+   Compiling hyper-tls v0.6.0
+   Compiling hyper-tls v0.5.0
+   Compiling reqwest v0.11.27
+   Compiling reqwest v0.12.28
+   Compiling hf-hub v0.3.2
+   Compiling request-sim v0.2.0 (/root/lmetric-repro/blitz-router/request-sim)
+   Compiling router v0.1.0 (/root/lmetric-repro/blitz-router/router)
+warning: unused import: `vllm::JShortestWeightQ`
+   --> router/src/scheduler/policies/mod.rs:114:16
+    |
+114 | pub(crate) use vllm::JShortestWeightQ;
+    |                ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `std::sync::OnceLock`
+ --> router/src/scheduler/state.rs:1:5
+  |
+1 | use std::sync::OnceLock;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: field `hashes` is never read
+    --> router/src/scheduler/kvcache.rs:1049:50
+     |
+1049 |             struct SeqState { indices: Vec<u64>, hashes: Vec<u64>, removed: bool }
+     |                    -------- field in this struct ^^^^^^
+     |
+     = note: `#[warn(dead_code)]` on by default
+
+warning: field `all_tokens` is never read
+  --> router/src/scheduler/policies/dsl_runtime.rs:32:9
+   |
+27 | pub(crate) struct Observation {
+   |                   ----------- field in this struct
+...
+32 |     pub all_tokens: usize,
+   |         ^^^^^^^^^^
+   |
+   = note: `Observation` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `new_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:126:15
+    |
+126 | pub(crate) fn new_blocks(req: &ValidGenerateRequest, sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^
+
+warning: function `match_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:155:15
+    |
+155 | pub(crate) fn match_blocks(req: &ValidGenerateRequest, sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `hit_pct` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:161:15
+    |
+161 | pub(crate) fn hit_pct(req: &ValidGenerateRequest, sctx: &Observation) -> f32 {
+    |               ^^^^^^^
+
+warning: function `decode_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:170:15
+    |
+170 | pub(crate) fn decode_blocks(sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^^^^
+
+warning: function `mean_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:421:15
+    |
+421 | pub(crate) fn mean_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> f32 {
+    |               ^^^^^^^^^^^^^
+
+warning: function `std_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:427:15
+    |
+427 | pub(crate) fn std_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize + Copy) -> f32 {
+    |               ^^^^^^^^^^^^
+
+warning: function `min_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:437:15
+    |
+437 | pub(crate) fn min_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `max_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:442:15
+    |
+442 | pub(crate) fn max_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `min_of_f32` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:473:15
+    |
+473 | pub(crate) fn min_of_f32(obs: &[Observation], proj: impl Fn(&Observation) -> f32) -> f32 {
+    |               ^^^^^^^^^^
+
+warning: function `max_of_f32` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:478:15
+    |
+478 | pub(crate) fn max_of_f32(obs: &[Observation], proj: impl Fn(&Observation) -> f32) -> f32 {
+    |               ^^^^^^^^^^
+
+warning: `router` (lib test) generated 14 warnings (run `cargo fix --lib -p router --tests` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5m 49s
+     Running unittests src/lib.rs (target/debug/deps/policy_dsl-6b7ef6518874eb19)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/radixtree-4a6dae6988b81a6b)
+
+running 16 tests
+test req_id_hash::tests::duplicate_insert_idempotent ... ok
+test req_id_hash::tests::empty_insert_is_noop ... ok
+test req_id_hash::tests::insert_and_get_basic ... ok
+test req_id_hash::tests::evict_orphan_drops_subtree ... ok
+test req_id_hash::tests::epoch_bumps_on_mutation ... ok
+test req_id_hash::tests::remove_last_owner_drops_path_completely ... ok
+test types::sliding_window::tests::aggregate_at_expires_then_reads ... ok
+test req_id_hash::tests::remove_unknown_rid_is_noop ... ok
+test req_id_hash::tests::remove_one_rid_keeps_shared_prefix ... ok
+test req_id_hash::tests::shared_prefix_two_rids ... ok
+test types::sliding_window::tests::aggregate_matches_replay ... ok
+test types::sliding_window::tests::empty_window_is_zero ... ok
+test types::sliding_window::tests::boundary_at_exact_duration_is_kept ... ok
+test types::sliding_window::tests::expire_removes_old_entries_and_decrements_aggregate ... ok
+test types::sliding_window::tests::negative_values_and_signed_sum ... ok
+test types::sliding_window::tests::push_increments_aggregate_and_len ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/lib.rs (target/debug/deps/request_sim-30f2910f06a6b51d)
+
+running 7 tests
+test apis::amadeus_api::tests::envelope_stream_false ... ok
+test apis::amadeus_api::tests::content_prompt_wrapping ... ok
+test apis::amadeus_api::tests::envelope_structure_matches_llm_bench ... ok
+test apis::amadeus_api::tests::extra_headers_extracts_trace_id ... ok
+test apis::amadeus_api::tests::optional_fields_preserved ... ok
+test token_sampler::tests::test_gen_string_latency_scaling ... FAILED
+test requester::tests::test_inflate_latency ... FAILED
+
+failures:
+
+---- token_sampler::tests::test_gen_string_latency_scaling stdout ----
+
+thread 'token_sampler::tests::test_gen_string_latency_scaling' panicked at request-sim/src/token_sampler.rs:568:62:
+Failed to load tokenizer: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- requester::tests::test_inflate_latency stdout ----
+
+thread 'requester::tests::test_inflate_latency' panicked at request-sim/src/dataset.rs:283:37:
+called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+
+
+failures:
+    requester::tests::test_inflate_latency
+    token_sampler::tests::test_gen_string_latency_scaling
+
+test result: FAILED. 5 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p request-sim --lib`

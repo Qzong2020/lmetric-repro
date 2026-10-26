@@ -1,0 +1,24 @@
+{
+  "stages": {
+    "cpu": {
+      "lmetric_lib_passed": 50,
+      "lmetric_lib_ignored": 3,
+      "baseline_lib_passed": 27,
+      "python_journal_passed": 14,
+      "observer_driver_passed": 3
+    },
+    "sync": true,
+    "async": true,
+    "benchmark_lmetric": true
+  },
+  "not_committed": true,
+  "not_pushed": true,
+  "npu_physical_ids": [
+    0,
+    6
+  ],
+  "runtime_visible_ids": [
+    0,
+    1
+  ]
+}

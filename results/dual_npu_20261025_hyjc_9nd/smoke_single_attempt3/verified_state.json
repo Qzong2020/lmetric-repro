@@ -1,0 +1,31 @@
+[
+  {
+    "engine": 0,
+    "events": 21,
+    "mutations": 10,
+    "epoch": "6c8b719ee127464b97a639b3260759d2",
+    "physical": {
+      "1": "d7ea110f4aaa47997309d81214d3b574fca2a87f3ca716055e4658e3d144d1d1",
+      "2": "dc95d38044a2f371af170db54c2208215481a022398f9812eb54016f96bb0cfa"
+    },
+    "requests": {},
+    "ledger": {
+      "active_entries": 0,
+      "all_tokens": 0,
+      "bs": 0,
+      "engine": 0,
+      "engine_epoch": "6c8b719ee127464b97a639b3260759d2",
+      "exception_entries": 0,
+      "mutation_seq": 10,
+      "physical": {
+        "1": "d7ea110f4aaa47997309d81214d3b574fca2a87f3ca716055e4658e3d144d1d1",
+        "2": "dc95d38044a2f371af170db54c2208215481a022398f9812eb54016f96bb0cfa"
+      },
+      "prefill": 0,
+      "requests": {},
+      "step_id": 21,
+      "valid": true,
+      "waiting": 0
+    }
+  }
+]

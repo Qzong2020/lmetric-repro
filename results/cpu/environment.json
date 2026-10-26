@@ -1,0 +1,17 @@
+{
+  "recorded_at": "2026-10-23T11:29:37.430295+08:00",
+  "platform": "Linux-5.15.0-25-generic-aarch64-with-glibc2.38",
+  "python": "3.12.13",
+  "cpu_max": "800000 100000",
+  "memory_max": "34359738368",
+  "rustc": "rustc 1.88.0 (6b00bc388 2025-06-23)",
+  "cargo": "cargo 1.88.0 (873a06493 2025-05-10)",
+  "source_commit": "a005ceb3a6689d30514bd27e45ede0db933d0fea",
+  "python_dependencies": {
+    "aiohttp": "3.14.3",
+    "psutil": "6.0.0",
+    "tokenizers": "0.22.2"
+  },
+  "backend": "synthetic CPU only; no model weights or accelerator API",
+  "features": "--no-default-features vllm-backend,radixtree-blockhash,default-hash-algo,determinent-schedule,<one-policy>"
+}

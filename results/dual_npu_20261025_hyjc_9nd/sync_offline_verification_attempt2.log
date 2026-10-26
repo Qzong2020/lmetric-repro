@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/root/lmetric-repro/scripts/dual_npu/verify_correctness.py", line 11, in <module>
+    states=s.verify(filename=str(audit.relative_to(out)/'verified_state.json'),allow_terminal_error=(0,))
+                                 ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.12.13/lib/python3.12/pathlib.py", line 682, in relative_to
+    raise ValueError(f"{str(self)!r} is not in the subpath of {str(other)!r}")
+ValueError: '/root/lmetric-repro/results/dual_npu_20261025_hyjc_9nd/sync_attempt2/offline_audit_7sifjln3' is not in the subpath of 'results/dual_npu_20261025_hyjc_9nd/sync_attempt2'

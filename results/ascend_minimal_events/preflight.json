@@ -1,0 +1,77 @@
+{
+  "npu_executed": false,
+  "full_engine_initialized": false,
+  "devices": [],
+  "npu_smi": "15 second timeout during initial read-only probe; no retry",
+  "block_size_probes": [
+    {
+      "requested": 16,
+      "prefix_cache": true,
+      "chunked_prefill": false,
+      "effective_in_cpu_method": 128
+    },
+    {
+      "requested": 16,
+      "prefix_cache": false,
+      "chunked_prefill": true,
+      "effective_in_cpu_method": 128
+    },
+    {
+      "requested": 16,
+      "prefix_cache": true,
+      "chunked_prefill": true,
+      "effective_in_cpu_method": 128
+    },
+    {
+      "requested": 32,
+      "prefix_cache": true,
+      "chunked_prefill": false,
+      "effective_in_cpu_method": 128
+    },
+    {
+      "requested": 32,
+      "prefix_cache": false,
+      "chunked_prefill": true,
+      "effective_in_cpu_method": 128
+    },
+    {
+      "requested": 32,
+      "prefix_cache": true,
+      "chunked_prefill": true,
+      "effective_in_cpu_method": 128
+    },
+    {
+      "requested": 128,
+      "prefix_cache": true,
+      "chunked_prefill": false,
+      "effective_in_cpu_method": 128
+    },
+    {
+      "requested": 128,
+      "prefix_cache": false,
+      "chunked_prefill": true,
+      "effective_in_cpu_method": 128
+    },
+    {
+      "requested": 128,
+      "prefix_cache": true,
+      "chunked_prefill": true,
+      "effective_in_cpu_method": 128
+    }
+  ],
+  "block_size_source": "/vllm-workspace/vllm-ascend/vllm_ascend/utils.py",
+  "block_size_source_sha256": "575b45d684eabdb7ac3195d33de48bd5f3233081f78886c08be92a4a2fd2fc02",
+  "actual_scheduler": null,
+  "actual_kv_groups": null,
+  "actual_engine_core_path": null,
+  "reason": "No initialized target model engine; runtime report remains pending",
+  "modules": {
+    "msgspec": true,
+    "zmq": true,
+    "fastapi": true,
+    "httpx": true,
+    "uvicorn": true,
+    "torch_npu": true
+  },
+  "serving_processes": []
+}

@@ -1,0 +1,8 @@
+{
+  "rank": 1,
+  "all_reduce": true,
+  "broadcast": true,
+  "all_gather": true,
+  "elements_all_reduce": 65536,
+  "passed": true
+}

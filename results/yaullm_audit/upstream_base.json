@@ -1,0 +1,221 @@
+{
+  "sha": "6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+  "node_id": "C_kwDOI7xeftoAKDZkOGQwYTI0YzAyYmZkODRkNDZiMzAxNmI4NjVhNDRmMDQ4YWU4NGI",
+  "commit": {
+    "author": {
+      "name": "Julien Denize",
+      "email": "40604584+juliendenize@users.noreply.github.com",
+      "date": "2025-07-24T04:51:32Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2025-07-24T04:51:32Z"
+    },
+    "message": "Add think chunk (#21333)\n\nSigned-off-by: Julien Denize <julien.denize@mistral.ai>",
+    "tree": {
+      "sha": "b3bb0acf99e887ca23c8022d0f3ddf0d3781901d",
+      "url": "https://api.github.com/repos/vllm-project/vllm/git/trees/b3bb0acf99e887ca23c8022d0f3ddf0d3781901d"
+    },
+    "url": "https://api.github.com/repos/vllm-project/vllm/git/commits/6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+    "comment_count": 0,
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJogbvUCRC1aQ7uu5UhlAAAyQ0QAAuLpJ+h5KYtu3Ov3dsG5tLE\n65N4jxT/y6hZrekg86X6+k5+VKgdY+aMFRMEQBoM0RKNAvKjgRmrhBOSZMFVhQ8j\nDOYl6SPOVOYurxcjL09I1hOuxAv3aR+JCo4rwh2W0gmXLO/7J0siDuZDaWKjPz2U\nE6RVaOCYEGrY8tmmbfJu/ObtARCbiDXzueajJXm/cNhdJJeqvFjxCgx9qgzs2lGG\nY5sUjDmFKTfFursit/2o7fmUMiHdKi3Qs5DSs6GV4n/QG0t2g0QACxCBHlGpgJk4\n+98EBVvt9UPs/M97rfqLFbhhg70aTUZNigtYbrMtR/53jcs4NV71L9C4k4uFti+b\nyl/0J5zG76Ohsr4krgTvfWF3wViv4hDcTBfIQ0c4dlfZfq9uiDX0rgLInJ60/quL\nO76giiP61kKrTHFpR0L6tLeAX8Trz3aT50ukk+ZFXy6tnTsQ7d6/VEyzMRkp7vsf\nO+1/ZopIpCsj48uVHAMro/yX/sT2JJCXh0Q8qmpJmgw6qd7/Nncy8DHBJTUW6Vao\nldp/SPg7I7UQLNQSvS7HUVP7udgv9m3le0WUsBWcaJ7bcsrZS3KMWtRbCmaqjYGf\n/56msK6zydGIgwOxuTPH2kWd5JEy7o6QhmCegUJyaDs6zJE+HxYpm5s5aI6IZcs2\nZqc3C97lgKnBbIoCue31\n=qofG\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree b3bb0acf99e887ca23c8022d0f3ddf0d3781901d\nparent 11ef7a611ec015523301930a25422cf68216b5c4\nauthor Julien Denize <40604584+juliendenize@users.noreply.github.com> 1753332692 +0200\ncommitter GitHub <noreply@github.com> 1753332692 -0700\n\nAdd think chunk (#21333)\n\nSigned-off-by: Julien Denize <julien.denize@mistral.ai>",
+      "verified_at": "2025-07-24T04:51:33Z"
+    }
+  },
+  "url": "https://api.github.com/repos/vllm-project/vllm/commits/6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+  "html_url": "https://github.com/vllm-project/vllm/commit/6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+  "comments_url": "https://api.github.com/repos/vllm-project/vllm/commits/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/comments",
+  "author": {
+    "login": "juliendenize",
+    "id": 40604584,
+    "node_id": "MDQ6VXNlcjQwNjA0NTg0",
+    "avatar_url": "https://avatars.githubusercontent.com/u/40604584?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/juliendenize",
+    "html_url": "https://github.com/juliendenize",
+    "followers_url": "https://api.github.com/users/juliendenize/followers",
+    "following_url": "https://api.github.com/users/juliendenize/following{/other_user}",
+    "gists_url": "https://api.github.com/users/juliendenize/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/juliendenize/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/juliendenize/subscriptions",
+    "organizations_url": "https://api.github.com/users/juliendenize/orgs",
+    "repos_url": "https://api.github.com/users/juliendenize/repos",
+    "events_url": "https://api.github.com/users/juliendenize/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/juliendenize/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "web-flow",
+    "id": 19864447,
+    "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+    "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/web-flow",
+    "html_url": "https://github.com/web-flow",
+    "followers_url": "https://api.github.com/users/web-flow/followers",
+    "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+    "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+    "organizations_url": "https://api.github.com/users/web-flow/orgs",
+    "repos_url": "https://api.github.com/users/web-flow/repos",
+    "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/web-flow/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "11ef7a611ec015523301930a25422cf68216b5c4",
+      "url": "https://api.github.com/repos/vllm-project/vllm/commits/11ef7a611ec015523301930a25422cf68216b5c4",
+      "html_url": "https://github.com/vllm-project/vllm/commit/11ef7a611ec015523301930a25422cf68216b5c4"
+    }
+  ],
+  "stats": {
+    "total": 695,
+    "additions": 682,
+    "deletions": 13
+  },
+  "files": [
+    {
+      "sha": "96ab646bb50ae56ca36d563791131d66d202943f",
+      "filename": "requirements/common.txt",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/requirements%2Fcommon.txt",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/requirements%2Fcommon.txt",
+      "contents_url": "https://api.github.com/repos/vllm-project/vllm/contents/requirements%2Fcommon.txt?ref=6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+      "patch": "@@ -33,7 +33,7 @@ pyzmq >= 25.0.0\n msgspec\n gguf >= 0.13.0\n importlib_metadata; python_version < '3.10'\n-mistral_common[opencv] >= 1.8.0\n+mistral_common[image,audio] >= 1.8.2\n opencv-python-headless >= 4.11.0    # required for video IO\n pyyaml\n six>=1.16.0; python_version > '3.11' # transitive dependency of pandas that needs to be the latest version for python 3.12"
+    },
+    {
+      "sha": "0a72ddefda79c57daa090f8315bbdf1406ef6b1b",
+      "filename": "requirements/nightly_torch_test.txt",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/requirements%2Fnightly_torch_test.txt",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/requirements%2Fnightly_torch_test.txt",
+      "contents_url": "https://api.github.com/repos/vllm-project/vllm/contents/requirements%2Fnightly_torch_test.txt?ref=6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+      "patch": "@@ -23,7 +23,7 @@ jiwer # required for audio tests\n timm # required for internvl test\n transformers_stream_generator # required for qwen-vl test\n matplotlib # required for qwen-vl test\n-mistral_common[opencv] >= 1.8.0 # required for voxtral test\n+mistral_common[image,audio] >= 1.8.2 # required for voxtral test\n num2words # required for smolvlm test\n opencv-python-headless >= 4.11.0 # required for video test\n datamodel_code_generator # required for minicpm3 test"
+    },
+    {
+      "sha": "429d1a50422f72010f955fcaecf3e0cddf0224d0",
+      "filename": "requirements/test.in",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/requirements%2Ftest.in",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/requirements%2Ftest.in",
+      "contents_url": "https://api.github.com/repos/vllm-project/vllm/contents/requirements%2Ftest.in?ref=6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+      "patch": "@@ -28,7 +28,7 @@ torchvision==0.22.1\n transformers_stream_generator # required for qwen-vl test\n mamba_ssm # required for plamo2 test\n matplotlib # required for qwen-vl test\n-mistral_common[opencv] >= 1.8.0 # required for voxtral test\n+mistral_common[image,audio] >= 1.8.2 # required for voxtral test\n num2words # required for smolvlm test\n open_clip_torch==2.32.0 # Required for nemotron_vl test\n opencv-python-headless >= 4.11.0 # required for video test"
+    },
+    {
+      "sha": "8e5af8d74bad7f2b22e23f471b8109e741b19388",
+      "filename": "requirements/test.txt",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 2,
+      "changes": 7,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/requirements%2Ftest.txt",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/requirements%2Ftest.txt",
+      "contents_url": "https://api.github.com/repos/vllm-project/vllm/contents/requirements%2Ftest.txt?ref=6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+      "patch": "@@ -447,7 +447,7 @@ mbstrdecoder==1.1.3\n     #   typepy\n mdurl==0.1.2\n     # via markdown-it-py\n-mistral-common==1.8.0\n+mistral-common==1.8.2\n     # via -r requirements/test.in\n mlflow==2.22.0\n     # via terratorch\n@@ -999,8 +999,11 @@ soundfile==0.12.1\n     # via\n     #   -r requirements/test.in\n     #   librosa\n+    #   mistral-common\n soxr==0.5.0.post1\n-    # via librosa\n+    # via\n+    #   librosa\n+    #   mistral-common\n sqlalchemy==2.0.41\n     # via\n     #   alembic"
+    },
+    {
+      "sha": "ed57fe39df6451c83aaa0f14eeaf639cc9b1057d",
+      "filename": "tests/entrypoints/test_chat_utils.py",
+      "status": "modified",
+      "additions": 167,
+      "deletions": 0,
+      "changes": 167,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/tests%2Fentrypoints%2Ftest_chat_utils.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/tests%2Fentrypoints%2Ftest_chat_utils.py",
+      "contents_url": "https://api.github.com/repos/vllm-project/vllm/contents/tests%2Fentrypoints%2Ftest_chat_utils.py?ref=6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+      "patch": "@@ -6,6 +6,10 @@\n from typing import Literal, Optional\n \n import pytest\n+from mistral_common.tokens.tokenizers.base import (SpecialTokenPolicy,\n+                                                   SpecialTokens)\n+from mistral_common.tokens.tokenizers.tekken import (SpecialTokenInfo,\n+                                                     Tekkenizer)\n \n from vllm.assets.audio import AudioAsset\n from vllm.assets.image import ImageAsset\n@@ -21,6 +25,7 @@\n from vllm.multimodal.utils import (encode_audio_base64, encode_image_base64,\n                                    encode_video_base64)\n from vllm.transformers_utils.tokenizer_group import TokenizerGroup\n+from vllm.transformers_utils.tokenizers.mistral import MistralTokenizer\n \n from ..models.registry import HF_EXAMPLE_MODELS\n from ..utils import VLLM_PATH\n@@ -1374,3 +1379,165 @@ def test_resolve_content_format_examples(template_path, expected_format):\n     )\n \n     assert resolved_format == expected_format\n+\n+\n+def test_parse_chat_messages_include_thinking_chunk(mistral_model_config,\n+                                                    mistral_tokenizer):\n+    messages = [{\n+        \"role\":\n+        \"system\",\n+        \"content\": [{\n+            \"type\": \"text\",\n+            \"text\": \"You are a helpful assistant.\"\n+        }, {\n+            \"type\":\n+            \"thinking\",\n+            \"closed\":\n+            True,\n+            \"thinking\":\n+            \"Only return the answer when you are confident.\"\n+        }]\n+    }, {\n+        \"role\": \"user\",\n+        \"content\": \"What is 2+2?\"\n+    }, {\n+        \"role\":\n+        \"assistant\",\n+        \"content\": [{\n+            \"type\": \"text\",\n+            \"text\": \"Let me think about it.\"\n+        }, {\n+            \"type\": \"thinking\",\n+            \"closed\": True,\n+            \"thinking\": \"2+2 = 4\"\n+        }, {\n+            \"type\": \"text\",\n+            \"text\": \"The answer is 4.\",\n+        }],\n+    }]\n+\n+    conversation_with_thinking, _ = parse_chat_messages(\n+        messages,\n+        mistral_model_config,\n+        mistral_tokenizer,\n+        content_format=\"openai\",\n+    )\n+\n+    expected_conversation = [{\n+        \"role\":\n+        \"system\",\n+        \"content\": [{\n+            \"type\": \"text\",\n+            \"text\": \"You are a helpful assistant.\"\n+        }, {\n+            \"type\": \"text\",\n+            \"text\": \"Only return the answer when you are confident.\"\n+        }],\n+    }, {\n+        \"role\":\n+        \"user\",\n+        \"content\": [{\n+            \"type\": \"text\",\n+            \"text\": \"What is 2+2?\"\n+        }],\n+    }, {\n+        \"role\":\n+        \"assistant\",\n+        \"content\": [\n+            {\n+                \"type\": \"text\",\n+                \"text\": \"Let me think about it.\"\n+            },\n+            {\n+                \"type\": \"text\",\n+                \"text\": \"2+2 = 4\"\n+            },\n+            {\n+                \"type\": \"text\",\n+                \"text\": \"The answer is 4.\"\n+            },\n+        ]\n+    }]\n+\n+    assert conversation_with_thinking == expected_conversation\n+\n+\n+def test_apply_mistral_chat_template_thinking_chunk():\n+    # Moved import here to avoid yapf and isort conflicts\n+    from vllm.entrypoints.chat_utils import apply_mistral_chat_template\n+    messages = [{\n+        \"role\":\n+        \"system\",\n+        \"content\": [{\n+            \"type\": \"text\",\n+            \"text\": \"You are a helpful assistant.\"\n+        }, {\n+            \"type\":\n+            \"thinking\",\n+            \"closed\":\n+            True,\n+            \"thinking\":\n+            \"Only return the answer when you are confident.\"\n+        }]\n+    }, {\n+        \"role\": \"user\",\n+        \"content\": \"What is 2+2?\"\n+    }, {\n+        \"role\":\n+        \"assistant\",\n+        \"content\": [{\n+            \"type\": \"text\",\n+            \"text\": \"Let me think about it.\"\n+        }, {\n+            \"type\": \"thinking\",\n+            \"closed\": True,\n+            \"thinking\": \"2+2 = 4\"\n+        }, {\n+            \"type\": \"text\",\n+            \"text\": \"The answer is 4.\",\n+        }],\n+    }, {\n+        \"role\": \"user\",\n+        \"content\": \"Thanks, what is 3+3?\"\n+    }]\n+\n+    # TODO(Julien): upon model release change to a tokenizer already configured.\n+    # =================================================================\n+    mistral_tokenizer = MistralTokenizer.from_pretrained(\n+        \"mistralai/Devstral-Small-2507\")\n+    assert isinstance(mistral_tokenizer.tokenizer, Tekkenizer)\n+    # Add think special tokens to the tokenizer\n+    mistral_tokenizer.tokenizer._all_special_tokens[35] = SpecialTokenInfo(\n+        rank=35, is_control=True, token_str=SpecialTokens.begin_think.value)\n+    mistral_tokenizer.tokenizer._all_special_tokens[36] = SpecialTokenInfo(\n+        rank=36, is_control=True, token_str=SpecialTokens.end_think.value)\n+    mistral_tokenizer.tokenizer._special_tokens_reverse_vocab = {\n+        k: v\n+        for k, v in\n+        mistral_tokenizer.tokenizer._special_tokens_reverse_vocab.items()\n+        if v not in {35, 36}\n+    }\n+    mistral_tokenizer.tokenizer._special_tokens_reverse_vocab[\n+        SpecialTokens.begin_think.value] = 35\n+    mistral_tokenizer.tokenizer._special_tokens_reverse_vocab[\n+        SpecialTokens.end_think.value] = 36\n+    mistral_tokenizer.instruct.BEGIN_THINK = 35\n+    mistral_tokenizer.instruct.END_THINK = 36\n+    # =================================================================\n+\n+    tokens_ids = apply_mistral_chat_template(mistral_tokenizer,\n+                                             messages,\n+                                             chat_template=None,\n+                                             tools=None)\n+\n+    string_tokens = mistral_tokenizer.mistral.decode(\n+        tokens_ids, special_token_policy=SpecialTokenPolicy.KEEP)\n+\n+    expected_tokens = (\n+        r\"<s>[SYSTEM_PROMPT]You are a helpful assistant.[THINK]Only return the\"\n+        r\" answer when you are confident.[/THINK][/SYSTEM_PROMPT]\"\n+        r\"[INST]What is 2+2?[/INST]\"\n+        r\"Let me think about it.[THINK]2+2 = 4[/THINK]The answer is 4.</s>\"\n+        r\"[INST]Thanks, what is 3+3?[/INST]\")\n+\n+    assert string_tokens == expected_tokens"
+    },
+    {
+      "sha": "91a22f6f5d7202bea4d51b64729eca6e9137ae7c",
+      "filename": "tests/reasoning/test_mistral_reasoning_parser.py",
+      "status": "added",
+      "additions": 341,
+      "deletions": 0,
+      "changes": 341,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/tests%2Freasoning%2Ftest_mistral_reasoning_parser.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/tests%2Freasoning%2Ftest_mistral_reasoning_parser.py",
+      "contents_url": "https://api.github.com/repos/vllm-project/vllm/contents/tests%2Freasoning%2Ftest_mistral_reasoning_parser.py?ref=6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+      "patch": "@@ -0,0 +1,341 @@\n+# SPDX-License-Identifier: Apache-2.0\n+# SPDX-FileCopyrightText: Copyright contributors to the vLLM project\n+\n+import pytest\n+from mistral_common.tokens.tokenizers.base import SpecialTokens\n+from mistral_common.tokens.tokenizers.tekken import (SpecialTokenInfo,\n+                                                     Tekkenizer)\n+\n+from tests.reasoning.utils import run_reasoning_extraction_mistral\n+from vllm.reasoning import ReasoningParser, ReasoningParserManager\n+from vllm.transformers_utils.tokenizers.mistral import MistralTokenizer\n+\n+parser_name = \"mistral\"\n+\n+\n+@pytest.fixture(scope=\"module\")\n+def mistral_tokenizer():\n+    # TODO(Julien): upon model release change to a tokenizer already configured.\n+    # =================================================================\n+    mistral_tokenizer = MistralTokenizer.from_pretrained(\n+        \"mistralai/Devstral-Small-2507\")\n+    assert isinstance(mistral_tokenizer.tokenizer, Tekkenizer)\n+    # Add think special tokens to the tokenizer\n+    mistral_tokenizer.tokenizer._all_special_tokens[35] = SpecialTokenInfo(\n+        rank=35, is_control=True, token_str=SpecialTokens.begin_think.value)\n+    mistral_tokenizer.tokenizer._all_special_tokens[36] = SpecialTokenInfo(\n+        rank=36, is_control=True, token_str=SpecialTokens.end_think.value)\n+    mistral_tokenizer.tokenizer._special_tokens_reverse_vocab = {\n+        k: v\n+        for k, v in\n+        mistral_tokenizer.tokenizer._special_tokens_reverse_vocab.items()\n+        if v not in {35, 36}\n+    }\n+    mistral_tokenizer.tokenizer._special_tokens_reverse_vocab[\n+        SpecialTokens.begin_think.value] = 35\n+    mistral_tokenizer.tokenizer._special_tokens_reverse_vocab[\n+        SpecialTokens.end_think.value] = 36\n+    mistral_tokenizer.instruct.BEGIN_THINK = 35\n+    mistral_tokenizer.instruct.END_THINK = 36\n+    # =================================================================\n+    return mistral_tokenizer\n+\n+\n+SIMPLE_REASONING = {\n+    \"output\": \"This is a reasoning section[/THINK]This is the rest\",\n+    \"reasoning_content\": \"This is a reasoning section\",\n+    \"content\": \"This is the rest\",\n+    \"is_reasoning_end\": True,\n+}\n+COMPLETE_REASONING = {\n+    \"output\": \"This is a reasoning section[/THINK]\",\n+    \"reasoning_content\": \"This is a reasoning section\",\n+    \"content\": None,\n+    \"is_reasoning_end\": True,\n+}\n+NO_CONTENT = {\n+    \"output\": \"This is content\",\n+    \"reasoning_content\": \"This is content\",\n+    \"content\": None,\n+    \"is_reasoning_end\": False,\n+}\n+NO_REASONING_STREAMING = {\n+    \"output\": \"This is a reasoning section\",\n+    \"reasoning_content\": \"This is a reasoning section\",\n+    \"content\": None,\n+    \"is_reasoning_end\": False,\n+}\n+MULTIPLE_LINES = {\n+    \"output\": \"This\\nThat[/THINK]This is the rest\\nThat\",\n+    \"reasoning_content\": \"This\\nThat\",\n+    \"content\": \"This is the rest\\nThat\",\n+    \"is_reasoning_end\": True,\n+}\n+SHORTEST_REASONING_NO_STREAMING = {\n+    \"output\": \"[/THINK]This is the rest\",\n+    \"reasoning_content\": \"\",\n+    \"content\": \"This is the rest\",\n+    \"is_reasoning_end\": True,\n+}\n+SHORTEST_REASONING = {\n+    \"output\": \"[/THINK]This is the rest\",\n+    \"reasoning_content\": None,\n+    \"content\": \"This is the rest\",\n+    \"is_reasoning_end\": True,\n+}\n+REASONING_WITH_THINK = {\n+    \"output\": \"[THINK]This is a reasoning section[/THINK]This is the rest\",\n+    \"reasoning_content\": \"This is a reasoning section\",\n+    \"content\": \"This is the rest\",\n+    \"is_reasoning_end\": True,\n+}\n+COMPLETE_REASONING_WITH_THINK = {\n+    \"output\": \"[THINK]This is a reasoning section[/THINK]\",\n+    \"reasoning_content\": \"This is a reasoning section\",\n+    \"content\": None,\n+    \"is_reasoning_end\": True,\n+}\n+MULTIPLE_LINES_WITH_THINK = {\n+    \"output\": \"[THINK]This\\nThat[/THINK]This is the rest\\nThat\",\n+    \"reasoning_content\": \"This\\nThat\",\n+    \"content\": \"This is the rest\\nThat\",\n+    \"is_reasoning_end\": True,\n+}\n+SHORTEST_REASONING_NO_STREAMING_WITH_THINK = {\n+    \"output\": \"[/THINK]This is the rest\",\n+    \"reasoning_content\": \"\",\n+    \"content\": \"This is the rest\",\n+    \"is_reasoning_end\": True,\n+}\n+SHORTEST_REASONING_WITH_THINK = {\n+    \"output\": \"[/THINK]This is the rest\",\n+    \"reasoning_content\": None,\n+    \"content\": \"This is the rest\",\n+    \"is_reasoning_end\": True,\n+}\n+THINK_NO_END = {\n+    \"output\": \"[THINK]This is a reasoning section\",\n+    \"reasoning_content\": \"This is a reasoning section\",\n+    \"content\": None,\n+    \"is_reasoning_end\": False,\n+}\n+EMPTY = {\n+    \"output\": \"\",\n+    \"reasoning_content\": \"\",\n+    \"content\": None,\n+    \"is_reasoning_end\": False,\n+}\n+EMPTY_STREAMING = {\n+    \"output\": \"\",\n+    \"reasoning_content\": None,\n+    \"content\": None,\n+    \"is_reasoning_end\": False,\n+}\n+NEW_LINE = {\n+    \"output\": \"\\n[THINK]This is a reasoning section[/THINK]\\nThis is the rest\",\n+    \"reasoning_content\": \"This is a reasoning section\",\n+    \"content\": \"\\nThis is the rest\",\n+    \"is_reasoning_end\": True,\n+}\n+# Streaming cannot handle new lines at the beginning of the output\n+# because we need to support [THINK]...[/THINK] and [/THINK]...\n+# We cannot know if the text before [THINK] is reasoning content\n+# or not.\n+NEW_LINE_STREAMING = {\n+    \"output\": \"\\n[THINK]This is a reasoning section[/THINK]\\nThis is the rest\",\n+    \"reasoning_content\": \"\\nThis is a reasoning section\",\n+    \"content\": \"\\nThis is the rest\",\n+    \"is_reasoning_end\": True,\n+}\n+\n+TEST_CASES = [\n+    pytest.param(\n+        False,\n+        SIMPLE_REASONING,\n+        id=\"simple_reasoning\",\n+    ),\n+    pytest.param(\n+        True,\n+        SIMPLE_REASONING,\n+        id=\"simple_reasoning_streaming\",\n+    ),\n+    pytest.param(\n+        False,\n+        COMPLETE_REASONING,\n+        id=\"complete_reasoning\",\n+    ),\n+    pytest.param(\n+        True,\n+        COMPLETE_REASONING,\n+        id=\"complete_reasoning_streaming\",\n+    ),\n+    pytest.param(\n+        False,\n+        NO_CONTENT,\n+        id=\"no_content_token\",\n+    ),\n+    pytest.param(\n+        True,\n+        NO_REASONING_STREAMING,\n+        id=\"no_reasoning_token_streaming\",\n+    ),\n+    pytest.param(\n+        False,\n+        MULTIPLE_LINES,\n+        id=\"multiple_lines\",\n+    ),\n+    pytest.param(\n+        True,\n+        MULTIPLE_LINES,\n+        id=\"multiple_lines_streaming\",\n+    ),\n+    pytest.param(\n+        True,\n+        SHORTEST_REASONING,\n+        id=\"shortest\",\n+    ),\n+    pytest.param(\n+        False,\n+        SHORTEST_REASONING_NO_STREAMING,\n+        id=\"shortest_streaming\",\n+    ),\n+    pytest.param(\n+        False,\n+        REASONING_WITH_THINK,\n+        id=\"reasoning_with_think\",\n+    ),\n+    pytest.param(\n+        True,\n+        REASONING_WITH_THINK,\n+        id=\"reasoning_with_think_streaming\",\n+    ),\n+    pytest.param(\n+        False,\n+        COMPLETE_REASONING_WITH_THINK,\n+        id=\"complete_reasoning_with_think\",\n+    ),\n+    pytest.param(\n+        True,\n+        COMPLETE_REASONING_WITH_THINK,\n+        id=\"complete_reasoning_with_think_streaming\",\n+    ),\n+    pytest.param(\n+        False,\n+        MULTIPLE_LINES_WITH_THINK,\n+        id=\"multiple_lines_with_think\",\n+    ),\n+    pytest.param(\n+        True,\n+        MULTIPLE_LINES_WITH_THINK,\n+        id=\"multiple_lines_with_think_streaming\",\n+    ),\n+    pytest.param(\n+        False,\n+        SHORTEST_REASONING_NO_STREAMING_WITH_THINK,\n+        id=\"shortest_with_think\",\n+    ),\n+    pytest.param(\n+        True,\n+        SHORTEST_REASONING_WITH_THINK,\n+        id=\"shortest_with_think_streaming\",\n+    ),\n+    pytest.param(\n+        False,\n+        THINK_NO_END,\n+        id=\"think_no_end\",\n+    ),\n+    pytest.param(\n+        True,\n+        THINK_NO_END,\n+        id=\"think_no_end_streaming\",\n+    ),\n+    pytest.param(\n+        False,\n+        EMPTY,\n+        id=\"empty\",\n+    ),\n+    pytest.param(\n+        True,\n+        EMPTY_STREAMING,\n+        id=\"empty_streaming\",\n+    ),\n+    pytest.param(\n+        False,\n+        NEW_LINE,\n+        id=\"new_line\",\n+    ),\n+    pytest.param(\n+        True,\n+        NEW_LINE_STREAMING,\n+        id=\"new_line_streaming\",\n+    ),\n+]\n+\n+\n+@pytest.mark.parametrize(\"streaming, param_dict\", TEST_CASES)\n+def test_mistral_reasoning(\n+    streaming: bool,\n+    param_dict: dict,\n+    mistral_tokenizer: MistralTokenizer,\n+):\n+    output = param_dict[\"output\"]\n+\n+    index_think = output.find(\"[THINK]\")\n+    len_think = len(\"[THINK]\")\n+    index_end_think = output.find(\"[/THINK]\")\n+    len_end_think = len(\"[/THINK]\")\n+\n+    # encode everything to tokens ids\n+    output_tokens = []\n+    if index_think != -1:\n+        output_before_think = output[:index_think]\n+        output_tokens += mistral_tokenizer.tokenizer.encode(\n+            output_before_think, False, False)\n+        output_tokens += [mistral_tokenizer.instruct.BEGIN_THINK]\n+\n+        if index_end_think != -1:\n+            output_middle = output[index_think + len_think:index_end_think]\n+            output_after_think = output[index_end_think + len_end_think:]\n+            output_tokens += mistral_tokenizer.tokenizer.encode(\n+                output_middle, False, False)\n+            output_tokens += [mistral_tokenizer.instruct.END_THINK]\n+            output_tokens += mistral_tokenizer.tokenizer.encode(\n+                output_after_think, False, False)\n+        else:\n+            output_middle = output[index_think + len_think:]\n+            output_tokens += mistral_tokenizer.tokenizer.encode(\n+                output_middle, False, False)\n+    elif index_end_think != -1:\n+        output_before_think = output[:index_end_think]\n+        output_after_think = output[index_end_think + len_end_think:]\n+        output_tokens += mistral_tokenizer.tokenizer.encode(\n+            output_before_think, False, False)\n+        output_tokens += [mistral_tokenizer.instruct.END_THINK]\n+        output_tokens += mistral_tokenizer.tokenizer.encode(\n+            output_after_think, False, False)\n+    else:\n+        output_tokens += mistral_tokenizer.tokenizer.encode(\n+            output, False, False)\n+\n+    parser: ReasoningParser = ReasoningParserManager.get_reasoning_parser(\n+        parser_name)(mistral_tokenizer)\n+\n+    reasoning, content = run_reasoning_extraction_mistral(parser,\n+                                                          output_tokens,\n+                                                          streaming=streaming)\n+\n+    assert reasoning == param_dict[\"reasoning_content\"]\n+    assert content == param_dict[\"content\"]\n+\n+    # Test is_reasoning_end\n+    is_reasoning_end = parser.is_reasoning_end(output_tokens)\n+    assert is_reasoning_end == param_dict[\"is_reasoning_end\"]\n+\n+    # Test extract_content\n+    if param_dict[\"content\"] is not None:\n+        content = parser.extract_content_ids(output_tokens)\n+        assert content == mistral_tokenizer.tokenizer.encode(\n+            param_dict[\"content\"], bos=False, eos=False)\n+    else:\n+        content = parser.extract_content_ids(output_tokens)\n+        assert content == []"
+    },
+    {
+      "sha": "9af5fa5addbc2ab457ed14e253626e8772b7249d",
+      "filename": "tests/reasoning/utils.py",
+      "status": "modified",
+      "additions": 59,
+      "deletions": 0,
+      "changes": 59,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/tests%2Freasoning%2Futils.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/tests%2Freasoning%2Futils.py",
+      "contents_url": "https://api.github.com/repos/vllm-project/vllm/contents/tests%2Freasoning%2Futils.py?ref=6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+      "patch": "@@ -6,6 +6,7 @@\n from vllm.entrypoints.openai.protocol import (ChatCompletionRequest,\n                                               DeltaMessage)\n from vllm.reasoning import ReasoningParser\n+from vllm.transformers_utils.tokenizers.mistral import MistralTokenizer\n \n \n class StreamingReasoningReconstructor:\n@@ -54,6 +55,32 @@ def run_reasoning_extraction(\n         return reasoning, content\n \n \n+def run_reasoning_extraction_mistral(\n+    reasoning_parser: ReasoningParser,\n+    model_output: list[int],\n+    request: Union[ChatCompletionRequest, None] = None,\n+    streaming: bool = False,\n+) -> tuple[Optional[str], Optional[str]]:\n+    assert isinstance(reasoning_parser.model_tokenizer,\n+                      MistralTokenizer), type(reasoning_parser.model_tokenizer)\n+    if streaming:\n+        reconstructor = run_reasoning_extraction_streaming_mistral(\n+            reasoning_parser,\n+            model_output,\n+            request,\n+        )\n+        return (\n+            reconstructor.reasoning_content,\n+            reconstructor.other_content or None,\n+        )\n+    else:\n+        str_output = reasoning_parser.model_tokenizer.convert_ids_to_tokens(\n+            model_output)\n+        reasoning, content = run_reasoning_extraction_nonstreaming(\n+            reasoning_parser, str_output, request)\n+        return reasoning, content\n+\n+\n def run_reasoning_extraction_nonstreaming(\n     reasoning_parser: ReasoningParser,\n     model_output: list[str],\n@@ -94,3 +121,35 @@ def run_reasoning_extraction_streaming(\n         previous_text = current_text\n         previous_tokens = current_tokens\n     return reconstructor\n+\n+\n+def run_reasoning_extraction_streaming_mistral(\n+    reasoning_parser: ReasoningParser,\n+    model_deltas: list[int],\n+    request: Union[ChatCompletionRequest, None] = None,\n+) -> StreamingReasoningReconstructor:\n+    assert isinstance(reasoning_parser.model_tokenizer,\n+                      MistralTokenizer), type(reasoning_parser.model_tokenizer)\n+    request = request or ChatCompletionRequest(messages=[], model=\"test-model\")\n+    reconstructor = StreamingReasoningReconstructor()\n+    previous_text = \"\"\n+    previous_tokens: list[int] = []\n+    for model_delta in model_deltas:\n+        token_delta = [model_delta]\n+        delta = reasoning_parser.model_tokenizer.convert_ids_to_tokens(\n+            [model_delta])[0]\n+        current_text = previous_text + delta\n+        current_tokens = previous_tokens + token_delta\n+        delta_message = reasoning_parser.extract_reasoning_content_streaming(\n+            previous_text,\n+            current_text,\n+            delta,\n+            previous_tokens,\n+            current_tokens,\n+            token_delta,\n+        )\n+        if delta_message is not None:\n+            reconstructor.append_delta(delta_message)\n+        previous_text = current_text\n+        previous_tokens = current_tokens\n+    return reconstructor"
+    },
+    {
+      "sha": "a6602391d4081ea1b9b5ac76887895ff9c77fc9d",
+      "filename": "vllm/entrypoints/chat_utils.py",
+      "status": "modified",
+      "additions": 27,
+      "deletions": 2,
+      "changes": 29,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/vllm%2Fentrypoints%2Fchat_utils.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/vllm%2Fentrypoints%2Fchat_utils.py",
+      "contents_url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm%2Fentrypoints%2Fchat_utils.py?ref=6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+      "patch": "@@ -151,6 +151,27 @@ class CustomChatCompletionContentSimpleVideoParam(TypedDict, total=False):\n     video_url: Required[str]\n \n \n+class CustomThinkCompletionContentParam(TypedDict, total=False):\n+    \"\"\"A Think Completion Content Param that accepts a plain text and a boolean.\n+\n+    Example:\n+    {\n+        \"thinking\": \"I am thinking about the answer\",\n+        \"closed\": True,\n+        \"type\": \"thinking\"\n+    }\n+    \"\"\"\n+\n+    thinking: Required[str]\n+    \"\"\"The thinking content.\"\"\"\n+\n+    closed: bool\n+    \"\"\"Whether the thinking is closed.\"\"\"\n+\n+    type: Required[Literal[\"thinking\"]]\n+    \"\"\"The thinking type.\"\"\"\n+\n+\n ChatCompletionContentPartParam: TypeAlias = Union[\n     OpenAIChatCompletionContentPartParam, ChatCompletionContentPartAudioParam,\n     ChatCompletionContentPartInputAudioParam,\n@@ -159,7 +180,8 @@ class CustomChatCompletionContentSimpleVideoParam(TypedDict, total=False):\n     CustomChatCompletionContentSimpleImageParam,\n     ChatCompletionContentPartImageEmbedsParam,\n     CustomChatCompletionContentSimpleAudioParam,\n-    CustomChatCompletionContentSimpleVideoParam, str]\n+    CustomChatCompletionContentSimpleVideoParam, str,\n+    CustomThinkCompletionContentParam]\n \n \n class CustomChatCompletionMessageParam(TypedDict, total=False):\n@@ -938,6 +960,7 @@ def _get_full_multimodal_text_prompt(placeholder_storage: dict[str, list],\n _InputAudioParser = partial(cast, ChatCompletionContentPartInputAudioParam)\n _RefusalParser = partial(cast, ChatCompletionContentPartRefusalParam)\n _PILImageParser = partial(cast, CustomChatCompletionContentPILImageParam)\n+_ThinkParser = partial(cast, CustomThinkCompletionContentParam)\n # Need to validate url objects\n _ImageParser = TypeAdapter(ChatCompletionContentPartImageParam).validate_python\n _AudioParser = TypeAdapter(ChatCompletionContentPartAudioParam).validate_python\n@@ -954,6 +977,8 @@ def _get_full_multimodal_text_prompt(placeholder_storage: dict[str, list],\n ] = {\n     \"text\":\n     lambda part: _TextParser(part).get(\"text\", None),\n+    \"thinking\":\n+    lambda part: _ThinkParser(part).get(\"thinking\", None),\n     \"input_text\":\n     lambda part: _TextParser(part).get(\"text\", None),\n     \"input_image\":\n@@ -1100,7 +1125,7 @@ def _parse_chat_message_content_part(\n             \"with empty / unparsable content.\", part, part_type)\n         return None\n \n-    if part_type in (\"text\", \"input_text\", \"refusal\"):\n+    if part_type in (\"text\", \"input_text\", \"refusal\", \"thinking\"):\n         str_content = cast(str, content)\n         if wrap_dicts:\n             return {'type': 'text', 'text': str_content}"
+    },
+    {
+      "sha": "d61e4f11dfa29a16dde708155de44c06b233af9c",
+      "filename": "vllm/reasoning/__init__.py",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 0,
+      "changes": 2,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/vllm%2Freasoning%2F__init__.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/vllm%2Freasoning%2F__init__.py",
+      "contents_url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm%2Freasoning%2F__init__.py?ref=6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+      "patch": "@@ -6,6 +6,7 @@\n from .glm4_moe_reasoning_parser import Glm4MoeModelReasoningParser\n from .granite_reasoning_parser import GraniteReasoningParser\n from .hunyuan_a13b_reasoning_parser import HunyuanA13BReasoningParser\n+from .mistral_reasoning_parser import MistralReasoningParser\n from .qwen3_reasoning_parser import Qwen3ReasoningParser\n \n __all__ = [\n@@ -16,4 +17,5 @@\n     \"HunyuanA13BReasoningParser\",\n     \"Qwen3ReasoningParser\",\n     \"Glm4MoeModelReasoningParser\",\n+    \"MistralReasoningParser\",\n ]"
+    },
+    {
+      "sha": "6c707a4079fa0e9a3efeb1ed83876b432d035466",
+      "filename": "vllm/reasoning/mistral_reasoning_parser.py",
+      "status": "added",
+      "additions": 47,
+      "deletions": 0,
+      "changes": 47,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/vllm%2Freasoning%2Fmistral_reasoning_parser.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/vllm%2Freasoning%2Fmistral_reasoning_parser.py",
+      "contents_url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm%2Freasoning%2Fmistral_reasoning_parser.py?ref=6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+      "patch": "@@ -0,0 +1,47 @@\n+# SPDX-License-Identifier: Apache-2.0\n+# SPDX-FileCopyrightText: Copyright contributors to the vLLM project\n+\n+from vllm.logger import init_logger\n+from vllm.reasoning import ReasoningParser, ReasoningParserManager\n+from vllm.reasoning.deepseek_r1_reasoning_parser import (\n+    DeepSeekR1ReasoningParser)\n+from vllm.transformers_utils.tokenizers.mistral import MistralTokenizer\n+\n+logger = init_logger(__name__)\n+\n+\n+@ReasoningParserManager.register_module(\"mistral\")\n+class MistralReasoningParser(DeepSeekR1ReasoningParser):\n+    \"\"\"\n+    Reasoning parser for Mistral models.\n+\n+    The Mistral models uses [THINK]...[/THINK] tokens to denote reasoning\n+    text. This parser extracts the reasoning content from the model output.\n+    \"\"\"\n+\n+    def __init__(self, tokenizer: MistralTokenizer):\n+        if not isinstance(tokenizer, MistralTokenizer):\n+            raise ValueError(\n+                \"The tokenizer must be an instance of MistralTokenizer.\")\n+\n+        ReasoningParser.__init__(self, tokenizer)\n+\n+        if not self.model_tokenizer:\n+            raise ValueError(\n+                \"The model tokenizer must be passed to the ReasoningParser \"\n+                \"constructor during construction.\")\n+\n+        from mistral_common.tokens.tokenizers.base import SpecialTokens\n+\n+        self.start_token = SpecialTokens.begin_think\n+        self.end_token = SpecialTokens.end_think\n+\n+        self.start_token_id = tokenizer.tokenizer.get_control_token(\n+            self.start_token)\n+        self.end_token_id = tokenizer.tokenizer.get_control_token(\n+            self.end_token)\n+\n+        if self.start_token_id is None or self.end_token_id is None:\n+            raise RuntimeError(\n+                \"Mistral reasoning parser could not locate think start/end \"\n+                \"tokens in the tokenizer!\")"
+    },
+    {
+      "sha": "f83405cfc016e93dbab4f3d766182b7f8b6fbd67",
+      "filename": "vllm/transformers_utils/tokenizers/mistral.py",
+      "status": "modified",
+      "additions": 31,
+      "deletions": 6,
+      "changes": 37,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/vllm%2Ftransformers_utils%2Ftokenizers%2Fmistral.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/6d8d0a24c02bfd84d46b3016b865a44f048ae84b/vllm%2Ftransformers_utils%2Ftokenizers%2Fmistral.py",
+      "contents_url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm%2Ftransformers_utils%2Ftokenizers%2Fmistral.py?ref=6d8d0a24c02bfd84d46b3016b865a44f048ae84b",
+      "patch": "@@ -145,6 +145,21 @@ def find_tokenizer_file(files: list[str]):\n     return matched_files[0]\n \n \n+def _aggregate_content(content: list) -> list[dict[str, Any]]:\n+    aggregated_content: list[dict[str, Any]] = []\n+    for chunk in content:\n+        if chunk.get(\"type\"\n+                     ) == \"text\" and aggregated_content and aggregated_content[\n+                         -1].get(\"type\") == \"text\":\n+            aggregated_content[-1][\"text\"] += \"\\n\\n\" + chunk.get(\"text\")\n+        else:\n+            aggregated_content.append(chunk)\n+    if len(aggregated_content) == 1 and aggregated_content[0].get(\n+            \"type\") == \"text\":\n+        content = aggregated_content[0][\"text\"]\n+    return content\n+\n+\n def make_mistral_chat_completion_request(\n         messages: list[\"ChatCompletionMessageParam\"],\n         tools: Optional[list[dict[str,\n@@ -162,10 +177,10 @@ def make_mistral_chat_completion_request(\n \n         # Convert list text content to string\n         if message.get(\"role\") in (\"assistant\", \"tool\"):\n-            content = message.get(\"content\")\n+            content: Any = message.get(\"content\")\n             if isinstance(content, list):\n-                content = \"\\n\".join(chunk.get(\"text\") for chunk in content)\n-                message[\"content\"] = content\n+                content = _aggregate_content(content)\n+            message[\"content\"] = content\n \n     # The Mistral client, in comparison to the OpenAI client, requires the\n     # \"parameters\" dict to be present, even if it's empty.\n@@ -465,6 +480,8 @@ def convert_ids_to_tokens(\n         skip_special_tokens: bool = True,\n     ) -> list[str]:\n         from mistral_common.tokens.tokenizers.base import SpecialTokens\n+        from mistral_common.tokens.tokenizers.instruct import (\n+            InstructTokenizerV13)\n \n         # TODO(Patrick) - potentially allow special tokens to not be skipped\n         assert (\n@@ -474,10 +491,18 @@ def convert_ids_to_tokens(\n         assert self.is_tekken or self.is_spm, type(self.tokenizer)\n \n         if self.is_tekken:\n-            # skip special tokens except tool call\n-            ids = [\n-                i for i in ids if i > self.tokenizer.num_special_tokens or i ==\n+            # skip special tokens except tool call and think tokens\n+            non_skip_special_tokens = {\n                 self.tokenizer.get_control_token(SpecialTokens.tool_calls)\n+            }\n+            if isinstance(self.instruct, InstructTokenizerV13):\n+                if self.instruct.BEGIN_THINK:\n+                    non_skip_special_tokens.add(self.instruct.BEGIN_THINK)\n+                if self.instruct.END_THINK:\n+                    non_skip_special_tokens.add(self.instruct.END_THINK)\n+            ids = [\n+                i for i in ids if i > self.tokenizer.num_special_tokens\n+                or i in non_skip_special_tokens\n             ]\n \n         tokens = [self.tokenizer.id_to_piece(id) for id in ids]"
+    }
+  ]
+}

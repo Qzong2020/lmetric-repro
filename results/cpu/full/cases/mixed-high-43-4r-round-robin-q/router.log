@@ -1,0 +1,3 @@
+2026-10-23T03:23:33.279972Z  WARN router: router/src/main.rs:417: The shard info is not set properly by the st-server
+Blitz router is ready
+2026-10-23T03:23:33.283353Z  WARN router::scheduler::statistic: router/src/scheduler/statistic.rs:16: Statistic path is not set

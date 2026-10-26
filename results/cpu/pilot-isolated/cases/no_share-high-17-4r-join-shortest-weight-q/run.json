@@ -1,0 +1,27 @@
+{
+  "command": [
+    "/root/lmetric-repro/results/cpu/bins/join-shortest-weight-q",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "55457",
+    "--client-config",
+    "results/cpu/pilot-isolated/cases/no_share-high-17-4r-join-shortest-weight-q/clients.json",
+    "--model-name",
+    "cpu-synthetic",
+    "--tokenizer-name",
+    "/root/lmetric-repro/models/cpu-synthetic-tokenizer",
+    "--use-tokenizer",
+    "--max-concurrent-requests",
+    "4096",
+    "--validation-workers",
+    "2"
+  ],
+  "policy": "join-shortest-weight-q",
+  "scenario": "no_share",
+  "load": "high",
+  "seed": 17,
+  "replicas": 4,
+  "requests": 100,
+  "trace_sha256": "b21bd7538a15a6f0cbe2774c061ad09912314772fa9b0dfd32dafddaa377fe5e"
+}

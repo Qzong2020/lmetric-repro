@@ -1,0 +1,22 @@
+test_async_snapshot_not_future_state (__main__.ContractTests.test_async_snapshot_not_future_state) ... [W1025 10:55:22.427363331 FunctionLoader.cpp:48] Warning: LD_PRELOAD detected, FunctionLoader prefers RTLD_DEFAULT for symbol resolution. (function operator())
+/usr/local/python3.12.13/lib/python3.12/site-packages/torch/jit/_script.py:362: DeprecationWarning: `torch.jit.script_method` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+INFO 10-25 10:55:34 [__init__.py:44] Available plugins for group vllm.platform_plugins:
+INFO 10-25 10:55:34 [__init__.py:46] - ascend -> vllm_ascend:register
+INFO 10-25 10:55:34 [__init__.py:49] All plugins in this group will be loaded. Set `VLLM_PLUGINS` to control which plugins to load.
+INFO 10-25 10:55:34 [__init__.py:238] Platform plugin ascend is activated
+INFO 10-25 10:55:34 [platform.py:62] Breakable cudagraph is force disabled on Ascend because DeepSeek V4 PIECEWISE cudagraph is not supported yet.
+ok
+test_config_and_preemption_rejected (__main__.ContractTests.test_config_and_preemption_rejected) ... ok
+test_config_validation_and_first_finish_after_free (__main__.ContractTests.test_config_validation_and_first_finish_after_free) ... ok
+test_core_client_filter_keeps_metric_only_packets (__main__.ContractTests.test_core_client_filter_keeps_metric_only_packets) ... ok
+test_real_struct_and_zmq_subprocess (__main__.ContractTests.test_real_struct_and_zmq_subprocess) ... ok
+test_rewritten_scheduler_dispatch_and_both_core_paths (__main__.ContractTests.test_rewritten_scheduler_dispatch_and_both_core_paths) ... ok
+test_id_mapping_frames_and_disconnect (__main__.HubTests.test_id_mapping_frames_and_disconnect) ... ok
+test_overflow_and_invalid_identity_fail_closed (__main__.HubTests.test_overflow_and_invalid_identity_fail_closed) ... ok
+test_real_async_llm_output_handler_publishes_empty_event (__main__.HubTests.test_real_async_llm_output_handler_publishes_empty_event) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 17.590s
+
+OK

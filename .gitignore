@@ -1,0 +1,14 @@
+/go/
+.venv/
+__pycache__/
+*.pyc
+target/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+/results/**/bins/
+/results/**/build_lib/
+**/.claude/memory/
+.env
+.env.*
+!.env.example

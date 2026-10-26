@@ -1,0 +1,34 @@
+INFO 10-25 13:59:59 [__init__.py:44] Available plugins for group vllm.platform_plugins:
+INFO 10-25 13:59:59 [__init__.py:46] - ascend -> vllm_ascend:register
+INFO 10-25 13:59:59 [__init__.py:49] All plugins in this group will be loaded. Set `VLLM_PLUGINS` to control which plugins to load.
+INFO 10-25 13:59:59 [__init__.py:238] Platform plugin ascend is activated
+INFO 10-25 13:59:59 [platform.py:62] Breakable cudagraph is force disabled on Ascend because DeepSeek V4 PIECEWISE cudagraph is not supported yet.
+VALIDATION_IMPORT {"pid": 189469, "vllm": "/root/lmetric-repro/engines/vllm/vllm/__init__.py", "ascend": "/vllm-workspace/vllm-ascend/vllm_ascend/__init__.py", "core": "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core.py", "events": "1"}
+2026-10-25 14:00:04,831 - 189469 - ServiceProfiler - INFO - VLLM_USE_V1 not set, auto-detected via vLLM 0.23.0+empty: default 1
+INFO 10-25 14:00:05 [__init__.py:115] Registered model loader `<class 'vllm_ascend.model_loader.netloader.netloader.ModelNetLoaderElastic'>` with load format `netloader`
+INFO 10-25 14:00:05 [__init__.py:115] Registered model loader `<class 'vllm_ascend.model_loader.rfork.rfork_loader.RForkModelLoader'>` with load format `rfork`
+(APIServer pid=189469) INFO 10-25 14:00:05 [api_utils.py:339] 
+(APIServer pid=189469) INFO 10-25 14:00:05 [api_utils.py:339]        █     █     █▄   ▄█
+(APIServer pid=189469) INFO 10-25 14:00:05 [api_utils.py:339]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.23.0
+(APIServer pid=189469) INFO 10-25 14:00:05 [api_utils.py:339]   █▄█▀ █     █     █     █  model   /models/Qwen2.5-7B-Instruct
+(APIServer pid=189469) INFO 10-25 14:00:05 [api_utils.py:339]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
+(APIServer pid=189469) INFO 10-25 14:00:05 [api_utils.py:339] 
+(APIServer pid=189469) INFO 10-25 14:00:05 [api_utils.py:273] non-default args: {'host': '127.0.0.1', 'port': 18182, 'model': '/models/Qwen2.5-7B-Instruct', 'max_model_len': 1024, 'enforce_eager': True, 'served_model_name': ['ascend-small'], 'block_size': 128, 'gpu_memory_utilization': 0.4, 'num_gpu_blocks_override': 8, 'enable_prefix_caching': True, 'max_num_batched_tokens': 128, 'max_num_seqs': 1, 'enable_chunked_prefill': True, 'async_scheduling': True}
+(APIServer pid=189469) WARNING 10-25 14:00:05 [envs.py:2088] Unknown vLLM environment variable detected: VLLM_LMETRIC_EVENTS
+(APIServer pid=189469) WARNING 10-25 14:00:05 [envs.py:2088] Unknown vLLM environment variable detected: VLLM_LMETRIC_KV_EVENTS
+(APIServer pid=189469) INFO 10-25 14:00:05 [model.py:611] Resolved architecture: Qwen2ForCausalLM
+(APIServer pid=189469) INFO 10-25 14:00:05 [model.py:1745] Using max model len 1024
+(APIServer pid=189469) INFO 10-25 14:00:05 [scheduler.py:239] Chunked prefill is enabled with max_num_batched_tokens=128.
+(APIServer pid=189469) INFO 10-25 14:00:05 [vllm.py:999] Asynchronous scheduling is enabled.
+(APIServer pid=189469) WARNING 10-25 14:00:05 [vllm.py:1055] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+(APIServer pid=189469) WARNING 10-25 14:00:05 [vllm.py:1097] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+(APIServer pid=189469) INFO 10-25 14:00:05 [kernel.py:270] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+(APIServer pid=189469) INFO 10-25 14:00:05 [vllm.py:1273] Cudagraph is disabled under eager mode
+(APIServer pid=189469) INFO 10-25 14:00:05 [utils.py:174] No quantization signature detected from model files for "/models/Qwen2.5-7B-Instruct". The model will be loaded as float. To force a quantization method, pass "--quantization <method>" explicitly.
+(APIServer pid=189469) WARNING 10-25 14:00:05 [platform.py:1067] GPU-specific parameter is not supported on Ascend. parameter=disable_cascade_attn, value=True, action: resetting to False.
+(APIServer pid=189469) INFO 10-25 14:00:05 [platform.py:1277] The timeout interval of the HCCL operator is 1836s. Timeout in seconds for execute_model RPC calls in multiprocessing must be greater than 1836s, Set VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS=3000
+(APIServer pid=189469) INFO 10-25 14:00:05 [ascend_config.py:893] Dynamic EPLB is False
+(APIServer pid=189469) INFO 10-25 14:00:05 [ascend_config.py:894] The number of redundant experts is 0
+(APIServer pid=189469) INFO 10-25 14:00:05 [platform.py:528] Compilation disabled, using eager mode by default
+(APIServer pid=189469) INFO 10-25 14:00:05 [platform.py:790] Set PYTORCH_NPU_ALLOC_CONF=expandable_segments:True
+(APIServer pid=189469) INFO 10-25 14:00:05 [compilation.py:321] Enabled custom fusions: norm_quant, act_quant

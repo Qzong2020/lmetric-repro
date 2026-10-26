@@ -1,0 +1,67 @@
+{
+  "passed_scoped_dual_npu_validation": true,
+  "physical_devices": [
+    0,
+    6
+  ],
+  "runtime_visible_devices": [
+    0,
+    1
+  ],
+  "correctness": {
+    "sync": {
+      "directory": "sync_attempt2",
+      "requests": 13,
+      "events": [
+        76,
+        84
+      ],
+      "epochs": [
+        "731eebe6b0544749a6ba73c124f4463b",
+        "4247fdd6ddd746158bc725220f66fa7f"
+      ],
+      "passed": true
+    },
+    "async": {
+      "directory": "async_attempt2",
+      "requests": 13,
+      "events": [
+        82,
+        91
+      ],
+      "epochs": [
+        "aa509676290e4d04a6b104ece8c020aa",
+        "9ec2bb526ae142ddbc7372af4ac8ce95"
+      ],
+      "passed": true
+    }
+  },
+  "benchmark_independent_audit_passed": true,
+  "benchmark_measured_requests": 96,
+  "benchmark_pilot_requests": 4,
+  "extra_requests_in_stopped_observer_attempt": 2,
+  "total_real_http_successes_including_stopped_observer_attempt": 128,
+  "formal_continuous_state_checks": 1391,
+  "cpu_tests": {
+    "lmetric_lib_passed": 50,
+    "lmetric_lib_ignored": 3,
+    "baseline_lib_passed": 27,
+    "python_journal_passed": 14,
+    "driver_observer_passed": 3
+  },
+  "actual_fix": "idle backend stream-disconnect worker panic",
+  "remaining_limits": [
+    "per-instance max_num_seqs=1",
+    "small model and eight physical blocks",
+    "graceful-shutdown channel panic observed after completed async run",
+    "inflight cancellation/recovery not validated",
+    "event-collection incremental overhead unmeasured",
+    "two repeats, nonrandomized strategy order and arrival jitter"
+  ],
+  "reports": [
+    "docs/dual_npu_validation.md",
+    "docs/dual_npu_preliminary_benchmark.md"
+  ],
+  "committed": false,
+  "pushed": false
+}

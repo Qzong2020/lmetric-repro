@@ -1,0 +1,12 @@
+2026-10-25T11:17:40.531269Z  WARN router: router/src/main.rs:417: The shard info is not set properly by the st-server
+2026-10-25T11:17:40.531762Z  INFO router: router/src/main.rs:435: Loaded model config: type=qwen3, max_position_embeddings=40960
+2026-10-25T11:17:40.531812Z  WARN router: router/src/main.rs:447: --max-total-tokens=1024 overrides auto-discovered max_position_embeddings=40960 from config.json
+2026-10-25T11:17:40.531838Z  WARN router: router/src/main.rs:471: --max-input-length=512 overrides auto-discovered max_total_tokens-1=1023
+Blitz router is ready
+2026-10-25T11:17:40.665430Z  WARN router::scheduler::statistic: router/src/scheduler/statistic.rs:16: Statistic path is not set
+2026-10-25T11:17:40.719218Z  INFO scheduling: router/src/scheduler/policies/dsl_runtime.rs:538: DECISION request_id=0 engine=0 predicted_hits=0 radix_epoch=0 new_tokens=313
+2026-10-25T11:17:40.719938Z  INFO lifecycle: router/src/engine/colocation.rs:205: REQUEST_ADMIT request_id=0 queue_time_us=421 input_length=313 max_new_tokens=8 engine=0
+2026-10-25T11:17:41.181721Z  INFO correction: router/src/engine/colocation.rs:553: CORRECTION request_id=0 engine=0 predicted=0 actual=0 diff=0 decision_epoch=0 current_epoch=5
+2026-10-25T11:17:41.181927Z  INFO lifecycle: router/src/engine/colocation.rs:296: PREFILL_DONE engine=0 request_id=0 hit_token_cnt=0
+2026-10-25T11:17:41.629296Z  INFO lifecycle: router/src/engine/colocation.rs:368: REQUEST_FINISH engine=0 request_id=0 generated_tokens=7
+2026-10-25T11:17:41.630948Z  INFO router::gateway::server: router/src/gateway/server.rs:649: signal received, starting graceful shutdown

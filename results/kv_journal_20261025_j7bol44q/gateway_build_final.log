@@ -1,0 +1,110 @@
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:174:17
+    |
+174 |                 (*node).payload[i].push(alias_bid);
+    |                 ^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+    = note: `#[warn(dangerous_implicit_autorefs)]` on by default
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+174 |                 (&mut (*node).payload)[i].push(alias_bid);
+    |                 +++++                +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:356:47
+    |
+356 |                     !(*n).value.is_empty() && (*n).value[0] == key[consumed]
+    |                                               ^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+356 |                     !(*n).value.is_empty() && (&(*n).value)[0] == key[consumed]
+    |                                               ++          +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:366:58
+    |
+366 |             while i < val_len && consumed < key.len() && (*child).value[i] == key[consumed] {
+    |                                                          ^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+366 |             while i < val_len && consumed < key.len() && (&(*child).value)[i] == key[consumed] {
+    |                                                          ++              +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:369:21
+    |
+369 |                     (*child).payload[i].push(alias_bid);
+    |                     ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+369 |                     (&mut (*child).payload)[i].push(alias_bid);
+    |                     +++++                 +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:459:41
+    |
+459 | ...                   for bids in (*node).payload[new_start..].iter() {
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+459 |                             for bids in (&(*node).payload)[new_start..].iter() {
+    |                                         ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:685:51
+    |
+685 |             while pos < (*node).payload.len() && !(*node).payload[pos].contains(&block_id) {
+    |                                                   ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+685 |             while pos < (*node).payload.len() && !(&(*node).payload)[pos].contains(&block_id) {
+    |                                                   ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:691:36
+    |
+691 |             let bids_at_pos = &mut (*node).payload[pos];
+    |                                    ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+691 |             let bids_at_pos = &mut (&mut (*node).payload)[pos];
+    |                                    +++++                +
+
+warning: `radixtree` (lib) generated 7 warnings
+   Compiling router v0.1.0 (/root/lmetric-repro/blitz-router/router)
+warning: unused import: `vllm::JShortestWeightQ`
+   --> router/src/scheduler/policies/mod.rs:117:16
+    |
+117 | pub(crate) use vllm::JShortestWeightQ;
+    |                ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `std::sync::OnceLock`
+ --> router/src/scheduler/state.rs:1:5
+  |
+1 | use std::sync::OnceLock;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+error[E0308]: mismatched types
+   --> router/src/engine/colocation.rs:379:35
+    |
+379 |                 generated_tokens: entry.generated_token_cnt,
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^ expected `u32`, found `usize`
+
+For more information about this error, try `rustc --explain E0308`.
+warning: `router` (lib) generated 2 warnings
+error: could not compile `router` (lib) due to 1 previous error; 2 warnings emitted

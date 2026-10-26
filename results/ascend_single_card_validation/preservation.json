@@ -1,0 +1,26 @@
+{
+  "engines/vllm": {
+    "head_unchanged": true,
+    "status_unchanged": true,
+    "diff_unchanged": true,
+    "captured_worktree_hashes_unchanged": true
+  },
+  "blitz-router": {
+    "head_unchanged": true,
+    "status_unchanged": true,
+    "diff_unchanged": true,
+    "captured_worktree_hashes_unchanged": true
+  },
+  "/vllm-workspace/vllm": {
+    "head_unchanged": true,
+    "status_unchanged": true,
+    "diff_unchanged": true,
+    "captured_worktree_hashes_unchanged": true
+  },
+  "/vllm-workspace/vllm-ascend": {
+    "head_unchanged": true,
+    "status_unchanged": true,
+    "diff_unchanged": true,
+    "captured_worktree_hashes_unchanged": true
+  }
+}

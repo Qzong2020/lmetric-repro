@@ -1,0 +1,5 @@
+	NPU ID                         Chip ID                        Chip Logic ID                  Chip Name                     
+	0                              0                              0                              Ascend 910B2
+	0                              1                              -                              Mcu                           
+	6                              0                              1                              Ascend 910B2
+	6                              1                              -                              Mcu                           

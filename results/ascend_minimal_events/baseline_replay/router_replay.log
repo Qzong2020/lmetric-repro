@@ -1,0 +1,231 @@
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:174:17
+    |
+174 |                 (*node).payload[i].push(alias_bid);
+    |                 ^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+    = note: `#[warn(dangerous_implicit_autorefs)]` on by default
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+174 |                 (&mut (*node).payload)[i].push(alias_bid);
+    |                 +++++                +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:356:47
+    |
+356 |                     !(*n).value.is_empty() && (*n).value[0] == key[consumed]
+    |                                               ^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+356 |                     !(*n).value.is_empty() && (&(*n).value)[0] == key[consumed]
+    |                                               ++          +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:366:58
+    |
+366 |             while i < val_len && consumed < key.len() && (*child).value[i] == key[consumed] {
+    |                                                          ^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+366 |             while i < val_len && consumed < key.len() && (&(*child).value)[i] == key[consumed] {
+    |                                                          ++              +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:369:21
+    |
+369 |                     (*child).payload[i].push(alias_bid);
+    |                     ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+369 |                     (&mut (*child).payload)[i].push(alias_bid);
+    |                     +++++                 +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:459:41
+    |
+459 | ...                   for bids in (*node).payload[new_start..].iter() {
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+459 |                             for bids in (&(*node).payload)[new_start..].iter() {
+    |                                         ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:685:51
+    |
+685 |             while pos < (*node).payload.len() && !(*node).payload[pos].contains(&block_id) {
+    |                                                   ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+685 |             while pos < (*node).payload.len() && !(&(*node).payload)[pos].contains(&block_id) {
+    |                                                   ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:691:36
+    |
+691 |             let bids_at_pos = &mut (*node).payload[pos];
+    |                                    ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+691 |             let bids_at_pos = &mut (&mut (*node).payload)[pos];
+    |                                    +++++                +
+
+warning: `radixtree` (lib) generated 7 warnings
+   Compiling router v0.1.0 (/tmp/ascend-router-audit-4dwpzhs6/blitz-router/router)
+warning: unused import: `vllm::JShortestWeightQ`
+   --> router/src/scheduler/policies/mod.rs:117:16
+    |
+117 | pub(crate) use vllm::JShortestWeightQ;
+    |                ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `std::sync::OnceLock`
+ --> router/src/scheduler/state.rs:1:5
+  |
+1 | use std::sync::OnceLock;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: field `hashes` is never read
+    --> router/src/scheduler/kvcache.rs:1049:50
+     |
+1049 |             struct SeqState { indices: Vec<u64>, hashes: Vec<u64>, removed: bool }
+     |                    -------- field in this struct ^^^^^^
+     |
+     = note: `#[warn(dead_code)]` on by default
+
+warning: field `all_tokens` is never read
+  --> router/src/scheduler/policies/dsl_runtime.rs:32:9
+   |
+27 | pub(crate) struct Observation {
+   |                   ----------- field in this struct
+...
+32 |     pub all_tokens: usize,
+   |         ^^^^^^^^^^
+   |
+   = note: `Observation` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `new_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:126:15
+    |
+126 | pub(crate) fn new_blocks(req: &ValidGenerateRequest, sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^
+
+warning: function `match_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:155:15
+    |
+155 | pub(crate) fn match_blocks(req: &ValidGenerateRequest, sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `hit_pct` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:161:15
+    |
+161 | pub(crate) fn hit_pct(req: &ValidGenerateRequest, sctx: &Observation) -> f32 {
+    |               ^^^^^^^
+
+warning: function `decode_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:170:15
+    |
+170 | pub(crate) fn decode_blocks(sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^^^^
+
+warning: function `mean_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:421:15
+    |
+421 | pub(crate) fn mean_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> f32 {
+    |               ^^^^^^^^^^^^^
+
+warning: function `std_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:427:15
+    |
+427 | pub(crate) fn std_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize + Copy) -> f32 {
+    |               ^^^^^^^^^^^^
+
+warning: function `min_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:437:15
+    |
+437 | pub(crate) fn min_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `max_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:442:15
+    |
+442 | pub(crate) fn max_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `min_of_f32` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:473:15
+    |
+473 | pub(crate) fn min_of_f32(obs: &[Observation], proj: impl Fn(&Observation) -> f32) -> f32 {
+    |               ^^^^^^^^^^
+
+warning: function `max_of_f32` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:478:15
+    |
+478 | pub(crate) fn max_of_f32(obs: &[Observation], proj: impl Fn(&Observation) -> f32) -> f32 {
+    |               ^^^^^^^^^^
+
+warning: `router` (lib test) generated 14 warnings (run `cargo fix --lib -p router --tests` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 16.75s
+     Running unittests src/lib.rs (/root/lmetric-repro/blitz-router/target/debug/deps/router-edaf117dc4e07598)
+
+running 14 tests
+test engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_cancel_ack ... AUDIT_RESULT {"case":"cancel_after_first_output_then_ack","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_chunk_and_finish ... AUDIT_RESULT {"case":"chunk_prefill_decode_finish","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_duplicate_decode ... AUDIT_RESULT {"case":"duplicate_decode_is_applied_twice","result":{"all_tokens":67,"bs":1,"prefill":0,"waiting":0},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_duplicate_prefill_panics - should panic ... 
+thread 'engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_duplicate_prefill_panics' panicked at router/src/scheduler/state.rs:207:17:
+attempt to add with overflow
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+ok
+test engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_first_output_finish ... AUDIT_RESULT {"case":"finish_skips_hit_correction","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"compute_only_finish_hit_mismatch","result":{"all_tokens":0,"bs":0,"prefill":-16,"waiting":0},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_kv_remove_before_insert ... AUDIT_RESULT {"case":"kv_remove_before_insert_full_loop","result":{"all_tokens":65,"bs":1,"prefill":0,"waiting":0},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_kv_reuse_order ... AUDIT_RESULT {"case":"kv_reuse_final_mapping","result":{"passed":true},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_multi_token_finish_residue ... AUDIT_RESULT {"case":"multi_token_event_finish_residue","result":{"all_tokens":1,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_non16_partial_hash_panics - should panic ... 
+thread 'engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_non16_partial_hash_panics' panicked at router/src/engine/colocation.rs:1088:9:
+assertion `left == right` failed
+  left: 1
+ right: 0
+ok
+test engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_preemption_only ... AUDIT_RESULT {"case":"preemption_has_no_ledger_rebuild","result":{"all_tokens":64,"bs":1,"prefill":32,"waiting":1},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_prefill_arithmetic ... AUDIT_RESULT {"case":"yaullm_prefill_pred_0_actual_0","result":{"all_tokens":65,"bs":1,"prefill":0,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"yaullm_prefill_pred_32_actual_32","result":{"all_tokens":65,"bs":1,"prefill":-32,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"yaullm_prefill_pred_16_actual_32","result":{"all_tokens":65,"bs":1,"prefill":-32,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"yaullm_prefill_pred_32_actual_16","result":{"all_tokens":65,"bs":1,"prefill":-16,"waiting":0},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_radix_parent_removal_panics - should panic ... 
+thread 'engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_radix_parent_removal_panics' panicked at radixtree/src/block_hash.rs:736:9:
+assertion failed: nblock_canary <= block_indices.len()
+ok
+test engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_serde ... AUDIT_RESULT {"case":"serde_and_mapping","result":{"passed":true},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_unsolicited_abort_ack_panics - should panic ... 
+thread 'engine::colocation::task_assignment::ascend_audit_tests::ascend_audit_unsolicited_abort_ack_panics' panicked at router/src/engine/colocation.rs:1302:80:
+Request_101 not captured in exception context!
+ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 27 filtered out; finished in 0.01s
+

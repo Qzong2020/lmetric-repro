@@ -1,0 +1,7 @@
+2026-10-23T03:22:32.971990Z  WARN router: router/src/main.rs:417: The shard info is not set properly by the st-server
+Blitz router is ready
+2026-10-23T03:22:32.975542Z  WARN router::scheduler::statistic: router/src/scheduler/statistic.rs:16: Statistic path is not set
+
+thread 'tokio-rt-worker' panicked at router/src/engine/colocation.rs:220:21:
+internal error: entered unreachable code: engine#3 WQ channel closed by receiver at CQ
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

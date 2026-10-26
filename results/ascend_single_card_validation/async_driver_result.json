@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/root/lmetric-repro/blitz-router/target/debug/deps/router-edaf117dc4e07598",
+    "real_npu_sse_completion",
+    "--ignored",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "exit_code": 0,
+  "handshake": true,
+  "health_200": true
+}

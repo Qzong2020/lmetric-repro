@@ -1,0 +1,15 @@
+{
+  "session": "async_attempt1",
+  "outcome": "interrupted_external_container_restart",
+  "request_count": 0,
+  "verified": false,
+  "evidence": {
+    "engine_0": "loaded; /health 200; SSE subscription not yet established by driver before teardown",
+    "engine_1": "still loading weights when container was replaced",
+    "driver_log_bytes": 0,
+    "container_pid1_started": "2026-10-26T02:25:47Z",
+    "session_last_write": "2026-10-25T14:00:05Z",
+    "devices_after_restart": "/dev/davinci* absent; npu-smi dcmi init ret=-8005; aclInit 507899"
+  },
+  "classification": "environment failure, not an async correctness failure; must be rerun in a new session"
+}

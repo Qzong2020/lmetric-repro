@@ -1,0 +1,192 @@
+    Blocking waiting for file lock on build directory
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:174:17
+    |
+174 |                 (*node).payload[i].push(alias_bid);
+    |                 ^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+    = note: `#[warn(dangerous_implicit_autorefs)]` on by default
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+174 |                 (&mut (*node).payload)[i].push(alias_bid);
+    |                 +++++                +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:356:47
+    |
+356 |                     !(*n).value.is_empty() && (*n).value[0] == key[consumed]
+    |                                               ^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+356 |                     !(*n).value.is_empty() && (&(*n).value)[0] == key[consumed]
+    |                                               ++          +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:366:58
+    |
+366 |             while i < val_len && consumed < key.len() && (*child).value[i] == key[consumed] {
+    |                                                          ^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+366 |             while i < val_len && consumed < key.len() && (&(*child).value)[i] == key[consumed] {
+    |                                                          ++              +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:369:21
+    |
+369 |                     (*child).payload[i].push(alias_bid);
+    |                     ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+369 |                     (&mut (*child).payload)[i].push(alias_bid);
+    |                     +++++                 +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:459:41
+    |
+459 | ...                   for bids in (*node).payload[new_start..].iter() {
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+459 |                             for bids in (&(*node).payload)[new_start..].iter() {
+    |                                         ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:685:51
+    |
+685 |             while pos < (*node).payload.len() && !(*node).payload[pos].contains(&block_id) {
+    |                                                   ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+685 |             while pos < (*node).payload.len() && !(&(*node).payload)[pos].contains(&block_id) {
+    |                                                   ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:691:36
+    |
+691 |             let bids_at_pos = &mut (*node).payload[pos];
+    |                                    ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+691 |             let bids_at_pos = &mut (&mut (*node).payload)[pos];
+    |                                    +++++                +
+
+warning: `radixtree` (lib) generated 7 warnings
+   Compiling router v0.1.0 (/root/lmetric-repro/blitz-router/router)
+warning: unused import: `vllm::JShortestWeightQ`
+   --> router/src/scheduler/policies/mod.rs:117:16
+    |
+117 | pub(crate) use vllm::JShortestWeightQ;
+    |                ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `std::sync::OnceLock`
+ --> router/src/scheduler/state.rs:1:5
+  |
+1 | use std::sync::OnceLock;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: field `hashes` is never read
+    --> router/src/scheduler/kvcache.rs:1053:50
+     |
+1053 |             struct SeqState { indices: Vec<u64>, hashes: Vec<u64>, removed: bool }
+     |                    -------- field in this struct ^^^^^^
+     |
+     = note: `#[warn(dead_code)]` on by default
+
+warning: function `new_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:128:15
+    |
+128 | pub(crate) fn new_blocks(req: &ValidGenerateRequest, sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^
+
+warning: function `match_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:157:15
+    |
+157 | pub(crate) fn match_blocks(req: &ValidGenerateRequest, sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `hit_pct` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:163:15
+    |
+163 | pub(crate) fn hit_pct(req: &ValidGenerateRequest, sctx: &Observation) -> f32 {
+    |               ^^^^^^^
+
+warning: function `decode_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:172:15
+    |
+172 | pub(crate) fn decode_blocks(sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^^^^
+
+warning: function `mean_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:423:15
+    |
+423 | pub(crate) fn mean_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> f32 {
+    |               ^^^^^^^^^^^^^
+
+warning: function `std_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:429:15
+    |
+429 | pub(crate) fn std_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize + Copy) -> f32 {
+    |               ^^^^^^^^^^^^
+
+warning: function `min_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:439:15
+    |
+439 | pub(crate) fn min_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `max_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:444:15
+    |
+444 | pub(crate) fn max_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `min_of_f32` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:475:15
+    |
+475 | pub(crate) fn min_of_f32(obs: &[Observation], proj: impl Fn(&Observation) -> f32) -> f32 {
+    |               ^^^^^^^^^^
+
+warning: function `max_of_f32` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:480:15
+    |
+480 | pub(crate) fn max_of_f32(obs: &[Observation], proj: impl Fn(&Observation) -> f32) -> f32 {
+    |               ^^^^^^^^^^
+
+warning: `router` (lib test) generated 13 warnings (run `cargo fix --lib -p router --tests` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 17.51s
+     Running unittests src/lib.rs (target/debug/deps/router-edaf117dc4e07598)
+
+running 6 tests
+test engine::colocation::task_assignment::kv_journal_integration_tests::dual_cpu_a_only_cache ... DUAL_CPU {"actual":0,"candidates":[{"all_tokens":0,"bs":0,"enabled":true,"engine":0,"hits":256,"prefill":0,"score":57,"waiting":0,"work":57},{"all_tokens":0,"bs":0,"enabled":true,"engine":1,"hits":0,"prefill":0,"score":313,"waiting":0,"work":313}],"expected":0,"predicted_hits":256,"scenario":"A_only"}
+ok
+test engine::colocation::task_assignment::kv_journal_integration_tests::dual_cpu_b_only_cache ... DUAL_CPU {"actual":1,"candidates":[{"all_tokens":0,"bs":0,"enabled":true,"engine":0,"hits":0,"prefill":0,"score":313,"waiting":0,"work":313},{"all_tokens":0,"bs":0,"enabled":true,"engine":1,"hits":256,"prefill":0,"score":57,"waiting":0,"work":57}],"expected":1,"predicted_hits":256,"scenario":"B_only"}
+ok
+test engine::colocation::task_assignment::kv_journal_integration_tests::dual_cpu_cache_load_conflict ... DUAL_CPU {"actual":1,"candidates":[{"all_tokens":600,"bs":2,"enabled":true,"engine":0,"hits":256,"prefill":128,"score":555,"waiting":1,"work":185},{"all_tokens":0,"bs":0,"enabled":true,"engine":1,"hits":0,"prefill":0,"score":313,"waiting":0,"work":313}],"expected":1,"predicted_hits":0,"scenario":"cache_load_conflict"}
+ok
+test engine::colocation::task_assignment::kv_journal_integration_tests::dual_cpu_failure_latches_and_admission_rechecks ... DUAL_CPU {"actual":1,"candidates":[{"all_tokens":0,"bs":0,"enabled":false,"engine":0,"hits":0,"prefill":0,"score":313,"waiting":0,"work":313},{"all_tokens":0,"bs":0,"enabled":true,"engine":1,"hits":0,"prefill":0,"score":313,"waiting":0,"work":313}],"expected":1,"predicted_hits":0,"scenario":"invalid_A_healthy_B"}
+ok
+test engine::colocation::task_assignment::kv_journal_integration_tests::dual_cpu_independent_sequences_and_multiple_requests_complete ... DUAL_CPU {"distinct_epochs":true,"ledgers_zero":true,"per_backend":2,"requests":4,"responses_verified":true,"same_mutation_ids":true,"same_physical_ids":true,"same_step_ids":true,"scenario":"multiple_requests"}
+ok
+test engine::colocation::task_assignment::kv_journal_integration_tests::dual_cpu_physical_namespace_and_reset_isolation ... DUAL_CPU {"actual":0,"candidates":[{"all_tokens":0,"bs":0,"enabled":true,"engine":0,"hits":256,"prefill":0,"score":57,"waiting":0,"work":57},{"all_tokens":0,"bs":0,"enabled":true,"engine":1,"hits":0,"prefill":0,"score":313,"waiting":0,"work":313}],"expected":0,"predicted_hits":256,"scenario":"same_bids_distinct_tokens_A"}
+DUAL_CPU {"actual":1,"candidates":[{"all_tokens":313,"bs":1,"enabled":true,"engine":0,"hits":0,"prefill":57,"score":740,"waiting":1,"work":370},{"all_tokens":0,"bs":0,"enabled":true,"engine":1,"hits":256,"prefill":0,"score":57,"waiting":0,"work":57}],"expected":1,"predicted_hits":256,"scenario":"same_bids_distinct_tokens_B"}
+DUAL_CPU {"actual":1,"candidates":[{"all_tokens":313,"bs":1,"enabled":true,"engine":0,"hits":0,"prefill":57,"score":740,"waiting":1,"work":370},{"all_tokens":313,"bs":1,"enabled":true,"engine":1,"hits":256,"prefill":57,"score":228,"waiting":1,"work":114}],"expected":1,"predicted_hits":256,"scenario":"A_reset_B_preserved"}
+ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 46 filtered out; finished in 0.02s
+

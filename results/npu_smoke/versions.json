@@ -1,0 +1,10 @@
+{
+  "torch": "2.10.0+cpu",
+  "torch_npu": "2.10.0.post4",
+  "vllm": "0.23.0+empty",
+  "vllm_ascend": "0.23.0",
+  "triton_ascend": "3.2.2",
+  "transformers": "5.5.4",
+  "vllm_git": "0fc695fc6d1d82e9a5ac6835ac8e4e1c83703665",
+  "vllm_ascend_git": "5cb98caaadeff42b5b62b996e34bb2aaa29d20fd"
+}

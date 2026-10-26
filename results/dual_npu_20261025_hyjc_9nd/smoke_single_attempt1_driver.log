@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/root/lmetric-repro/scripts/dual_npu/smoke_single.py", line 156, in <module>
+    main()
+  File "/root/lmetric-repro/scripts/dual_npu/smoke_single.py", line 121, in main
+    s.start_single()
+  File "/root/lmetric-repro/scripts/dual_npu/smoke_single.py", line 41, in start_single
+    self.health(18181, p)
+  File "/root/lmetric-repro/scripts/dual_npu/smoke_single.py", line 28, in health
+    wait(check, 900, 'bounded single-model load timeout')
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 47, in wait
+    raise TimeoutError(label)
+TimeoutError: bounded single-model load timeout

@@ -1,0 +1,36 @@
+{
+  "outputs": [],
+  "step_id": 1,
+  "latency": 12,
+  "prefill_token_budget": 256,
+  "prefill_tokens": 16,
+  "new_block_hashes": [
+    [
+      291
+    ]
+  ],
+  "evicted_block_hashes": [
+    [
+      1110
+    ]
+  ],
+  "evicted_block_ids": [
+    9
+  ],
+  "cur_used_block_ids": {
+    "101": [
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "new_block_hashes_ids": {
+    "101": [
+      4,
+      5
+    ]
+  },
+  "preempted_ids": [],
+  "aborted_requests": []
+}

@@ -1,0 +1,8 @@
+test_all_prompts_round_trip_including_long_warmup_and_benchmark (__main__.VerifierTests.test_all_prompts_round_trip_including_long_warmup_and_benchmark) ... ok
+test_shared_stdout_records_and_partial_live_write (__main__.VerifierTests.test_shared_stdout_records_and_partial_live_write) ... ok
+test_verify_two_distinct_namespaces_and_reject_contamination (__main__.VerifierTests.test_verify_two_distinct_namespaces_and_reject_contamination) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.096s
+
+OK

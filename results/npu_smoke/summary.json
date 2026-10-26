@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-10-23T08:38:02.655554+00:00",
+  "phases": {
+    "compute": {
+      "exit_code": 0,
+      "passed": true,
+      "elapsed_seconds": 16.26
+    },
+    "hccl": {
+      "exit_code": 0,
+      "passed": true,
+      "elapsed_seconds": 24.4
+    },
+    "engine": {
+      "exit_code": 0,
+      "passed": true,
+      "elapsed_seconds": 23.32
+    }
+  },
+  "scope": "hardware, elementary math, HCCL and Python imports; not LLM serving validation",
+  "all_passed": true
+}

@@ -1,0 +1,18 @@
+--- user-worktree/router/src/engine/client.rs
++++ isolated-driver/router/src/engine/client.rs
+@@ -223,6 +223,7 @@
+                 }
+             }
+ 
++            if let Ok(p) = std::env::var("LMETRIC_HANDSHAKE_FILE") { std::fs::write(p, "real SSE HTTP 200 before request").unwrap(); }
+             self.sse_state = Some(SseState {
+                 sequence: Default::default(),
+                 stream: Box::new(stream),
+@@ -245,6 +246,7 @@
+             loop {
+                 match sse_state.stream.next().await {
+                     Some(Ok(es::SSE::Event(e))) => {
++                        println!("REAL_RAW_SSE {}", e.data);
+                         let m = sse_state.sequence.parse(&e.data).map_err(|err| {
+                             EngineClientError::Json(format!(
+                                 "Failed to parse SSE event data: {} (raw: {:?})",

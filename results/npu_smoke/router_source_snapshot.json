@@ -1,0 +1,6 @@
+{
+  "router/src/scheduler/policies/vllm.rs": "0d8f93e07b3dc01c0e1de998e2114c1ef9af34bb23b56f861c936b3f9726c4f0",
+  "router/src/scheduler/policies/lmetric.rs": "c9617481119a209f8571d6f481efb222e2c9cb29fc2ebbc31dfafd476876e25b",
+  "router/src/engine/client.rs": "f0797f2e3932c061bba1d4eae0ecb730df2abbef834a2e4deb3a12ba3e9a7b81",
+  "router/src/engine/vllm_http.rs": "fd00e7953f3abc759ad73787917149d56e44e4b556cc09b700d9f35625bac506"
+}

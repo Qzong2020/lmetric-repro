@@ -1,0 +1,40 @@
+{
+  "request": {
+    "model": "ascend-small",
+    "prompt": "The capital of France is",
+    "max_tokens": 8,
+    "temperature": 0,
+    "n": 1
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "cmpl-917e6f30f86e5617",
+      "object": "text_completion",
+      "created": 1792923670,
+      "model": "ascend-small",
+      "choices": [
+        {
+          "index": 0,
+          "text": " Paris. The capital of France is also",
+          "logprobs": null,
+          "finish_reason": "length",
+          "stop_reason": null,
+          "token_ids": null,
+          "prompt_logprobs": null,
+          "prompt_token_ids": null,
+          "routed_experts": null
+        }
+      ],
+      "service_tier": null,
+      "system_fingerprint": "vllm-0.23.0-f0beb0fd",
+      "usage": {
+        "prompt_tokens": 5,
+        "total_tokens": 13,
+        "completion_tokens": 8,
+        "prompt_tokens_details": null
+      },
+      "kv_transfer_params": null
+    }
+  }
+}

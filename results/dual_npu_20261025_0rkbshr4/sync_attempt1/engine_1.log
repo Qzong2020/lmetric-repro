@@ -1,0 +1,221 @@
+[W1025 12:35:16.221593554 FunctionLoader.cpp:48] Warning: LD_PRELOAD detected, FunctionLoader prefers RTLD_DEFAULT for symbol resolution. (function operator())
+INFO 10-25 12:35:27 [__init__.py:44] Available plugins for group vllm.platform_plugins:
+INFO 10-25 12:35:27 [__init__.py:46] - ascend -> vllm_ascend:register
+INFO 10-25 12:35:27 [__init__.py:49] All plugins in this group will be loaded. Set `VLLM_PLUGINS` to control which plugins to load.
+INFO 10-25 12:35:27 [__init__.py:238] Platform plugin ascend is activated
+INFO 10-25 12:35:27 [platform.py:62] Breakable cudagraph is force disabled on Ascend because DeepSeek V4 PIECEWISE cudagraph is not supported yet.
+VALIDATION_IMPORT {"pid": 38146, "vllm": "/root/lmetric-repro/engines/vllm/vllm/__init__.py", "ascend": "/vllm-workspace/vllm-ascend/vllm_ascend/__init__.py", "core": "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core.py", "events": "1"}
+2026-10-25 12:35:32,567 - 38146 - ServiceProfiler - INFO - VLLM_USE_V1 not set, auto-detected via vLLM 0.23.0+empty: default 1
+INFO 10-25 12:35:33 [__init__.py:115] Registered model loader `<class 'vllm_ascend.model_loader.netloader.netloader.ModelNetLoaderElastic'>` with load format `netloader`
+INFO 10-25 12:35:33 [__init__.py:115] Registered model loader `<class 'vllm_ascend.model_loader.rfork.rfork_loader.RForkModelLoader'>` with load format `rfork`
+(APIServer pid=38146) INFO 10-25 12:35:33 [api_utils.py:339] 
+(APIServer pid=38146) INFO 10-25 12:35:33 [api_utils.py:339]        █     █     █▄   ▄█
+(APIServer pid=38146) INFO 10-25 12:35:33 [api_utils.py:339]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.23.0
+(APIServer pid=38146) INFO 10-25 12:35:33 [api_utils.py:339]   █▄█▀ █     █     █     █  model   /models/Qwen3-0.6B
+(APIServer pid=38146) INFO 10-25 12:35:33 [api_utils.py:339]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
+(APIServer pid=38146) INFO 10-25 12:35:33 [api_utils.py:339] 
+(APIServer pid=38146) INFO 10-25 12:35:33 [api_utils.py:273] non-default args: {'host': '127.0.0.1', 'port': 18182, 'model': '/models/Qwen3-0.6B', 'max_model_len': 1024, 'enforce_eager': True, 'served_model_name': ['ascend-small'], 'block_size': 128, 'gpu_memory_utilization': 0.2, 'num_gpu_blocks_override': 8, 'enable_prefix_caching': True, 'max_num_batched_tokens': 128, 'max_num_seqs': 1, 'enable_chunked_prefill': True, 'async_scheduling': False}
+(APIServer pid=38146) WARNING 10-25 12:35:33 [envs.py:2088] Unknown vLLM environment variable detected: VLLM_LMETRIC_EVENTS
+(APIServer pid=38146) WARNING 10-25 12:35:33 [envs.py:2088] Unknown vLLM environment variable detected: VLLM_LMETRIC_KV_EVENTS
+(APIServer pid=38146) INFO 10-25 12:35:33 [model.py:611] Resolved architecture: Qwen3ForCausalLM
+(APIServer pid=38146) INFO 10-25 12:35:33 [model.py:1745] Using max model len 1024
+(APIServer pid=38146) INFO 10-25 12:35:33 [scheduler.py:239] Chunked prefill is enabled with max_num_batched_tokens=128.
+(APIServer pid=38146) INFO 10-25 12:35:33 [vllm.py:999] Asynchronous scheduling is disabled.
+(APIServer pid=38146) WARNING 10-25 12:35:33 [vllm.py:1055] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+(APIServer pid=38146) WARNING 10-25 12:35:33 [vllm.py:1097] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+(APIServer pid=38146) INFO 10-25 12:35:33 [kernel.py:270] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+(APIServer pid=38146) INFO 10-25 12:35:33 [vllm.py:1273] Cudagraph is disabled under eager mode
+(APIServer pid=38146) INFO 10-25 12:35:33 [utils.py:174] No quantization signature detected from model files for "/models/Qwen3-0.6B". The model will be loaded as float. To force a quantization method, pass "--quantization <method>" explicitly.
+(APIServer pid=38146) WARNING 10-25 12:35:33 [platform.py:1067] GPU-specific parameter is not supported on Ascend. parameter=disable_cascade_attn, value=True, action: resetting to False.
+(APIServer pid=38146) INFO 10-25 12:35:33 [platform.py:1277] The timeout interval of the HCCL operator is 1836s. Timeout in seconds for execute_model RPC calls in multiprocessing must be greater than 1836s, Set VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS=3000
+(APIServer pid=38146) INFO 10-25 12:35:33 [ascend_config.py:893] Dynamic EPLB is False
+(APIServer pid=38146) INFO 10-25 12:35:33 [ascend_config.py:894] The number of redundant experts is 0
+(APIServer pid=38146) INFO 10-25 12:35:33 [platform.py:528] Compilation disabled, using eager mode by default
+(APIServer pid=38146) INFO 10-25 12:35:33 [platform.py:790] Set PYTORCH_NPU_ALLOC_CONF=expandable_segments:True
+(APIServer pid=38146) INFO 10-25 12:35:33 [compilation.py:321] Enabled custom fusions: norm_quant, act_quant
+[W1025 12:35:42.325080882 FunctionLoader.cpp:48] Warning: LD_PRELOAD detected, FunctionLoader prefers RTLD_DEFAULT for symbol resolution. (function operator())
+INFO 10-25 12:35:53 [__init__.py:44] Available plugins for group vllm.platform_plugins:
+INFO 10-25 12:35:53 [__init__.py:46] - ascend -> vllm_ascend:register
+INFO 10-25 12:35:53 [__init__.py:49] All plugins in this group will be loaded. Set `VLLM_PLUGINS` to control which plugins to load.
+INFO 10-25 12:35:53 [__init__.py:238] Platform plugin ascend is activated
+INFO 10-25 12:35:53 [platform.py:62] Breakable cudagraph is force disabled on Ascend because DeepSeek V4 PIECEWISE cudagraph is not supported yet.
+VALIDATION_IMPORT {"pid": 38943, "vllm": "/root/lmetric-repro/engines/vllm/vllm/__init__.py", "ascend": "/vllm-workspace/vllm-ascend/vllm_ascend/__init__.py", "core": "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core.py", "events": "1"}
+(EngineCore pid=38943) 2026-10-25 12:35:58,824 - 38943 - ServiceProfiler - INFO - VLLM_USE_V1 not set, auto-detected via vLLM 0.23.0+empty: default 1
+(EngineCore pid=38943) INFO 10-25 12:35:58 [__init__.py:115] Registered model loader `<class 'vllm_ascend.model_loader.netloader.netloader.ModelNetLoaderElastic'>` with load format `netloader`
+(EngineCore pid=38943) INFO 10-25 12:35:58 [__init__.py:115] Registered model loader `<class 'vllm_ascend.model_loader.rfork.rfork_loader.RForkModelLoader'>` with load format `rfork`
+(EngineCore pid=38943) INFO 10-25 12:35:58 [core.py:113] Initializing a V1 LLM engine (v0.23.0) with config: model='/models/Qwen3-0.6B', speculative_config=None, tokenizer='/models/Qwen3-0.6B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=1024, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=True, quantization=None, quantization_config=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=npu, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=ascend-small, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'vllm_ascend.compilation.compiler_interface.AscendCompiler', 'custom_ops': ['all'], 'ir_enable_torch_wrap': False, 'splitting_ops': [], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [128], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': True, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=True, moe_backend='auto', linear_backend='auto')
+(EngineCore pid=38943) `Qwen2VLImageProcessorFast` is deprecated. The `Fast` suffix for image processors has been removed; use `Qwen2VLImageProcessor` instead.
+(EngineCore pid=38943) INFO 10-25 12:36:00 [ascend_config.py:893] Dynamic EPLB is False
+(EngineCore pid=38943) INFO 10-25 12:36:00 [ascend_config.py:894] The number of redundant experts is 0
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244] EngineCore failed to start.
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244] Traceback (most recent call last):
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]   File "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core.py", line 1213, in run_engine_core
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]   File "/root/lmetric-repro/engines/vllm/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]     return func(*args, **kwargs)
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]   File "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core.py", line 979, in __init__
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]     super().__init__(
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]   File "/root/lmetric-repro/scripts/kv_journal/launch_gateway.py", line 25, in observed_init
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]     original_init(self,*args,**kwargs)
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]   File "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core.py", line 131, in __init__
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]   File "/root/lmetric-repro/engines/vllm/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]     return func(*args, **kwargs)
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]   File "/root/lmetric-repro/engines/vllm/vllm/v1/executor/abstract.py", line 109, in __init__
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]     self._init_executor()
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]   File "/root/lmetric-repro/engines/vllm/vllm/v1/executor/uniproc_executor.py", line 62, in _init_executor
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]     self.driver_worker.init_worker(all_kwargs=[kwargs])
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]   File "/root/lmetric-repro/engines/vllm/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]     return func(*args, **kwargs)
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]   File "/root/lmetric-repro/engines/vllm/vllm/v1/worker/worker_base.py", line 313, in init_worker
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]     self.worker = worker_class(**kwargs)
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]                   ^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]   File "/vllm-workspace/vllm-ascend/vllm_ascend/worker/worker.py", line 124, in __init__
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]     check_ascend_device_type()
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]   File "/vllm-workspace/vllm-ascend/vllm_ascend/utils.py", line 850, in check_ascend_device_type
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]     soc_version = torch_npu.npu.get_soc_version()
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]   File "/usr/local/python3.12.13/lib/python3.12/site-packages/torch_npu/npu/_backends.py", line 97, in get_soc_version
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]     torch_npu.npu._lazy_init()
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]   File "/usr/local/python3.12.13/lib/python3.12/site-packages/torch_npu/npu/__init__.py", line 273, in _lazy_init
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]     torch_npu._C._npu_init()
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244] RuntimeError: Initialize:../torch_npu/csrc/core/npu/sys_ctrl/npu_sys_ctrl.cpp:165 NPU function error: aclInit, error code is 107001
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244] [ERROR] 2026-10-25-12:36:01 (PID:38943, Device:0, RankID:-1) ERR00100 PTA call acl api failed
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244] [Error]: Invalid device ID.
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]         Check whether the device ID is valid.
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244] [PID: 38943] 2026-10-25-12:36:01.297.590 Invalid_Argument(EE1003): Obtaining the logical device ID based on the user device ID failed because value 0 for parameter userDevId is invalid. Expected value: [0, 0).
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]         Solution: 1. Check the input parameter range of the function. 2. Check the function invocation relationship.
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244] TraceBack (most recent call last):
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]         rtSetDefaultDeviceId execution failed, reason=device id error[FUNC:FuncErrorReason][FILE:error_message_manage.cc][LINE:69]
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]         [Process][DefaultDevice]process HandleDefaultDevice failed[FUNC:ReportInnerError][FILE:log_inner.cpp][LINE:132]
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]         ctx is NULL![FUNC:GetDevErrMsg][FILE:api_impl.cc][LINE:6047]
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244]         The argument is invalid. Reason: rtGetDevMsg execution failed, the context is a null pointer.
+(EngineCore pid=38943) ERROR 10-25 12:36:01 [core.py:1244] 
+(EngineCore pid=38943) Process EngineCore:
+(EngineCore pid=38943) Traceback (most recent call last):
+(EngineCore pid=38943)   File "/usr/local/python3.12.13/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+(EngineCore pid=38943)     self.run()
+(EngineCore pid=38943)   File "/usr/local/python3.12.13/lib/python3.12/multiprocessing/process.py", line 108, in run
+(EngineCore pid=38943)     self._target(*self._args, **self._kwargs)
+(EngineCore pid=38943)   File "/vllm-workspace/vllm-ascend/vllm_ascend/patch/platform/patch_balance_schedule.py", line 692, in run_engine_core
+(EngineCore pid=38943)     return _ORIGINAL_RUN_ENGINE_CORE(*args, dp_rank=dp_rank, local_dp_rank=local_dp_rank, **kwargs)
+(EngineCore pid=38943)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=38943)   File "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core.py", line 1248, in run_engine_core
+(EngineCore pid=38943)     raise e
+(EngineCore pid=38943)   File "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core.py", line 1213, in run_engine_core
+(EngineCore pid=38943)     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=38943)                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=38943)   File "/root/lmetric-repro/engines/vllm/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=38943)     return func(*args, **kwargs)
+(EngineCore pid=38943)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=38943)   File "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core.py", line 979, in __init__
+(EngineCore pid=38943)     super().__init__(
+(EngineCore pid=38943)   File "/root/lmetric-repro/scripts/kv_journal/launch_gateway.py", line 25, in observed_init
+(EngineCore pid=38943)     original_init(self,*args,**kwargs)
+(EngineCore pid=38943)   File "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core.py", line 131, in __init__
+(EngineCore pid=38943)     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=38943)                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=38943)   File "/root/lmetric-repro/engines/vllm/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=38943)     return func(*args, **kwargs)
+(EngineCore pid=38943)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=38943)   File "/root/lmetric-repro/engines/vllm/vllm/v1/executor/abstract.py", line 109, in __init__
+(EngineCore pid=38943)     self._init_executor()
+(EngineCore pid=38943)   File "/root/lmetric-repro/engines/vllm/vllm/v1/executor/uniproc_executor.py", line 62, in _init_executor
+(EngineCore pid=38943)     self.driver_worker.init_worker(all_kwargs=[kwargs])
+(EngineCore pid=38943)   File "/root/lmetric-repro/engines/vllm/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=38943)     return func(*args, **kwargs)
+(EngineCore pid=38943)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=38943)   File "/root/lmetric-repro/engines/vllm/vllm/v1/worker/worker_base.py", line 313, in init_worker
+(EngineCore pid=38943)     self.worker = worker_class(**kwargs)
+(EngineCore pid=38943)                   ^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=38943)   File "/vllm-workspace/vllm-ascend/vllm_ascend/worker/worker.py", line 124, in __init__
+(EngineCore pid=38943)     check_ascend_device_type()
+(EngineCore pid=38943)   File "/vllm-workspace/vllm-ascend/vllm_ascend/utils.py", line 850, in check_ascend_device_type
+(EngineCore pid=38943)     soc_version = torch_npu.npu.get_soc_version()
+(EngineCore pid=38943)                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=38943)   File "/usr/local/python3.12.13/lib/python3.12/site-packages/torch_npu/npu/_backends.py", line 97, in get_soc_version
+(EngineCore pid=38943)     torch_npu.npu._lazy_init()
+(EngineCore pid=38943)   File "/usr/local/python3.12.13/lib/python3.12/site-packages/torch_npu/npu/__init__.py", line 273, in _lazy_init
+(EngineCore pid=38943)     torch_npu._C._npu_init()
+(EngineCore pid=38943) RuntimeError: Initialize:../torch_npu/csrc/core/npu/sys_ctrl/npu_sys_ctrl.cpp:165 NPU function error: aclInit, error code is 107001
+(EngineCore pid=38943) [ERROR] 2026-10-25-12:36:01 (PID:38943, Device:0, RankID:-1) ERR00100 PTA call acl api failed
+(EngineCore pid=38943) [Error]: Invalid device ID.
+(EngineCore pid=38943)         Check whether the device ID is valid.
+(EngineCore pid=38943) [PID: 38943] 2026-10-25-12:36:01.297.590 Invalid_Argument(EE1003): Obtaining the logical device ID based on the user device ID failed because value 0 for parameter userDevId is invalid. Expected value: [0, 0).
+(EngineCore pid=38943)         Solution: 1. Check the input parameter range of the function. 2. Check the function invocation relationship.
+(EngineCore pid=38943) TraceBack (most recent call last):
+(EngineCore pid=38943)         rtSetDefaultDeviceId execution failed, reason=device id error[FUNC:FuncErrorReason][FILE:error_message_manage.cc][LINE:69]
+(EngineCore pid=38943)         [Process][DefaultDevice]process HandleDefaultDevice failed[FUNC:ReportInnerError][FILE:log_inner.cpp][LINE:132]
+(EngineCore pid=38943)         ctx is NULL![FUNC:GetDevErrMsg][FILE:api_impl.cc][LINE:6047]
+(EngineCore pid=38943)         The argument is invalid. Reason: rtGetDevMsg execution failed, the context is a null pointer.
+(EngineCore pid=38943) 
+(APIServer pid=38146) Traceback (most recent call last):
+(APIServer pid=38146)   File "/root/lmetric-repro/scripts/kv_journal/launch_gateway.py", line 64, in <module>
+(APIServer pid=38146)     runpy.run_module('vllm.entrypoints.openai.api_server',run_name='__main__')
+(APIServer pid=38146)   File "<frozen runpy>", line 229, in run_module
+(APIServer pid=38146)   File "<frozen runpy>", line 88, in _run_code
+(APIServer pid=38146)   File "/root/lmetric-repro/engines/vllm/vllm/entrypoints/openai/api_server.py", line 712, in <module>
+(APIServer pid=38146)     uvloop.run(run_server(args))
+(APIServer pid=38146)   File "/usr/local/python3.12.13/lib/python3.12/site-packages/uvloop/__init__.py", line 96, in run
+(APIServer pid=38146)     return __asyncio.run(
+(APIServer pid=38146)            ^^^^^^^^^^^^^^
+(APIServer pid=38146)   File "/usr/local/python3.12.13/lib/python3.12/asyncio/runners.py", line 195, in run
+(APIServer pid=38146)     return runner.run(main)
+(APIServer pid=38146)            ^^^^^^^^^^^^^^^^
+(APIServer pid=38146)   File "/usr/local/python3.12.13/lib/python3.12/asyncio/runners.py", line 118, in run
+(APIServer pid=38146)     return self._loop.run_until_complete(task)
+(APIServer pid=38146)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=38146)   File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+(APIServer pid=38146)   File "/usr/local/python3.12.13/lib/python3.12/site-packages/uvloop/__init__.py", line 48, in wrapper
+(APIServer pid=38146)     return await main
+(APIServer pid=38146)            ^^^^^^^^^^
+(APIServer pid=38146)   File "/root/lmetric-repro/engines/vllm/vllm/entrypoints/openai/api_server.py", line 672, in run_server
+(APIServer pid=38146)     await run_server_worker(listen_address, sock, args, **uvicorn_kwargs)
+(APIServer pid=38146)   File "/root/lmetric-repro/engines/vllm/vllm/entrypoints/openai/api_server.py", line 686, in run_server_worker
+(APIServer pid=38146)     async with build_async_engine_client(
+(APIServer pid=38146)                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=38146)   File "/usr/local/python3.12.13/lib/python3.12/contextlib.py", line 210, in __aenter__
+(APIServer pid=38146)     return await anext(self.gen)
+(APIServer pid=38146)            ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=38146)   File "/root/lmetric-repro/engines/vllm/vllm/entrypoints/openai/api_server.py", line 99, in build_async_engine_client
+(APIServer pid=38146)     async with build_async_engine_client_from_engine_args(
+(APIServer pid=38146)                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=38146)   File "/usr/local/python3.12.13/lib/python3.12/contextlib.py", line 210, in __aenter__
+(APIServer pid=38146)     return await anext(self.gen)
+(APIServer pid=38146)            ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=38146)   File "/root/lmetric-repro/engines/vllm/vllm/entrypoints/openai/api_server.py", line 135, in build_async_engine_client_from_engine_args
+(APIServer pid=38146)     async_llm = AsyncLLM.from_vllm_config(
+(APIServer pid=38146)                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=38146)   File "/root/lmetric-repro/engines/vllm/vllm/v1/engine/async_llm.py", line 222, in from_vllm_config
+(APIServer pid=38146)     return cls(
+(APIServer pid=38146)            ^^^^
+(APIServer pid=38146)   File "/root/lmetric-repro/engines/vllm/vllm/v1/engine/async_llm.py", line 146, in __init__
+(APIServer pid=38146)     self.engine_core = EngineCoreClient.make_async_mp_client(
+(APIServer pid=38146)                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=38146)   File "/root/lmetric-repro/engines/vllm/vllm/tracing/otel.py", line 178, in sync_wrapper
+(APIServer pid=38146)     return func(*args, **kwargs)
+(APIServer pid=38146)            ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=38146)   File "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core_client.py", line 131, in make_async_mp_client
+(APIServer pid=38146)     return AsyncMPClient(*client_args)
+(APIServer pid=38146)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=38146)   File "/root/lmetric-repro/engines/vllm/vllm/tracing/otel.py", line 178, in sync_wrapper
+(APIServer pid=38146)     return func(*args, **kwargs)
+(APIServer pid=38146)            ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=38146)   File "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core_client.py", line 948, in __init__
+(APIServer pid=38146)     super().__init__(
+(APIServer pid=38146)   File "/root/lmetric-repro/engines/vllm/vllm/v1/engine/core_client.py", line 570, in __init__
+(APIServer pid=38146)     with launch_core_engines(
+(APIServer pid=38146)          ^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=38146)   File "/usr/local/python3.12.13/lib/python3.12/contextlib.py", line 144, in __exit__
+(APIServer pid=38146)     next(self.gen)
+(APIServer pid=38146)   File "/root/lmetric-repro/engines/vllm/vllm/v1/engine/utils.py", line 1190, in launch_core_engines
+(APIServer pid=38146)     wait_for_engine_startup(
+(APIServer pid=38146)   File "/root/lmetric-repro/engines/vllm/vllm/v1/engine/utils.py", line 1249, in wait_for_engine_startup
+(APIServer pid=38146)     raise RuntimeError(
+(APIServer pid=38146) RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+(APIServer pid=38146) [ERROR] 2026-10-25-12:36:04 (PID:38146, Device:-1, RankID:-1) ERR99999 UNKNOWN applicaiton exception

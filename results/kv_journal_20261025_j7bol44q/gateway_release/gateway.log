@@ -1,0 +1,54 @@
+2026-10-25T11:37:27.807335Z  WARN router: router/src/main.rs:417: The shard info is not set properly by the st-server
+2026-10-25T11:37:27.807777Z  INFO router: router/src/main.rs:435: Loaded model config: type=qwen3, max_position_embeddings=40960
+2026-10-25T11:37:27.807824Z  WARN router: router/src/main.rs:447: --max-total-tokens=1024 overrides auto-discovered max_position_embeddings=40960 from config.json
+2026-10-25T11:37:27.807853Z  WARN router: router/src/main.rs:471: --max-input-length=512 overrides auto-discovered max_total_tokens-1=1023
+Blitz router is ready
+2026-10-25T11:37:27.912649Z  WARN router::scheduler::statistic: router/src/scheduler/statistic.rs:16: Statistic path is not set
+2026-10-25T11:37:28.045991Z  INFO scheduling: router/src/scheduler/policies/dsl_runtime.rs:538: DECISION request_id=0 engine=0 predicted_hits=0 radix_epoch=0 new_tokens=313
+2026-10-25T11:37:28.046646Z  INFO lifecycle: router/src/engine/colocation.rs:205: REQUEST_ADMIT request_id=0 queue_time_us=356 input_length=313 max_new_tokens=8 engine=0
+2026-10-25T11:37:28.390865Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=1 evicted=0 inserted=0 epoch_before=0 epoch_after=3
+2026-10-25T11:37:28.455055Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=2 evicted=0 inserted=0 epoch_before=3 epoch_after=5
+2026-10-25T11:37:28.535798Z  INFO correction: router/src/engine/colocation.rs:556: CORRECTION request_id=0 engine=0 predicted=0 actual=0 diff=0 decision_epoch=0 current_epoch=5
+2026-10-25T11:37:28.535900Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=3 evicted=0 inserted=0 epoch_before=5 epoch_after=6
+2026-10-25T11:37:28.535999Z  INFO lifecycle: router/src/engine/colocation.rs:296: PREFILL_DONE engine=0 request_id=0 hit_token_cnt=0
+2026-10-25T11:37:28.613489Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=4 evicted=0 inserted=0 epoch_before=6 epoch_after=6
+2026-10-25T11:37:28.677063Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=5 evicted=0 inserted=0 epoch_before=6 epoch_after=6
+2026-10-25T11:37:28.738388Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=6 evicted=0 inserted=0 epoch_before=6 epoch_after=6
+2026-10-25T11:37:28.797854Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=7 evicted=0 inserted=0 epoch_before=6 epoch_after=6
+2026-10-25T11:37:28.863396Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=8 evicted=0 inserted=0 epoch_before=6 epoch_after=6
+2026-10-25T11:37:28.927743Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=9 evicted=0 inserted=0 epoch_before=6 epoch_after=6
+2026-10-25T11:37:28.988400Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=10 evicted=0 inserted=0 epoch_before=6 epoch_after=7
+2026-10-25T11:37:28.988584Z  INFO lifecycle: router/src/engine/colocation.rs:368: REQUEST_FINISH engine=0 request_id=0 generated_tokens=8
+2026-10-25T11:37:28.989741Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=11 evicted=0 inserted=0 epoch_before=7 epoch_after=7
+2026-10-25T11:37:29.104940Z  INFO scheduling: router/src/scheduler/policies/dsl_runtime.rs:538: DECISION request_id=1 engine=0 predicted_hits=2 radix_epoch=7 new_tokens=57
+2026-10-25T11:37:29.105576Z  INFO lifecycle: router/src/engine/colocation.rs:205: REQUEST_ADMIT request_id=1 queue_time_us=334 input_length=313 max_new_tokens=8 engine=0
+2026-10-25T11:37:29.179781Z  INFO correction: router/src/engine/colocation.rs:556: CORRECTION request_id=1 engine=0 predicted=256 actual=256 diff=0 decision_epoch=7 current_epoch=7
+2026-10-25T11:37:29.179889Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=12 evicted=0 inserted=0 epoch_before=7 epoch_after=8
+2026-10-25T11:37:29.179999Z  INFO lifecycle: router/src/engine/colocation.rs:296: PREFILL_DONE engine=0 request_id=1 hit_token_cnt=256
+2026-10-25T11:37:29.239417Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=13 evicted=0 inserted=0 epoch_before=8 epoch_after=8
+2026-10-25T11:37:29.301571Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=14 evicted=0 inserted=0 epoch_before=8 epoch_after=8
+2026-10-25T11:37:29.361359Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=15 evicted=0 inserted=0 epoch_before=8 epoch_after=8
+2026-10-25T11:37:29.420230Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=16 evicted=0 inserted=0 epoch_before=8 epoch_after=8
+2026-10-25T11:37:29.482708Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=17 evicted=0 inserted=0 epoch_before=8 epoch_after=8
+2026-10-25T11:37:29.542639Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=18 evicted=0 inserted=0 epoch_before=8 epoch_after=8
+2026-10-25T11:37:29.603270Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=19 evicted=0 inserted=0 epoch_before=8 epoch_after=9
+2026-10-25T11:37:29.603488Z  INFO lifecycle: router/src/engine/colocation.rs:368: REQUEST_FINISH engine=0 request_id=1 generated_tokens=8
+2026-10-25T11:37:29.603936Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=20 evicted=0 inserted=0 epoch_before=9 epoch_after=9
+2026-10-25T11:37:29.709905Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=21 evicted=0 inserted=0 epoch_before=9 epoch_after=10
+2026-10-25T11:37:29.824794Z  INFO scheduling: router/src/scheduler/policies/dsl_runtime.rs:538: DECISION request_id=2 engine=0 predicted_hits=0 radix_epoch=10 new_tokens=313
+2026-10-25T11:37:29.825413Z  INFO lifecycle: router/src/engine/colocation.rs:205: REQUEST_ADMIT request_id=2 queue_time_us=267 input_length=313 max_new_tokens=8 engine=0
+2026-10-25T11:37:29.896153Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=22 evicted=0 inserted=0 epoch_before=10 epoch_after=12
+2026-10-25T11:37:29.958495Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=23 evicted=0 inserted=0 epoch_before=12 epoch_after=14
+2026-10-25T11:37:30.022044Z  INFO correction: router/src/engine/colocation.rs:556: CORRECTION request_id=2 engine=0 predicted=0 actual=0 diff=0 decision_epoch=10 current_epoch=14
+2026-10-25T11:37:30.022125Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=24 evicted=0 inserted=0 epoch_before=14 epoch_after=15
+2026-10-25T11:37:30.022196Z  INFO lifecycle: router/src/engine/colocation.rs:296: PREFILL_DONE engine=0 request_id=2 hit_token_cnt=0
+2026-10-25T11:37:30.080784Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=25 evicted=0 inserted=0 epoch_before=15 epoch_after=15
+2026-10-25T11:37:30.139593Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=26 evicted=0 inserted=0 epoch_before=15 epoch_after=15
+2026-10-25T11:37:30.202867Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=27 evicted=0 inserted=0 epoch_before=15 epoch_after=15
+2026-10-25T11:37:30.263852Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=28 evicted=0 inserted=0 epoch_before=15 epoch_after=15
+2026-10-25T11:37:30.337606Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=29 evicted=0 inserted=0 epoch_before=15 epoch_after=15
+2026-10-25T11:37:30.399693Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=30 evicted=0 inserted=0 epoch_before=15 epoch_after=15
+2026-10-25T11:37:30.467560Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=31 evicted=0 inserted=0 epoch_before=15 epoch_after=16
+2026-10-25T11:37:30.467714Z  INFO lifecycle: router/src/engine/colocation.rs:368: REQUEST_FINISH engine=0 request_id=2 generated_tokens=8
+2026-10-25T11:37:30.468449Z  INFO cache_tracking: router/src/engine/colocation.rs:723: SSE_EVENT engine=0 step_id=32 evicted=0 inserted=0 epoch_before=16 epoch_after=16
+2026-10-25T11:37:30.574768Z  INFO router::gateway::server: router/src/gateway/server.rs:649: signal received, starting graceful shutdown

@@ -1,0 +1,61 @@
+{
+  "bookkeeping_and_matching_hit_feedback_checked": true,
+  "decisions": 10000,
+  "first_mismatch": {
+    "case": 25,
+    "chosen": 5,
+    "lmetric": false,
+    "scores": [
+      106,
+      87,
+      106,
+      79,
+      102,
+      81
+    ],
+    "states": [
+      {
+        "hits": 138,
+        "prefill": 18650,
+        "queued": 22,
+        "running": 18
+      },
+      {
+        "hits": 149,
+        "prefill": 4569,
+        "queued": 11,
+        "running": 43
+      },
+      {
+        "hits": 74,
+        "prefill": 13763,
+        "queued": 20,
+        "running": 26
+      },
+      {
+        "hits": 94,
+        "prefill": 14701,
+        "queued": 18,
+        "running": 7
+      },
+      {
+        "hits": 53,
+        "prefill": 16967,
+        "queued": 23,
+        "running": 10
+      },
+      {
+        "hits": 56,
+        "prefill": 476,
+        "queued": 10,
+        "running": 41
+      }
+    ]
+  },
+  "lmetric_mismatches": 0,
+  "scope": "CPU policy conformance, not model latency reproduction",
+  "seed": 260315202,
+  "states": 5000,
+  "tie_cases": 107,
+  "vllm_mismatches": 224
+}

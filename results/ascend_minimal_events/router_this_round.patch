@@ -1,0 +1,602 @@
+diff --git a/README.md b/README.md
+--- a/README.md
++++ b/README.md
+@@ -61,3 +61,9 @@
+ Licensed under the **Apache License, Version 2.0**.
+ The full license text is provided in `LICENSES/Apache-2.0.txt`.
+ Modification details in `NOTICE` and individual source files.
++
++### Experimental Ascend request events
++
++The local vLLM-Ascend 0.23.0 request/execution prototype uses versioned SSE,
++with CPU synthetic replay validation and no KV mutation export or NPU result.
++See [scope, configuration and tests](docs/ascend-request-events.md).
+diff --git a/docs/ascend-request-events.md b/docs/ascend-request-events.md
+--- /dev/null
++++ b/docs/ascend-request-events.md
+@@ -0,0 +1,24 @@
++# Ascend request/execution protocol prototype
++
++`request-v1` is an experimental, versioned extension for vLLM-Ascend 0.23.0.
++It reports completed-schedule prompt work and per-request outputs, not KV cache mutations.
++The engine patch lives in the sibling `engines/vllm` checkout; installed packages are unchanged.
++
++The first target uses one frontend and one KV group, with Router flag
++`--kvcache-block-size 128`. The default Router block size remains 16.
++Compute-only Prefill work plus the first-output actual-minus-predicted hit
++correction closes the new protocol ledger, including first-output finish.
++Legacy yaullm ledger semantics are preserved.
++
++Run `python ../scripts/run_ascend_minimal_tests.py` from this repository.
++It starts a loopback synthetic SSE server and runs the real Rust receiver and
++completion loop. No model or NPU is initialized. The network test is ignored in
++ordinary cargo test and enabled explicitly by this driver.
++
++The receiver stops on invalid sequences or block-size mismatch. Automatic
++replica removal, stream recovery, abort ACKs and KV events are not implemented;
++stop and restart the experimental session on failure. This is not a completed
++cache-aware routing integration or a performance result.
++
++See the [full implementation/validation report](../../docs/ascend_minimal_events.md)
++and [machine-readable results](../../results/ascend_minimal_events/tests.json).
+diff --git a/router/src/engine/ascend_request_tests.rs b/router/src/engine/ascend_request_tests.rs
+--- /dev/null
++++ b/router/src/engine/ascend_request_tests.rs
+@@ -0,0 +1,224 @@
++// SIMULATED EVENTS ONLY. Injected as a child of task_assignment in a /tmp copy.
++// Runs the unchanged production completion_event_loop, types, policy and cache.
++#[cfg(test)]
++mod ascend_request_tests {
++    use super::*;
++    use crate::engine::client::{EngineClientError, EngineStepOutput};
++    use crate::scheduler::kvcache::{BlockHashState, PrefixBlockHash};
++    use crate::scheduler::policies::{lmetric::LmetricQ, policy_trait::Policy};
++    use crate::scheduler::state::LMetric;
++    use crate::gateway::validation::ValidGenerateRequest;
++    use crate::types::GenerationParams;
++    use serde_json::{json, Value};
++    use std::collections::VecDeque;
++
++    struct Replay { events: VecDeque<EngineStepOutput> }
++    #[async_trait::async_trait]
++    impl EngineStepReceiver for Replay {
++        async fn recv_step(&mut self) -> Result<EngineStepOutput, EngineClientError> {
++            self.events.pop_front().ok_or(EngineClientError::StreamEnded)
++        }
++    }
++    fn step(v: Value) -> EngineStepOutput {
++        // Execute the real HTTP DTO and real client conversion.
++        crate::engine::client::lmetric_test_convert(v)
++    }
++    fn status(state: &str, finished: bool, hit: u64, tokens: Value) -> Value {
++        json!({"request_id":101,"state":state,"is_finished":finished,
++               "hit_token_cnt":hit,"new_token_ids":tokens})
++    }
++    fn entry() -> (Entry, mpsc::UnboundedReceiver<Result<InferStreamResponse, InferError>>) {
++        let tokens: Vec<u32> = (0..64).collect();
++        let (response_tx, rx) = mpsc::unbounded_channel();
++        (Entry {
++            block_hash_state: BlockHashState::new(&tokens, 16),
++            request: ValidGenerateRequest {
++                request_id:101, messages:vec![], inputs:String::new(), input_length:64,
++                truncate:0, decoder_input_details:false,
++                params:GenerationParams { temperature:1.0, repetition_penalty:1.0,
++                    top_k:0, top_p:1.0, seed:0, max_new_tokens:64,
++                    stop_sequences:vec![], ignore_eos_token:false },
++                top_n_tokens:0, input_tokens:tokens,
++            },
++            response_tx, span:tracing::Span::none(), temp_span:None,
++            queue_time:tokio::time::Instant::now(), batch_time:Some(tokio::time::Instant::now()),
++            generated_token_cnt:0, prev_token_time:None, time_of_per_token:None,
++            max_time_between_tokens:Duration::ZERO,
++        }, rx)
++    }
++    async fn replay(pred: usize, events: Vec<Value>, disconnect: bool) -> Value {
++        let (e, rx) = entry();
++        let ctx = Arc::new(Mutex::new(ScheduleContext {
++            lmetric:LMetric::default(), block_hash:PrefixBlockHash::new(128),
++        }));
++        if pred > 0 {
++            ctx.lock().await.block_hash.insert(&e.block_hash_state.get_hashes()[..pred],
++                                              (1..=pred as u64).collect());
++        }
++        assert_eq!(LmetricQ::schedule(&e, &[ctx.clone()], &mut ()).await, Some(0));
++        if disconnect { drop(rx); } else { // Keep receiver alive across replay.
++            return replay_inner(e, ctx, events, Some(rx)).await;
++        }
++        replay_inner(e, ctx, events, None).await
++    }
++    async fn replay_inner(e: Entry, ctx: Arc<Mutex<ScheduleContext>>, events: Vec<Value>,
++        _rx: Option<mpsc::UnboundedReceiver<Result<InferStreamResponse, InferError>>>) -> Value {
++        let (tx, cq) = channel(8); tx.send(e).await.unwrap();
++        let (_err_tx, err_rx) = mpsc::unbounded_channel();
++        completion_event_loop(0, Box::new(Replay { events:events.into_iter().map(step).collect() }),
++            Arc::new(Mutex::new(())), cq, err_rx, ctx.clone(), None).await;
++        let c = ctx.lock().await;
++        json!({"bs":c.lmetric.bs,"waiting":c.lmetric.waiting_reqs,
++               "prefill":c.lmetric.prefill_tokens,"all_tokens":c.lmetric.all_tokens})
++    }
++    fn record(name: &str, v: &Value) {
++        println!("AUDIT_RESULT {}", json!({"case":name,"simulated":true,"result":v}));
++    }
++
++    fn v1(mut event: Value) -> Value {
++        event["lmetric_protocol"] = json!("request-v1");
++        event["block_size"] = json!(16);
++        event
++    }
++    fn drained(v: &Value) { assert_eq!(*v,json!({"bs":0,"waiting":0,"prefill":0,"all_tokens":0})); }
++
++    #[tokio::test]
++    async fn ascend_request_prefill_prediction_matrix() {
++        for (pred,actual) in [(0,0),(2,32),(1,32),(2,16),(4,48)] {
++            for chunk in [false,true] {
++                let work=64-actual;
++                let mut es=vec![];
++                if chunk { es.push(v1(json!({"prefill_tokens":work/2}))); }
++                es.push(v1(json!({"prefill_tokens":if chunk {work-work/2} else {work},
++                    "outputs":[status("PREFILL",false,actual,json!([9]))]})));
++                let mid=replay(pred,es.clone(),false).await;
++                assert_eq!(mid["prefill"],0);assert_eq!(mid["waiting"],0);
++                es.push(v1(json!({"outputs":[status("DECODE",true,actual,json!([10]))]})));
++                let end=replay(pred,es,false).await;drained(&end);
++                record(&format!("request_v1_pred_{}_actual_{}_chunk_{}",pred*16,actual,chunk),&end);
++            }
++        }
++    }
++    #[tokio::test]
++    async fn ascend_request_first_output_finish_matrix() {
++        for (pred,actual) in [(0,0),(0,32),(2,16),(1,32),(4,48)] {
++            let end=replay(pred,vec![v1(json!({"prefill_tokens":64-actual,
++                "outputs":[status("PREFILL",true,actual,json!([9]))]}))],false).await;
++            drained(&end);record(&format!("request_v1_first_finish_{}_{}",pred*16,actual),&end);
++        }
++    }
++    #[tokio::test]
++    async fn ascend_request_legacy_regression_still_reproduced() {
++        let v=replay(2,vec![json!({"prefill_tokens":64,
++            "outputs":[status("PREFILL",false,32,json!([9]))]})],false).await;
++        assert_eq!(v["prefill"],-32);record("legacy_negative_ledger_preserved",&v);
++    }
++    #[tokio::test]
++    async fn ascend_request_multi_token_finish() {
++        let v=replay(0,vec![v1(json!({"prefill_tokens":64,
++            "outputs":[status("PREFILL",false,0,json!([9,10]))]})),
++            v1(json!({"outputs":[status("DECODE",false,0,json!([11,12,13]))]})),
++            v1(json!({"outputs":[status("DECODE",true,0,json!([14]))]}))],false).await;
++        drained(&v);record("multi_token_no_finish_residue",&v);
++    }
++    #[test]
++    fn ascend_request_128_tail_and_multi_block_append() {
++        for size in [16,32,128] {
++            for n in [0,1,15,16,48,127,128,129,255,256,300] {
++                let tokens:Vec<u32>=(0..n).collect();
++                let mut h=BlockHashState::new(&tokens,size);
++                assert_eq!(h.get_hashes().len(),tokens.len()/size);
++                let extra:Vec<u32>=(n..n+300).collect();h.append_tokens(&extra);
++                let all:Vec<u32>=(0..n+300).collect();
++                let reference=BlockHashState::new(&all,size);
++                assert_eq!(h.get_hashes(),reference.get_hashes());
++            }
++        }
++    }
++    #[test]
++    fn ascend_request_128_physical_mapping_uses_local_hash() {
++        let all:Vec<u32>=(0..256).collect();let mut h=BlockHashState::new(&all,128);
++        h.set_bids(vec![7,8]);
++        let hashes=h.get_onto_hashes(&vec![7,8]).unwrap().to_vec();
++        let mut tree=PrefixBlockHash::new(128);tree.insert(&hashes,vec![7,8]);
++        assert_eq!(tree.get(&hashes),2);
++        assert_eq!(BlockHashState::new(&(0..48).collect(),128).get_hashes().len(),0);
++    }
++    #[tokio::test]
++    async fn ascend_request_mismatched_block_size_rejected_before_accounting() {
++        let mut event=v1(json!({"prefill_tokens":64,
++            "outputs":[status("PREFILL",false,0,json!([9]))]}));
++        event["block_size"]=json!(128);
++        let v=replay(0,vec![event],false).await;
++        assert_eq!(v,json!({"bs":1,"waiting":1,"prefill":64,"all_tokens":64}));
++        record("block_size_mismatch_no_event_applied",&v);
++    }
++    #[test]
++    fn ascend_request_sequence_validation() {
++        use crate::engine::vllm_http::MetricSequence;
++        fn packet(seq:u64)->Value {json!({"lmetric_protocol":"request-v1","engine_epoch":"synthetic",
++            "step_id":seq,"latency":12,"latency_kind":"schedule_to_completion_host_ms",
++            "execution_mode":"async","kv_events":false,"block_size":128,"kv_groups":1,"prefill_tokens":16,"outputs":[]})}
++        let duplicate=packet(1);
++        let gap=packet(3);
++        let mut changed=packet(2);changed["engine_epoch"]=json!("other");
++        let mut missing=packet(2);missing.as_object_mut().unwrap().remove("prefill_tokens");
++        let mut invalid=packet(2);invalid["outputs"]=json!([{"request_id":101}]);
++        let mut groups=packet(2);groups["kv_groups"]=json!(2);
++        for bad in [duplicate,gap,changed,missing,invalid,groups] {
++            let mut sequence=MetricSequence::default();
++            assert!(sequence.parse(&packet(1).to_string()).is_ok());
++            assert!(sequence.parse(&bad.to_string()).is_err());
++            assert!(sequence.failed());
++            assert!(sequence.parse(&packet(2).to_string()).is_err());
++        }
++        let mut fresh=MetricSequence::default();
++        assert!(fresh.parse(&packet(1).to_string()).is_ok());
++        assert!(fresh.parse(&packet(2).to_string()).is_ok());
++        assert!(MetricSequence::default().parse("{}").is_ok());
++    }
++    struct Limited { inner:Box<dyn EngineStepReceiver>, left:usize }
++    #[async_trait::async_trait]
++    impl EngineStepReceiver for Limited {
++        async fn recv_step(&mut self)->Result<EngineStepOutput,EngineClientError> {
++            if self.left==0 {return Err(EngineClientError::StreamEnded);}
++            let step=self.inner.recv_step().await?;self.left-=1;
++            assert_eq!(step.lmetric_protocol.as_deref(),Some("request-v1"));
++            assert_eq!(step.step_id,4-self.left as u64);
++            Ok(step)
++        }
++    }
++    #[tokio::test]
++    #[ignore = "requires scripts/run_ascend_minimal_tests.py synthetic server"]
++    async fn ascend_request_real_http_sse_to_completion_loop() {
++        use crate::engine::client::{EngineClient,VllmEngineClient};
++        use crate::engine::vllm_http::VllmClient;
++        let url=std::env::var("LMETRIC_SYNTHETIC_URL").expect("run scripts/run_ascend_minimal_tests.py");
++        let mut client=VllmEngineClient::new(VllmClient::new(&url,"SYNTHETIC-NO-MODEL"));
++        let _errors=client.get_error_rx();
++        let receiver=client.take_step_receiver();
++        let (mut e,rx)=entry();
++        e.request.input_length=384;
++        e.request.input_tokens=(0..384).collect();
++        e.block_hash_state=BlockHashState::new(&e.request.input_tokens,128);
++        let ctx=Arc::new(Mutex::new(ScheduleContext {
++            lmetric:LMetric::default(),block_hash:PrefixBlockHash::new(128)}));
++        ctx.lock().await.block_hash.insert(&e.block_hash_state.get_hashes()[..1],vec![1]);
++        assert_eq!(LmetricQ::schedule(&e,&[ctx.clone()],&mut ()).await,Some(0));
++        let (tx,cq)=channel(8);tx.send(e).await.unwrap();
++        let (_err_tx,err_rx)=mpsc::unbounded_channel();
++        let trigger=tokio::spawn(async move {
++            let response=reqwest::Client::new().post(format!("{url}/test/run")).send().await.unwrap();
++            assert_eq!(response.status(),200);
++        });
++        tokio::time::timeout(Duration::from_secs(15),completion_event_loop(0,
++            Box::new(Limited {inner:receiver,left:4}),Arc::new(Mutex::new(())),
++            cq,err_rx,ctx.clone(),None)).await.expect("synthetic SSE timeout");
++        trigger.await.unwrap();
++        let c=ctx.lock().await;
++        let v=json!({"bs":c.lmetric.bs,"waiting":c.lmetric.waiting_reqs,
++            "prefill":c.lmetric.prefill_tokens,"all_tokens":c.lmetric.all_tokens});
++        drained(&v);record("REAL_HTTP_SSE_SYNTHETIC_to_Rust_completion_loop",&v);
++        drop(rx);
++    }
++}
+diff --git a/router/src/engine/client.rs b/router/src/engine/client.rs
+--- a/router/src/engine/client.rs
++++ b/router/src/engine/client.rs
+@@ -78,6 +78,11 @@
+ /// `EngineCoreOutputs` (ZMQ) for the event loop.
+ #[derive(Debug, Clone, Serialize, Deserialize)]
+ pub struct EngineStepOutput {
++    /// Versioned compute-only Prefill semantics. None preserves yaullm behavior.
++    #[serde(default)]
++    pub lmetric_protocol: Option<String>,
++    #[serde(default)]
++    pub lmetric_block_size: Option<usize>,
+     /// Number of prefill tokens processed in this step.
+     pub prefill_tokens: usize,
+     /// Remaining prefill token budget after this step.
+@@ -169,6 +174,7 @@
+     /// Internal state for the SSE stream, lazily initialized on the first
+     /// call to `recv_step`.
+     struct SseState {
++        sequence: super::super::vllm_http::MetricSequence,
+         stream: Box<dyn futures::Stream<Item = Result<es::SSE, es::Error>> + Unpin + Send>,
+     }
+ 
+@@ -218,6 +224,7 @@
+             }
+ 
+             self.sse_state = Some(SseState {
++                sequence: Default::default(),
+                 stream: Box::new(stream),
+             });
+ 
+@@ -231,11 +238,14 @@
+             self.ensure_sse_connected().await?;
+ 
+             let sse_state = self.sse_state.as_mut().unwrap();
++            if sse_state.sequence.failed() {
++                return Err(EngineClientError::StreamEnded);
++            }
+ 
+             loop {
+                 match sse_state.stream.next().await {
+                     Some(Ok(es::SSE::Event(e))) => {
+-                        let m: VllmMetric = serde_json::from_str(&e.data).map_err(|err| {
++                        let m = sse_state.sequence.parse(&e.data).map_err(|err| {
+                             EngineClientError::Json(format!(
+                                 "Failed to parse SSE event data: {} (raw: {:?})",
+                                 err, e.data
+@@ -245,10 +255,19 @@
+                     }
+                     Some(Ok(es::SSE::Comment(_))) => continue,
+                     Some(Ok(es::SSE::Connected(_))) => {
++                        if sse_state.sequence.versioned() {
++                            sse_state.sequence.invalidate();
++                            return Err(EngineClientError::Sse(
++                                "request-v1 reconnect requires a fresh Router/engine session".into()
++                            ));
++                        }
+                         tracing::debug!("SSE reconnected");
+                         continue;
+                     }
+                     Some(Err(e)) => {
++                        if sse_state.sequence.versioned() {
++                            sse_state.sequence.invalidate();
++                        }
+                         return Err(EngineClientError::Sse(format!("SSE stream error: {}", e)));
+                     }
+                     None => {
+@@ -275,7 +294,7 @@
+     }
+ 
+     /// Convert `VllmMetric` (from SSE JSON) into the unified `EngineStepOutput`.
+-    fn vllm_metric_to_step_output(m: VllmMetric) -> EngineStepOutput {
++    pub(super) fn vllm_metric_to_step_output(m: VllmMetric) -> EngineStepOutput {
+         let outputs = m
+             .outputs
+             .into_iter()
+@@ -290,6 +309,8 @@
+             .collect();
+ 
+         EngineStepOutput {
++            lmetric_protocol: m.lmetric_protocol,
++            lmetric_block_size: m.block_size,
+             prefill_tokens: m.prefill_tokens,
+             prefill_token_budget: m.prefill_token_budget,
+             latency: m.latency,
+@@ -463,6 +484,8 @@
+                 .unwrap_or(0);
+ 
+             Ok(EngineStepOutput {
++                lmetric_protocol: None,
++                lmetric_block_size: None,
+                 prefill_tokens: outputs.prefill_tokens.unwrap_or(0) as usize,
+                 prefill_token_budget: outputs.prefill_token_budget.unwrap_or(0) as usize,
+                 latency: latency_ms,
+@@ -516,3 +539,8 @@
+ 
+ #[cfg(feature = "zmq-backend")]
+ pub use zmq_impl::ZmqEngineClientAdapter;
++
++#[cfg(all(test, feature = "vllm-backend"))]
++pub(crate) fn lmetric_test_convert(v: serde_json::Value) -> EngineStepOutput {
++    vllm_impl::vllm_metric_to_step_output(serde_json::from_value(v).unwrap())
++}
+diff --git a/router/src/engine/colocation.rs b/router/src/engine/colocation.rs
+--- a/router/src/engine/colocation.rs
++++ b/router/src/engine/colocation.rs
+@@ -443,6 +443,15 @@
+             }
+             // postcond: all requests in step output are visible to CQ
+ 
++            // Never apply a request-v1 step using a different token/block unit.
++            // This also catches a Router left at its legacy CLI default of 16.
++            if m.lmetric_protocol.as_deref() == Some("request-v1")
++                && entries.values().chain(except_context.entries.values()).any(|entry|
++                    m.lmetric_block_size != Some(entry.block_hash_state.get_block_size())) {
++                tracing::error!(engine = replica_index, "LMetric block-size mismatch; stop consumer and restart session");
++                break;
++            }
++
+             tracing::trace!(engine = replica_index, step = ?m, "STEP_RECEIVED");
+ 
+             let current_epoch = schedule_context.lock().await.block_hash.epoch();
+@@ -475,6 +484,16 @@
+                             || except_context.entries.contains_key(&request_id);
+                         if is_known {
+                             metric_delta.waiting_reqs_dec += 1;
++                        }
++                        // request-v1 excludes hits from reported prompt work.
++                        // Apply H_actual-H_pred even when the first output finishes.
++                        if is_finished && m.lmetric_protocol.as_deref() == Some("request-v1") {
++                            if let Some(entry) = entries.get_mut(&request_id)
++                                .or_else(|| except_context.entries.get_mut(&request_id)) {
++                                metric_delta.prefill_tokens_dec += entry.block_hash_state
++                                    .set_real_token_hits_get_diff(hit_token_cnt)
++                                    * entry.block_hash_state.get_block_size() as isize;
++                            }
+                         }
+                         if is_finished {
+                             if let Some(entry) = entries.get_mut(&request_id) {
+@@ -884,6 +903,9 @@
+             }
+         }
+     }
++    #[cfg(all(test, feature = "lmetric-q", feature = "vllm-backend"))]
++    include!("ascend_request_tests.rs");
++
+ }
+ 
+ mod except_management {
+diff --git a/router/src/engine/vllm_http.rs b/router/src/engine/vllm_http.rs
+--- a/router/src/engine/vllm_http.rs
++++ b/router/src/engine/vllm_http.rs
+@@ -153,6 +153,16 @@
+ 
+ #[derive(Serialize, Deserialize, Debug)]
+ pub(crate) struct VllmMetric {
++    #[serde(default)]
++    pub lmetric_protocol: Option<String>,
++    #[serde(default)]
++    pub engine_epoch: Option<String>,
++    #[serde(default)]
++    pub kv_events: Option<bool>,
++    #[serde(default)]
++    pub block_size: Option<usize>,
++    #[serde(default)]
++    pub kv_groups: Option<usize>,
+     #[serde(default)]
+     pub prefill_tokens: usize,
+     #[serde(default)]
+@@ -307,3 +317,75 @@
+     #[serde(skip_serializing_if = "Option::is_none")]
+     temperature: Option<f32>,
+ }
++
++/// New request-v1 sessions are contiguous and cannot silently reconnect.
++/// Legacy yaullm JSON keeps its existing permissive parsing behavior.
++#[derive(Default)]
++pub(super) struct MetricSequence {
++    epoch: Option<String>,
++    last: u64,
++    failed: bool,
++}
++
++impl MetricSequence {
++    pub(super) fn versioned(&self) -> bool { self.epoch.is_some() }
++
++    pub(super) fn failed(&self) -> bool { self.failed }
++
++    pub(super) fn invalidate(&mut self) { self.failed = true; }
++
++    pub(super) fn parse(&mut self, data: &str) -> Result<VllmMetric, String> {
++        if self.failed { return Err("LMetric session invalid; restart required".into()); }
++        let result = self.parse_inner(data);
++        if result.is_err() && (self.versioned() || data.contains("lmetric_protocol")) {
++            self.failed = true;
++        }
++        result
++    }
++
++    fn parse_inner(&mut self, data: &str) -> Result<VllmMetric, String> {
++        let raw: serde_json::Value = serde_json::from_str(data).map_err(|e| e.to_string())?;
++        let metric: VllmMetric = serde_json::from_value(raw.clone()).map_err(|e| e.to_string())?;
++        match metric.lmetric_protocol.as_deref() {
++            None if self.epoch.is_none() => return Ok(metric),
++            Some("request-v1") => {},
++            _ => return Err("Unsupported/missing LMetric protocol".into()),
++        }
++        for field in ["step_id", "latency", "outputs", "prefill_tokens"] {
++            if raw.get(field).is_none() { return Err(format!("Missing request-v1 field: {field}")); }
++        }
++        if metric.kv_groups != Some(1) || metric.block_size.unwrap_or(0) == 0
++            || metric.kv_events != Some(false)
++            || raw["latency_kind"] != "schedule_to_completion_host_ms"
++            || !matches!(raw["execution_mode"].as_str(), Some("sync" | "async")) {
++            return Err("Invalid request-v1 capabilities/timing semantics".into());
++        }
++        if !metric.evicted_block_ids.is_empty() || !metric.cur_used_block_ids.is_empty()
++            || !metric.new_block_hashes_ids.is_empty() || !metric.new_block_hashes.is_empty()
++            || !metric.evicted_block_hashes.is_empty() || !metric.preempted_ids.is_empty()
++            || !metric.aborted_requests.is_empty() {
++            return Err("request-v1 does not support KV/preempt/abort events".into());
++        }
++        let epoch = metric.engine_epoch.as_deref().filter(|s| !s.is_empty())
++            .ok_or("Missing request-v1 engine_epoch")?;
++        if self.epoch.as_deref().map_or(false, |e| e != epoch) || metric.step_id != self.last + 1 {
++            return Err("LMetric epoch changed or step sequence duplicated/gapped".into());
++        }
++        let mut seen = std::collections::HashSet::new();
++        for (i, status) in metric.outputs.iter().enumerate() {
++            for field in ["request_id", "new_token_ids", "state", "is_finished", "hit_token_cnt", "prev_computed_tokens"] {
++                if raw["outputs"][i].get(field).is_none() {
++                    return Err(format!("Missing request-v1 output field: {field}"));
++                }
++            }
++            if !matches!(status.state.as_str(), "PREFILL" | "DECODE")
++                || !seen.insert(status.request_id)
++                || (status.new_token_ids.is_empty() && !status.is_finished) {
++                return Err("Invalid request-v1 request output".into());
++            }
++        }
++        self.epoch = Some(epoch.to_owned());
++        self.last = metric.step_id;
++        Ok(metric)
++    }
++}
+diff --git a/router/src/scheduler/kvcache.rs b/router/src/scheduler/kvcache.rs
+--- a/router/src/scheduler/kvcache.rs
++++ b/router/src/scheduler/kvcache.rs
+@@ -183,7 +183,7 @@
+         let mut token_in_last_block = Vec::with_capacity(block_size);
+ 
+         for block in input_tokens.chunks(block_size) {
+-            if block.len() < 16 {
++            if block.len() < block_size {
+                 token_in_last_block.extend_from_slice(block);
+                 break;
+             }
+@@ -243,7 +243,7 @@
+ 
+     pub fn append_tokens(&mut self, new_tokens: &[u32]) {
+         self.token_in_last_block.extend_from_slice(new_tokens);
+-        if self.token_in_last_block.len() >= self.block_size {
++        while self.token_in_last_block.len() >= self.block_size {
+             let block = self.token_in_last_block.drain(..self.block_size).collect::<Vec<_>>();
+             let len = block.len() * std::mem::size_of::<u32>();
+             let ptr = block.as_ptr() as *const u8;
+diff --git a/router/src/scheduler/policies/mod.rs b/router/src/scheduler/policies/mod.rs
+--- a/router/src/scheduler/policies/mod.rs
++++ b/router/src/scheduler/policies/mod.rs
+@@ -166,7 +166,14 @@
+ 
+ impl Entry {
+     pub fn append_state(&mut self, new_tokens: &Vec<u32>, tbt: &Duration) {
+-        self.append_tbt_to_tpot(tbt);
++        // A completion may contain multiple tokens. Account for each token;
++        // divide the observed interval across them for the existing TPOT average.
++        if !new_tokens.is_empty() {
++            let per_token = *tbt / new_tokens.len() as u32;
++            for _ in new_tokens {
++                self.append_tbt_to_tpot(&per_token);
++            }
++        }
+         self.block_hash_state.append_tokens(new_tokens);
+     }
+ 
+diff --git a/router/src/scheduler/simulator/mirror.rs b/router/src/scheduler/simulator/mirror.rs
+--- a/router/src/scheduler/simulator/mirror.rs
++++ b/router/src/scheduler/simulator/mirror.rs
+@@ -162,6 +162,8 @@
+         preempted: Vec<u64>,
+     ) -> EngineStepOutput {
+         EngineStepOutput {
++            lmetric_protocol: None,
++            lmetric_block_size: None,
+             prefill_tokens: 0,
+             prefill_token_budget: 1024,
+             latency: 1,
+diff --git a/router/src/scheduler/simulator/mod.rs b/router/src/scheduler/simulator/mod.rs
+--- a/router/src/scheduler/simulator/mod.rs
++++ b/router/src/scheduler/simulator/mod.rs
+@@ -219,6 +219,8 @@
+ 
+     fn empty_step(prefill_tokens: usize, latency_ms: u64, outputs: Vec<RequestStepOutput>) -> EngineStepOutput {
+         EngineStepOutput {
++            lmetric_protocol: None,
++            lmetric_block_size: None,
+             prefill_tokens,
+             prefill_token_budget: 1024,
+             latency: latency_ms,
+diff --git a/router/src/scheduler/simulator/pctx.rs b/router/src/scheduler/simulator/pctx.rs
+--- a/router/src/scheduler/simulator/pctx.rs
++++ b/router/src/scheduler/simulator/pctx.rs
+@@ -762,6 +762,8 @@
+         outputs: Vec<RequestStepOutput>,
+     ) -> EngineStepOutput {
+         EngineStepOutput {
++            lmetric_protocol: None,
++            lmetric_block_size: None,
+             prefill_tokens,
+             prefill_token_budget: 1024,
+             latency: 1,
+diff --git a/router/src/scheduler/simulator/sched.rs b/router/src/scheduler/simulator/sched.rs
+--- a/router/src/scheduler/simulator/sched.rs
++++ b/router/src/scheduler/simulator/sched.rs
+@@ -281,6 +281,8 @@
+         aborted: Vec<u64>,
+     ) -> EngineStepOutput {
+         EngineStepOutput {
++            lmetric_protocol: None,
++            lmetric_block_size: None,
+             prefill_tokens,
+             prefill_token_budget: 1024,
+             latency: 1,

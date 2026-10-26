@@ -1,0 +1,21 @@
+{
+  "cwd": "/tmp/lmetric-real-npu-router",
+  "command": [
+    "cargo",
+    "+1.88.0",
+    "test",
+    "-p",
+    "router",
+    "--lib",
+    "--no-default-features",
+    "--features",
+    "vllm-backend,radixtree-blockhash,default-hash-algo,determinent-schedule,lmetric-q",
+    "--offline",
+    "--locked",
+    "--jobs",
+    "4",
+    "real_npu_sse_completion",
+    "--no-run"
+  ],
+  "instrumentation": "copy only; add handshake observation and raw SSE log; production receiver and completion loop unchanged"
+}

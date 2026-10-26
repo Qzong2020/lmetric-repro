@@ -1,0 +1,41 @@
+[W1025 10:50:06.642747896 FunctionLoader.cpp:48] Warning: LD_PRELOAD detected, FunctionLoader prefers RTLD_DEFAULT for symbol resolution. (function operator())
+INFO 10-25 10:50:12 [__init__.py:44] Available plugins for group vllm.platform_plugins:
+INFO 10-25 10:50:12 [__init__.py:46] - ascend -> vllm_ascend:register
+INFO 10-25 10:50:12 [__init__.py:49] All plugins in this group will be loaded. Set `VLLM_PLUGINS` to control which plugins to load.
+INFO 10-25 10:50:12 [__init__.py:238] Platform plugin ascend is activated
+INFO 10-25 10:50:12 [platform.py:62] Breakable cudagraph is force disabled on Ascend because DeepSeek V4 PIECEWISE cudagraph is not supported yet.
+test_journal_identity_mapped_before_final_output_unregistration (__main__.HubTests.test_journal_identity_mapped_before_final_output_unregistration) ... ok
+test_kv_only_envelope_survives_real_msgpack (__main__.HubTests.test_kv_only_envelope_survives_real_msgpack) ... ok
+test_bounded_failure_latches_without_sequence_reset (__main__.JournalTests.test_bounded_failure_latches_without_sequence_reset) ... ok
+test_disabled_pool_keeps_native_behavior (__main__.JournalTests.test_disabled_pool_keeps_native_behavior) ... ok
+test_free_is_not_evict_and_exact_copy_removal (__main__.JournalTests.test_free_is_not_evict_and_exact_copy_removal) ... ok
+test_insert_only_after_success_and_full_prefix_proof (__main__.JournalTests.test_insert_only_after_success_and_full_prefix_proof) ... ok
+test_manager_actual_allocate_and_free_hooks (__main__.JournalTests.test_manager_actual_allocate_and_free_hooks) ... FAIL
+test_mask_and_null_not_reported (__main__.JournalTests.test_mask_and_null_not_reported) ... ok
+test_physical_reuse_order (__main__.JournalTests.test_physical_reuse_order) ... ok
+test_request_full_lists_release_and_deduplicate (__main__.JournalTests.test_request_full_lists_release_and_deduplicate) ... ok
+test_reset_failure_then_success (__main__.JournalTests.test_reset_failure_then_success) ... WARNING 10-25 10:50:20 [block_pool.py:484] Failed to reset prefix cache because some blocks (1) are not freed yet
+INFO 10-25 10:50:20 [block_pool.py:503] Successfully reset prefix cache
+ok
+
+======================================================================
+FAIL: test_manager_actual_allocate_and_free_hooks (__main__.JournalTests.test_manager_actual_allocate_and_free_hooks)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/root/lmetric-repro/scripts/kv_journal/test_journal.py", line 102, in test_manager_actual_allocate_and_free_hooks
+    manager.allocate_slots(req,128)
+  File "/root/lmetric-repro/engines/vllm/vllm/v1/core/kv_cache_manager.py", line 441, in allocate_slots
+    self.coordinator.cache_blocks(request, num_tokens_to_cache)
+  File "/root/lmetric-repro/engines/vllm/vllm/v1/core/kv_cache_coordinator.py", line 258, in cache_blocks
+    manager.cache_blocks(
+  File "/root/lmetric-repro/engines/vllm/vllm/v1/core/single_type_kv_cache_manager.py", line 331, in cache_blocks
+    self.block_pool.cache_full_blocks(
+  File "/root/lmetric-repro/engines/vllm/vllm/v1/core/block_pool.py", line 249, in cache_full_blocks
+    assert len(request.block_hashes) >= num_full_blocks
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.030s
+
+FAILED (failures=1)

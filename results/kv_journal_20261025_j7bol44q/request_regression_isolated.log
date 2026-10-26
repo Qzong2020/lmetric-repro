@@ -1,0 +1,15 @@
+test_async_snapshot_not_future_state (isolated_request_tests.ContractTests.test_async_snapshot_not_future_state) ... [W1025 11:32:53.472228915 FunctionLoader.cpp:48] Warning: LD_PRELOAD detected, FunctionLoader prefers RTLD_DEFAULT for symbol resolution. (function operator())
+INFO 10-25 11:33:05 [__init__.py:44] Available plugins for group vllm.platform_plugins:
+INFO 10-25 11:33:05 [__init__.py:46] - ascend -> vllm_ascend:register
+INFO 10-25 11:33:05 [__init__.py:49] All plugins in this group will be loaded. Set `VLLM_PLUGINS` to control which plugins to load.
+INFO 10-25 11:33:05 [__init__.py:238] Platform plugin ascend is activated
+INFO 10-25 11:33:05 [platform.py:62] Breakable cudagraph is force disabled on Ascend because DeepSeek V4 PIECEWISE cudagraph is not supported yet.
+ok
+test_config_and_preemption_rejected (isolated_request_tests.ContractTests.test_config_and_preemption_rejected) ... ok
+test_config_validation_and_first_finish_after_free (isolated_request_tests.ContractTests.test_config_validation_and_first_finish_after_free) ... ok
+test_core_client_filter_keeps_metric_only_packets (isolated_request_tests.ContractTests.test_core_client_filter_keeps_metric_only_packets) ... ok
+test_real_struct_and_zmq_subprocess (isolated_request_tests.ContractTests.test_real_struct_and_zmq_subprocess) ... ERROR
+test_rewritten_scheduler_dispatch_and_both_core_paths (isolated_request_tests.ContractTests.test_rewritten_scheduler_dispatch_and_both_core_paths) ... ok
+test_id_mapping_frames_and_disconnect (isolated_request_tests.HubTests.test_id_mapping_frames_and_disconnect) ... ok
+test_overflow_and_invalid_identity_fail_closed (isolated_request_tests.HubTests.test_overflow_and_invalid_identity_fail_closed) ... ok
+test_real_async_llm_output_handler_publishes_empty_event (isolated_request_tests.HubTests.test_real_async_llm_output_handler_publishes_empty_event) ... 

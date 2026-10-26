@@ -1,0 +1,27 @@
+{
+  "command": [
+    "/root/lmetric-repro/results/cpu/bins/lmetric-q",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "32805",
+    "--client-config",
+    "/root/lmetric-repro/results/cpu/scaling/cases/mixed-high-17-4r-lmetric-q/clients.json",
+    "--model-name",
+    "cpu-synthetic",
+    "--tokenizer-name",
+    "/root/lmetric-repro/models/cpu-synthetic-tokenizer",
+    "--use-tokenizer",
+    "--max-concurrent-requests",
+    "4096",
+    "--validation-workers",
+    "2"
+  ],
+  "policy": "lmetric-q",
+  "scenario": "mixed",
+  "load": "high",
+  "seed": 17,
+  "replicas": 4,
+  "requests": 300,
+  "trace_sha256": "e965a66e6960c9a74b44e6f3c38c1db0cae5384796f90798ca5e6fe95a26258a"
+}

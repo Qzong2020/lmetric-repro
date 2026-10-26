@@ -1,0 +1,70 @@
+{
+  "date_client_timezone": "2026-10-24 Asia/Shanghai",
+  "captured_utc": "2026-10-24T10:51:07.809932+00:00",
+  "python": "3.12.13",
+  "machine": "aarch64",
+  "repos": {
+    "router": {
+      "path": "/root/lmetric-repro/blitz-router",
+      "head": "a005ceb3a6689d30514bd27e45ede0db933d0fea",
+      "branch": "lmetric/camera-ready",
+      "describe": "a005ceb",
+      "status": "## lmetric/camera-ready...origin/lmetric/camera-ready\n M .cargo/config.toml\n M CLAUDE.md\n M README.md\n M docs/dsl/policies.md\n ? request-sim\n M router/src/engine/colocation.rs\n M router/src/gateway/server.rs\n M router/src/scheduler/policies/llm_d/least_bs.rs\n M router/src/scheduler/policies/llm_d/least_waiting.rs\n M router/src/scheduler/policies/lmetric.rs\n M router/src/scheduler/policies/mod.rs\n M router/src/scheduler/policies/policy_runner.rs\n M router/src/scheduler/policies/vllm.rs\n?? docs/cpu-testing.md\n?? docs/paper-cpu-tests.md\n?? router/src/scheduler/policies/paper_tests.rs",
+      "tracked_diff_sha256": "a26ec6d2f85a0a16e745c4dae4a7b506670386a41e20d8e7b9bda6731f495366"
+    },
+    "vllm": {
+      "path": "/vllm-workspace/vllm",
+      "head": "0fc695fc6d1d82e9a5ac6835ac8e4e1c83703665",
+      "branch": "",
+      "describe": "v0.23.0",
+      "status": "## HEAD (no branch)",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ascend": {
+      "path": "/vllm-workspace/vllm-ascend",
+      "head": "5cb98caaadeff42b5b62b996e34bb2aaa29d20fd",
+      "branch": "",
+      "describe": "v0.23.0",
+      "status": "## HEAD (no branch)",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "packages": {
+    "vllm": {
+      "version": "0.23.0+empty",
+      "metadata_path": "/usr/local/python3.12.13/lib/python3.12/site-packages/vllm-0.23.0+empty.dist-info",
+      "direct_url": "{\"dir_info\": {\"editable\": true}, \"url\": \"file:///vllm-workspace/vllm\"}"
+    },
+    "vllm-ascend": {
+      "version": "0.23.0",
+      "metadata_path": "/usr/local/python3.12.13/lib/python3.12/site-packages/vllm_ascend-0.23.0.dist-info",
+      "direct_url": "{\"dir_info\": {\"editable\": true}, \"url\": \"file:///vllm-workspace/vllm-ascend\"}"
+    },
+    "torch": {
+      "version": "2.10.0+cpu",
+      "metadata_path": "/usr/local/python3.12.13/lib/python3.12/site-packages/torch-2.10.0+cpu.dist-info",
+      "direct_url": null
+    },
+    "torch-npu": {
+      "version": "2.10.0.post4",
+      "metadata_path": "/usr/local/python3.12.13/lib/python3.12/site-packages/torch_npu-2.10.0.post4.dist-info",
+      "direct_url": null
+    },
+    "triton-ascend": {
+      "version": "3.2.2",
+      "metadata_path": "/usr/local/python3.12.13/lib/python3.12/site-packages/triton_ascend-3.2.2.dist-info",
+      "direct_url": null
+    },
+    "msgspec": {
+      "version": "0.21.1",
+      "metadata_path": "/usr/local/python3.12.13/lib/python3.12/site-packages/msgspec-0.21.1.dist-info",
+      "direct_url": null
+    }
+  },
+  "device_check": {
+    "npu_smi_info_exit": 187,
+    "output": "DrvMngGetConsoleLogLevel failed. (ret=4)\ndcmi module initialize failed. ret is -8005",
+    "dev_davinci_glob": []
+  },
+  "no_runtime_engine_or_model_loaded": true
+}

@@ -1,0 +1,216 @@
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:174:17
+    |
+174 |                 (*node).payload[i].push(alias_bid);
+    |                 ^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+    = note: `#[warn(dangerous_implicit_autorefs)]` on by default
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+174 |                 (&mut (*node).payload)[i].push(alias_bid);
+    |                 +++++                +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:356:47
+    |
+356 |                     !(*n).value.is_empty() && (*n).value[0] == key[consumed]
+    |                                               ^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+356 |                     !(*n).value.is_empty() && (&(*n).value)[0] == key[consumed]
+    |                                               ++          +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:366:58
+    |
+366 |             while i < val_len && consumed < key.len() && (*child).value[i] == key[consumed] {
+    |                                                          ^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+366 |             while i < val_len && consumed < key.len() && (&(*child).value)[i] == key[consumed] {
+    |                                                          ++              +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:369:21
+    |
+369 |                     (*child).payload[i].push(alias_bid);
+    |                     ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+369 |                     (&mut (*child).payload)[i].push(alias_bid);
+    |                     +++++                 +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:459:41
+    |
+459 | ...                   for bids in (*node).payload[new_start..].iter() {
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+459 |                             for bids in (&(*node).payload)[new_start..].iter() {
+    |                                         ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:685:51
+    |
+685 |             while pos < (*node).payload.len() && !(*node).payload[pos].contains(&block_id) {
+    |                                                   ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+685 |             while pos < (*node).payload.len() && !(&(*node).payload)[pos].contains(&block_id) {
+    |                                                   ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:691:36
+    |
+691 |             let bids_at_pos = &mut (*node).payload[pos];
+    |                                    ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+691 |             let bids_at_pos = &mut (&mut (*node).payload)[pos];
+    |                                    +++++                +
+
+warning: `radixtree` (lib) generated 7 warnings
+   Compiling router v0.1.0 (/root/lmetric-repro/blitz-router/router)
+warning: unused import: `vllm::JShortestWeightQ`
+   --> router/src/scheduler/policies/mod.rs:117:16
+    |
+117 | pub(crate) use vllm::JShortestWeightQ;
+    |                ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `std::sync::OnceLock`
+ --> router/src/scheduler/state.rs:1:5
+  |
+1 | use std::sync::OnceLock;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: field `hashes` is never read
+    --> router/src/scheduler/kvcache.rs:1049:50
+     |
+1049 |             struct SeqState { indices: Vec<u64>, hashes: Vec<u64>, removed: bool }
+     |                    -------- field in this struct ^^^^^^
+     |
+     = note: `#[warn(dead_code)]` on by default
+
+warning: field `all_tokens` is never read
+  --> router/src/scheduler/policies/dsl_runtime.rs:32:9
+   |
+27 | pub(crate) struct Observation {
+   |                   ----------- field in this struct
+...
+32 |     pub all_tokens: usize,
+   |         ^^^^^^^^^^
+   |
+   = note: `Observation` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `new_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:126:15
+    |
+126 | pub(crate) fn new_blocks(req: &ValidGenerateRequest, sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^
+
+warning: function `match_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:155:15
+    |
+155 | pub(crate) fn match_blocks(req: &ValidGenerateRequest, sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `hit_pct` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:161:15
+    |
+161 | pub(crate) fn hit_pct(req: &ValidGenerateRequest, sctx: &Observation) -> f32 {
+    |               ^^^^^^^
+
+warning: function `decode_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:170:15
+    |
+170 | pub(crate) fn decode_blocks(sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^^^^
+
+warning: function `mean_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:421:15
+    |
+421 | pub(crate) fn mean_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> f32 {
+    |               ^^^^^^^^^^^^^
+
+warning: function `std_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:427:15
+    |
+427 | pub(crate) fn std_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize + Copy) -> f32 {
+    |               ^^^^^^^^^^^^
+
+warning: function `min_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:437:15
+    |
+437 | pub(crate) fn min_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `max_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:442:15
+    |
+442 | pub(crate) fn max_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `min_of_f32` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:473:15
+    |
+473 | pub(crate) fn min_of_f32(obs: &[Observation], proj: impl Fn(&Observation) -> f32) -> f32 {
+    |               ^^^^^^^^^^
+
+warning: function `max_of_f32` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:478:15
+    |
+478 | pub(crate) fn max_of_f32(obs: &[Observation], proj: impl Fn(&Observation) -> f32) -> f32 {
+    |               ^^^^^^^^^^
+
+warning: `router` (lib test) generated 14 warnings (run `cargo fix --lib -p router --tests` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.84s
+     Running unittests src/lib.rs (target/debug/deps/router-edaf117dc4e07598)
+
+running 9 tests
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_128_physical_mapping_uses_local_hash ... ok
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_128_tail_and_multi_block_append ... ok
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_first_output_finish_matrix ... AUDIT_RESULT {"case":"request_v1_first_finish_0_0","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"request_v1_first_finish_0_32","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"request_v1_first_finish_32_16","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"request_v1_first_finish_16_32","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"request_v1_first_finish_64_48","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_legacy_regression_still_reproduced ... AUDIT_RESULT {"case":"legacy_negative_ledger_preserved","result":{"all_tokens":65,"bs":1,"prefill":-32,"waiting":0},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_mismatched_block_size_rejected_before_accounting ... AUDIT_RESULT {"case":"block_size_mismatch_no_event_applied","result":{"all_tokens":64,"bs":1,"prefill":64,"waiting":1},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_multi_token_finish ... AUDIT_RESULT {"case":"multi_token_no_finish_residue","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_prefill_prediction_matrix ... AUDIT_RESULT {"case":"request_v1_pred_0_actual_0_chunk_false","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"request_v1_pred_0_actual_0_chunk_true","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"request_v1_pred_32_actual_32_chunk_false","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"request_v1_pred_32_actual_32_chunk_true","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"request_v1_pred_16_actual_32_chunk_false","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"request_v1_pred_16_actual_32_chunk_true","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"request_v1_pred_32_actual_16_chunk_false","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"request_v1_pred_32_actual_16_chunk_true","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"request_v1_pred_64_actual_48_chunk_false","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+AUDIT_RESULT {"case":"request_v1_pred_64_actual_48_chunk_true","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_real_http_sse_to_completion_loop ... AUDIT_RESULT {"case":"REAL_HTTP_SSE_SYNTHETIC_to_Rust_completion_loop","result":{"all_tokens":0,"bs":0,"prefill":0,"waiting":0},"simulated":true}
+ok
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_sequence_validation ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 27 filtered out; finished in 1.14s
+

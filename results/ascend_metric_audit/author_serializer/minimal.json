@@ -1,0 +1,26 @@
+{
+  "outputs": [
+    {
+      "request_id": 101,
+      "new_token_ids": [
+        7
+      ],
+      "state": "PREFILL",
+      "is_finished": false,
+      "hit_token_cnt": 32,
+      "prev_computed_tokens": 32,
+      "ttft": 0.125
+    }
+  ],
+  "step_id": 1,
+  "latency": 12,
+  "prefill_token_budget": 0,
+  "prefill_tokens": 0,
+  "new_block_hashes": [],
+  "evicted_block_hashes": [],
+  "evicted_block_ids": [],
+  "cur_used_block_ids": {},
+  "new_block_hashes_ids": {},
+  "preempted_ids": [],
+  "aborted_requests": []
+}

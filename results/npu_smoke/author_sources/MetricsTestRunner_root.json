@@ -1,0 +1,227 @@
+{
+  "branch": "main",
+  "commit": "3ad55e81923f8f33044aa68dc178858c6694971e",
+  "tree": {
+    "sha": "3ad55e81923f8f33044aa68dc178858c6694971e",
+    "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/trees/3ad55e81923f8f33044aa68dc178858c6694971e",
+    "tree": [
+      {
+        "path": ".gitattributes",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "8b8853087369a298575eaaef64efddfe0de972e8",
+        "size": 1195,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/8b8853087369a298575eaaef64efddfe0de972e8"
+      },
+      {
+        "path": ".gitignore",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "298d607eab6fcb66bf72d7877a199a38435dd877",
+        "size": 178,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/298d607eab6fcb66bf72d7877a199a38435dd877"
+      },
+      {
+        "path": ".vscode",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "6e42d80717056498614b90f20bc9528404261c50",
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/trees/6e42d80717056498614b90f20bc9528404261c50"
+      },
+      {
+        "path": "README.md",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "96e7d85e8507f2059f4b2354b31b2d13f66eba0d",
+        "size": 7938,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/96e7d85e8507f2059f4b2354b31b2d13f66eba0d"
+      },
+      {
+        "path": "compare_fine_grained.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "bf67f27045cc6cce8b7be190b5e35b4d2c830d3b",
+        "size": 7385,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/bf67f27045cc6cce8b7be190b5e35b4d2c830d3b"
+      },
+      {
+        "path": "config",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "dbe0610b80c27c5889ae2567c927b7d27973607e",
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/trees/dbe0610b80c27c5889ae2567c927b7d27973607e"
+      },
+      {
+        "path": "csv_filter.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "7837505d3ab32840bf8d80a3acca2da657ecd7b2",
+        "size": 1412,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/7837505d3ab32840bf8d80a3acca2da657ecd7b2"
+      },
+      {
+        "path": "debug",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "c8bc40ea87e7f04a532d040632b47bf30b14fb83",
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/trees/c8bc40ea87e7f04a532d040632b47bf30b14fb83"
+      },
+      {
+        "path": "disagg_proxy_p2p_nccl_xpyd.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "a2e07b6f4d29fdc1a18086b013f828314d79b258",
+        "size": 9334,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/a2e07b6f4d29fdc1a18086b013f828314d79b258"
+      },
+      {
+        "path": "error_bucket.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "3936d47aa9326093a54806392633601b75bee602",
+        "size": 2041,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/3936d47aa9326093a54806392633601b75bee602"
+      },
+      {
+        "path": "extend_csv.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "36e999d61ff1edccee25c3f07b965e26e1151117",
+        "size": 1345,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/36e999d61ff1edccee25c3f07b965e26e1151117"
+      },
+      {
+        "path": "extract_after_execute.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "887a86587f36adb5dc14dab6985556cdee6861ad",
+        "size": 4260,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/887a86587f36adb5dc14dab6985556cdee6861ad"
+      },
+      {
+        "path": "extract_before_execute.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "743ccd06b9fd55fd2635f27393da5c7315d00440",
+        "size": 3868,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/743ccd06b9fd55fd2635f27393da5c7315d00440"
+      },
+      {
+        "path": "feature_error_visual.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "d9d25f0ecc8ce3ed44dd57597798277021758145",
+        "size": 2593,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/d9d25f0ecc8ce3ed44dd57597798277021758145"
+      },
+      {
+        "path": "figures",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "bd3db60b2d37e482102795caec4679d3c8c1c96b",
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/trees/bd3db60b2d37e482102795caec4679d3c8c1c96b"
+      },
+      {
+        "path": "long_run.sh",
+        "mode": "100755",
+        "type": "blob",
+        "sha": "e156a050d8ef9c47615f4608c286cc5b49aefc62",
+        "size": 3595,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/e156a050d8ef9c47615f4608c286cc5b49aefc62"
+      },
+      {
+        "path": "model_csv",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "1761b230855dd0b557c3c336be87a5d7367f8599",
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/trees/1761b230855dd0b557c3c336be87a5d7367f8599"
+      },
+      {
+        "path": "moe_long",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "fe9ebe89f5d22885358ffa788abb93155201cd75",
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/trees/fe9ebe89f5d22885358ffa788abb93155201cd75"
+      },
+      {
+        "path": "rps_counter.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "8b763f3993519b8cd9a179c491dfa5316fac081f",
+        "size": 405,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/8b763f3993519b8cd9a179c491dfa5316fac081f"
+      },
+      {
+        "path": "sampler_e2e_9f4b3b9a_predictions.csv",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "e4658cb2e0ac62d89eeb581bd6b4de73207245da",
+        "size": 6388,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/e4658cb2e0ac62d89eeb581bd6b4de73207245da"
+      },
+      {
+        "path": "schedule_9f4b3b9a_predictions.csv",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "6359b8e80aadb84af6a6d19c6dea218c532ff441",
+        "size": 6311,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/6359b8e80aadb84af6a6d19c6dea218c532ff441"
+      },
+      {
+        "path": "scripts",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "01961b5f612cc8380c623fd9b7123fccd625bb26",
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/trees/01961b5f612cc8380c623fd9b7123fccd625bb26"
+      },
+      {
+        "path": "smart_runner.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "5b88875cbf2834543976e59461bec23b4dd3e6a8",
+        "size": 20615,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/5b88875cbf2834543976e59461bec23b4dd3e6a8"
+      },
+      {
+        "path": "smart_runner_multiworker.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "be99735985f6e06479066d492f3eb861bc4a9752",
+        "size": 21970,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/be99735985f6e06479066d492f3eb861bc4a9752"
+      },
+      {
+        "path": "ttft_bucket.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "e495318f9bfdd74fd527fa2a215d1222603fb128",
+        "size": 4489,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/e495318f9bfdd74fd527fa2a215d1222603fb128"
+      },
+      {
+        "path": "ttft_cdf.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "6ea5e4cefaaf944dc5eb822718148e4aead76dc7",
+        "size": 3785,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/6ea5e4cefaaf944dc5eb822718148e4aead76dc7"
+      },
+      {
+        "path": "ttft_cdf_split.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "5eafc65094b284c9356b48e1466c06edcb5788fe",
+        "size": 6272,
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/blobs/5eafc65094b284c9356b48e1466c06edcb5788fe"
+      },
+      {
+        "path": "zipped_csv",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "5934cc088d240d2a429b68310f296b464f036edc",
+        "url": "https://api.github.com/repos/blitz-serving/MetricsTestRunner/git/trees/5934cc088d240d2a429b68310f296b464f036edc"
+      }
+    ],
+    "truncated": false
+  }
+}

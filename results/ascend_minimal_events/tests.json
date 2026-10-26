@@ -1,0 +1,272 @@
+{
+  "npu_executed": false,
+  "full_engine_initialized": false,
+  "events": "SYNTHETIC ONLY",
+  "python": {
+    "command": [
+      "/usr/local/python3.12.13/bin/python",
+      "/root/lmetric-repro/scripts/ascend_minimal/test_events.py"
+    ],
+    "exit_code": 0,
+    "log": "/root/lmetric-repro/results/ascend_minimal_events/python_tests.log"
+  },
+  "rust": {
+    "command": [
+      "cargo",
+      "+1.88.0",
+      "test",
+      "-p",
+      "router",
+      "--lib",
+      "--no-default-features",
+      "--features",
+      "vllm-backend,radixtree-blockhash,default-hash-algo,determinent-schedule,lmetric-q",
+      "--offline",
+      "--locked",
+      "--jobs",
+      "4",
+      "ascend_request",
+      "--",
+      "--nocapture",
+      "--include-ignored",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "log": "/root/lmetric-repro/results/ascend_minimal_events/rust_tests.log",
+    "cases": [
+      {
+        "case": "request_v1_first_finish_0_0",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "request_v1_first_finish_0_32",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "request_v1_first_finish_32_16",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "request_v1_first_finish_16_32",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "request_v1_first_finish_64_48",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "legacy_negative_ledger_preserved",
+        "result": {
+          "all_tokens": 65,
+          "bs": 1,
+          "prefill": -32,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "block_size_mismatch_no_event_applied",
+        "result": {
+          "all_tokens": 64,
+          "bs": 1,
+          "prefill": 64,
+          "waiting": 1
+        },
+        "simulated": true
+      },
+      {
+        "case": "multi_token_no_finish_residue",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "request_v1_pred_0_actual_0_chunk_false",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "request_v1_pred_0_actual_0_chunk_true",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "request_v1_pred_32_actual_32_chunk_false",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "request_v1_pred_32_actual_32_chunk_true",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "request_v1_pred_16_actual_32_chunk_false",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "request_v1_pred_16_actual_32_chunk_true",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "request_v1_pred_32_actual_16_chunk_false",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "request_v1_pred_32_actual_16_chunk_true",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "request_v1_pred_64_actual_48_chunk_false",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "request_v1_pred_64_actual_48_chunk_true",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      },
+      {
+        "case": "REAL_HTTP_SSE_SYNTHETIC_to_Rust_completion_loop",
+        "result": {
+          "all_tokens": 0,
+          "bs": 0,
+          "prefill": 0,
+          "waiting": 0
+        },
+        "simulated": true
+      }
+    ],
+    "summary": "test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 27 filtered out; finished in 1.14s"
+  },
+  "router_regression": {
+    "command": [
+      "cargo",
+      "+1.88.0",
+      "test",
+      "-p",
+      "router",
+      "--lib",
+      "--no-default-features",
+      "--features",
+      "vllm-backend,radixtree-blockhash,default-hash-algo,determinent-schedule,lmetric-q",
+      "--offline",
+      "--locked",
+      "--jobs",
+      "4",
+      "--",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "log": "/root/lmetric-repro/results/ascend_minimal_events/router_regression.log"
+  },
+  "simulator_compile": {
+    "command": [
+      "cargo",
+      "+1.88.0",
+      "test",
+      "-p",
+      "router",
+      "--lib",
+      "--no-default-features",
+      "--features",
+      "vllm-backend,radixtree-blockhash,default-hash-algo,determinent-schedule,lmetric-q,simulator",
+      "--offline",
+      "--locked",
+      "--jobs",
+      "4",
+      "--no-run"
+    ],
+    "exit_code": 0,
+    "log": "/root/lmetric-repro/results/ascend_minimal_events/simulator_compile.log"
+  },
+  "passed": true
+}

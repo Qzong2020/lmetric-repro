@@ -1,0 +1,4 @@
+{
+  "model_type": "cpu-synthetic",
+  "max_position_embeddings": 8192
+}

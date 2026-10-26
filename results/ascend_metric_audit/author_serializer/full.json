@@ -1,0 +1,48 @@
+{
+  "outputs": [
+    {
+      "request_id": 101,
+      "new_token_ids": [
+        7
+      ],
+      "state": "PREFILL",
+      "is_finished": false,
+      "hit_token_cnt": 32,
+      "prev_computed_tokens": 32,
+      "ttft": 0.125
+    }
+  ],
+  "step_id": 1,
+  "latency": 12,
+  "prefill_token_budget": 256,
+  "prefill_tokens": 64,
+  "new_block_hashes": [
+    [
+      291
+    ]
+  ],
+  "evicted_block_hashes": [
+    [
+      1110
+    ]
+  ],
+  "evicted_block_ids": [
+    9
+  ],
+  "cur_used_block_ids": {
+    "101": [
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "new_block_hashes_ids": {
+    "101": [
+      4,
+      5
+    ]
+  },
+  "preempted_ids": [],
+  "aborted_requests": []
+}

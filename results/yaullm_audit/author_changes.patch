@@ -1,0 +1,1837 @@
+diff --git a/README.md b/README.md
+index dc2f0af..b7d0a3b 100644
+--- a/README.md
++++ b/README.md
+@@ -1,165 +1,69 @@
+-<p align="center">
+-  <picture>
+-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/vllm-project/vllm/main/docs/assets/logos/vllm-logo-text-dark.png">
+-    <img alt="vLLM" src="https://raw.githubusercontent.com/vllm-project/vllm/main/docs/assets/logos/vllm-logo-text-light.png" width=55%>
+-  </picture>
+-</p>
+-
+-<h3 align="center">
+-Easy, fast, and cheap LLM serving for everyone
+-</h3>
+-
+-<p align="center">
+-| <a href="https://docs.vllm.ai"><b>Documentation</b></a> | <a href="https://blog.vllm.ai/"><b>Blog</b></a> | <a href="https://arxiv.org/abs/2309.06180"><b>Paper</b></a> | <a href="https://x.com/vllm_project"><b>Twitter/X</b></a> | <a href="https://discuss.vllm.ai"><b>User Forum</b></a> | <a href="https://slack.vllm.ai"><b>Developer Slack</b></a> |
+-</p>
+-
+----
+-
+-*Latest News* 🔥
+-- [2025/05] We hosted [NYC vLLM Meetup](https://lu.ma/c1rqyf1f)! Please find the meetup slides [here](https://docs.google.com/presentation/d/1_q_aW_ioMJWUImf1s1YM-ZhjXz8cUeL0IJvaquOYBeA/edit?usp=sharing).
+-- [2025/05] vLLM is now a hosted project under PyTorch Foundation! Please find the announcement [here](https://pytorch.org/blog/pytorch-foundation-welcomes-vllm/).
+-- [2025/04] We hosted [Asia Developer Day](https://www.sginnovate.com/event/limited-availability-morning-evening-slots-remaining-inaugural-vllm-asia-developer-day)! Please find the meetup slides from the vLLM team [here](https://docs.google.com/presentation/d/19cp6Qu8u48ihB91A064XfaXruNYiBOUKrBxAmDOllOo/edit?usp=sharing).
+-- [2025/01] We are excited to announce the alpha release of vLLM V1: A major architectural upgrade with 1.7x speedup! Clean code, optimized execution loop, zero-overhead prefix caching, enhanced multimodal support, and more. Please check out our blog post [here](https://blog.vllm.ai/2025/01/27/v1-alpha-release.html).
+-
+-<details>
+-<summary>Previous News</summary>
+-
+-- [2025/03] We hosted [vLLM x Ollama Inference Night](https://lu.ma/vllm-ollama)! Please find the meetup slides from the vLLM team [here](https://docs.google.com/presentation/d/16T2PDD1YwRnZ4Tu8Q5r6n53c5Lr5c73UV9Vd2_eBo4U/edit?usp=sharing).
+-- [2025/03] We hosted [the first vLLM China Meetup](https://mp.weixin.qq.com/s/n77GibL2corAtQHtVEAzfg)! Please find the meetup slides from vLLM team [here](https://docs.google.com/presentation/d/1REHvfQMKGnvz6p3Fd23HhSO4c8j5WPGZV0bKYLwnHyQ/edit?usp=sharing).
+-- [2025/03] We hosted [the East Coast vLLM Meetup](https://lu.ma/7mu4k4xx)! Please find the meetup slides [here](https://docs.google.com/presentation/d/1NHiv8EUFF1NLd3fEYODm56nDmL26lEeXCaDgyDlTsRs/edit#slide=id.g31441846c39_0_0).
+-- [2025/02] We hosted [the ninth vLLM meetup](https://lu.ma/h7g3kuj9) with Meta! Please find the meetup slides from vLLM team [here](https://docs.google.com/presentation/d/1jzC_PZVXrVNSFVCW-V4cFXb6pn7zZ2CyP_Flwo05aqg/edit?usp=sharing) and AMD [here](https://drive.google.com/file/d/1Zk5qEJIkTmlQ2eQcXQZlljAx3m9s7nwn/view?usp=sharing). The slides from Meta will not be posted.
+-- [2025/01] We hosted [the eighth vLLM meetup](https://lu.ma/zep56hui) with Google Cloud! Please find the meetup slides from vLLM team [here](https://docs.google.com/presentation/d/1epVkt4Zu8Jz_S5OhEHPc798emsYh2BwYfRuDDVEF7u4/edit?usp=sharing), and Google Cloud team [here](https://drive.google.com/file/d/1h24pHewANyRL11xy5dXUbvRC9F9Kkjix/view?usp=sharing).
+-- [2024/12] vLLM joins [pytorch ecosystem](https://pytorch.org/blog/vllm-joins-pytorch)! Easy, Fast, and Cheap LLM Serving for Everyone!
+-- [2024/11] We hosted [the seventh vLLM meetup](https://lu.ma/h0qvrajz) with Snowflake! Please find the meetup slides from vLLM team [here](https://docs.google.com/presentation/d/1e3CxQBV3JsfGp30SwyvS3eM_tW-ghOhJ9PAJGK6KR54/edit?usp=sharing), and Snowflake team [here](https://docs.google.com/presentation/d/1qF3RkDAbOULwz9WK5TOltt2fE9t6uIc_hVNLFAaQX6A/edit?usp=sharing).
+-- [2024/10] We have just created a developer slack ([slack.vllm.ai](https://slack.vllm.ai)) focusing on coordinating contributions and discussing features. Please feel free to join us there!
+-- [2024/10] Ray Summit 2024 held a special track for vLLM! Please find the opening talk slides from the vLLM team [here](https://docs.google.com/presentation/d/1B_KQxpHBTRa_mDF-tR6i8rWdOU5QoTZNcEg2MKZxEHM/edit?usp=sharing). Learn more from the [talks](https://www.youtube.com/playlist?list=PLzTswPQNepXl6AQwifuwUImLPFRVpksjR) from other vLLM contributors and users!
+-- [2024/09] We hosted [the sixth vLLM meetup](https://lu.ma/87q3nvnh) with NVIDIA! Please find the meetup slides [here](https://docs.google.com/presentation/d/1wrLGwytQfaOTd5wCGSPNhoaW3nq0E-9wqyP7ny93xRs/edit?usp=sharing).
+-- [2024/07] We hosted [the fifth vLLM meetup](https://lu.ma/lp0gyjqr) with AWS! Please find the meetup slides [here](https://docs.google.com/presentation/d/1RgUD8aCfcHocghoP3zmXzck9vX3RCI9yfUAB2Bbcl4Y/edit?usp=sharing).
+-- [2024/07] In partnership with Meta, vLLM officially supports Llama 3.1 with FP8 quantization and pipeline parallelism! Please check out our blog post [here](https://blog.vllm.ai/2024/07/23/llama31.html).
+-- [2024/06] We hosted [the fourth vLLM meetup](https://lu.ma/agivllm) with Cloudflare and BentoML! Please find the meetup slides [here](https://docs.google.com/presentation/d/1iJ8o7V2bQEi0BFEljLTwc5G1S10_Rhv3beed5oB0NJ4/edit?usp=sharing).
+-- [2024/04] We hosted [the third vLLM meetup](https://robloxandvllmmeetup2024.splashthat.com/) with Roblox! Please find the meetup slides [here](https://docs.google.com/presentation/d/1A--47JAK4BJ39t954HyTkvtfwn0fkqtsL8NGFuslReM/edit?usp=sharing).
+-- [2024/01] We hosted [the second vLLM meetup](https://lu.ma/ygxbpzhl) with IBM! Please find the meetup slides [here](https://docs.google.com/presentation/d/12mI2sKABnUw5RBWXDYY-HtHth4iMSNcEoQ10jDQbxgA/edit?usp=sharing).
+-- [2023/10] We hosted [the first vLLM meetup](https://lu.ma/first-vllm-meetup) with a16z! Please find the meetup slides [here](https://docs.google.com/presentation/d/1QL-XPFXiFpDBh86DbEegFXBXFXjix4v032GhShbKf3s/edit?usp=sharing).
+-- [2023/08] We would like to express our sincere gratitude to [Andreessen Horowitz](https://a16z.com/2023/08/30/supporting-the-open-source-ai-community/) (a16z) for providing a generous grant to support the open-source development and research of vLLM.
+-- [2023/06] We officially released vLLM! FastChat-vLLM integration has powered [LMSYS Vicuna and Chatbot Arena](https://chat.lmsys.org) since mid-April. Check out our [blog post](https://vllm.ai).
+-
+-</details>
+-
+----
+-## About
+-
+-vLLM is a fast and easy-to-use library for LLM inference and serving.
+-
+-Originally developed in the [Sky Computing Lab](https://sky.cs.berkeley.edu) at UC Berkeley, vLLM has evolved into a community-driven project with contributions from both academia and industry.
+-
+-vLLM is fast with:
+-
+-- State-of-the-art serving throughput
+-- Efficient management of attention key and value memory with [**PagedAttention**](https://blog.vllm.ai/2023/06/20/vllm.html)
+-- Continuous batching of incoming requests
+-- Fast model execution with CUDA/HIP graph
+-- Quantizations: [GPTQ](https://arxiv.org/abs/2210.17323), [AWQ](https://arxiv.org/abs/2306.00978), [AutoRound](https://arxiv.org/abs/2309.05516), INT4, INT8, and FP8
+-- Optimized CUDA kernels, including integration with FlashAttention and FlashInfer
+-- Speculative decoding
+-- Chunked prefill
+-
+-vLLM is flexible and easy to use with:
+-
+-- Seamless integration with popular Hugging Face models
+-- High-throughput serving with various decoding algorithms, including *parallel sampling*, *beam search*, and more
+-- Tensor, pipeline, data and expert parallelism support for distributed inference
+-- Streaming outputs
+-- OpenAI-compatible API server
+-- Support NVIDIA GPUs, AMD CPUs and GPUs, Intel CPUs and GPUs, PowerPC CPUs, TPU, and AWS Neuron
+-- Prefix caching support
+-- Multi-LoRA support
+-
+-vLLM seamlessly supports most popular open-source models on HuggingFace, including:
+-- Transformer-like LLMs (e.g., Llama)
+-- Mixture-of-Expert LLMs (e.g., Mixtral, Deepseek-V2 and V3)
+-- Embedding Models (e.g., E5-Mistral)
+-- Multi-modal LLMs (e.g., LLaVA)
+-
+-Find the full list of supported models [here](https://docs.vllm.ai/en/latest/models/supported_models.html).
+-
+-## Getting Started
+-
+-Install vLLM with `pip` or [from source](https://docs.vllm.ai/en/latest/getting_started/installation/gpu/index.html#build-wheel-from-source):
++# yaullm
+ 
+-```bash
+-pip install vllm
++`yaullm` stands for **yet-another-micro-vllm** modification. This repository is a
++vLLM fork used as the backend engine in the **x-metric** artifact evaluation.
++
++In the AE workflow, the cluster-level pipeline is:
++
++```text
++request-sim -> blitz-router -> yaullm
+ ```
+ 
+-Visit our [documentation](https://docs.vllm.ai/en/latest/) to learn more.
+-- [Installation](https://docs.vllm.ai/en/latest/getting_started/installation.html)
+-- [Quickstart](https://docs.vllm.ai/en/latest/getting_started/quickstart.html)
+-- [List of Supported Models](https://docs.vllm.ai/en/latest/models/supported_models.html)
+-
+-## Contributing
+-
+-We welcome and value any contributions and collaborations.
+-Please check out [Contributing to vLLM](https://docs.vllm.ai/en/latest/contributing/index.html) for how to get involved.
+-
+-## Sponsors
+-
+-vLLM is a community project. Our compute resources for development and testing are supported by the following organizations. Thank you for your support!
+-
+-<!-- Note: Please sort them in alphabetical order. -->
+-<!-- Note: Please keep these consistent with docs/community/sponsors.md -->
+-Cash Donations:
+-- a16z
+-- Dropbox
+-- Sequoia Capital
+-- Skywork AI
+-- ZhenFund
+-
+-Compute Resources:
+-- AMD
+-- Anyscale
+-- AWS
+-- Crusoe Cloud
+-- Databricks
+-- DeepInfra
+-- Google Cloud
+-- Intel
+-- Lambda Lab
+-- Nebius
+-- Novita AI
+-- NVIDIA
+-- Replicate
+-- Roblox
+-- RunPod
+-- Trainy
+-- UC Berkeley
+-- UC San Diego
+-
+-Slack Sponsor: Anyscale
+-
+-We also have an official fundraising venue through [OpenCollective](https://opencollective.com/vllm). We plan to use the fund to support the development, maintenance, and adoption of vLLM.
+-
+-## Citation
+-
+-If you use vLLM for your research, please cite our [paper](https://arxiv.org/abs/2309.06180):
+-
+-```bibtex
+-@inproceedings{kwon2023efficient,
+-  title={Efficient Memory Management for Large Language Model Serving with PagedAttention},
+-  author={Woosuk Kwon and Zhuohan Li and Siyuan Zhuang and Ying Sheng and Lianmin Zheng and Cody Hao Yu and Joseph E. Gonzalez and Hao Zhang and Ion Stoica},
+-  booktitle={Proceedings of the ACM SIGOPS 29th Symposium on Operating Systems Principles},
+-  year={2023}
+-}
++`yaullm` extends vLLM with richer metric reporting over SSE. The stream gives
++the router visibility into each engine replica's internal state, so routing
++decisions can account for what the engine actually scheduled and how its prefix
++cache changed over time.
++
++## Metric SSE
++
++`yaullm` adds a metric Server-Sent Events endpoint to the OpenAI-compatible
++server:
++
++```text
++GET /v1/metrics
++Content-Type: text/event-stream
++```
++
++The metric SSE stream is designed for two purposes:
++
++1. Expose the inner batch scheduler behavior of the engine, including step
++   boundaries, per-step latency, request progress, and request state changes.
++2. Expose the inner prefix-cache management behavior of the engine, including
++   cache hits, newly materialized blocks, currently used blocks, evictions, and
++   request abort/preemption events.
++
++This stream is separate from normal token streaming. The router consumes it to
++observe what each engine replica actually did after a routing decision.
++
++## Configuration
++
++Metric reporting is enabled by default:
++
++```bash
++VLLM_REPORT_METRICS=1
+ ```
+ 
+-## Contact Us
++Set `VLLM_REPORT_METRICS=0` to disable metric reporting and skip the extra
++bookkeeping used only for this stream.
+ 
+-<!-- --8<-- [start:contact-us] -->
+-- For technical questions and feature requests, please use GitHub [Issues](https://github.com/vllm-project/vllm/issues) or [Discussions](https://github.com/vllm-project/vllm/discussions)
+-- For discussing with fellow users, please use the [vLLM Forum](https://discuss.vllm.ai)
+-- For coordinating contributions and development, please use [Slack](https://slack.vllm.ai)
+-- For security disclosures, please use GitHub's [Security Advisories](https://github.com/vllm-project/vllm/security/advisories) feature
+-- For collaborations and partnerships, please contact us at [vllm-questions@lists.berkeley.edu](mailto:vllm-questions@lists.berkeley.edu)
+-<!-- --8<-- [end:contact-us] -->
++`VLLM_SSE_MODE` controls the amount of serialized data:
+ 
+-## Media Kit
++- `full` (default): scheduler progress plus prefix-cache block updates.
++- `minimal`: scheduler progress only.
++
++Example:
++
++```bash
++VLLM_USE_V1=1 VLLM_REPORT_METRICS=1 VLLM_SSE_MODE=full \
++  vllm serve /path/to/model --port 50180
++```
++
++Read the stream:
++
++```bash
++curl -N http://localhost:50180/v1/metrics
++```
+ 
+-- If you wish to use vLLM's logo, please refer to [our media kit repo](https://github.com/vllm-project/media-kit)
++For the router-side SSE parser and consumer, see
++[`router/src/engine/colocation.rs`](https://github.com/blitz-serving/blitz-router/blob/osdi26-ae-workflow/router/src/engine/colocation.rs)
++in `blitz-router`.
+diff --git a/benchmarks/merics_client.py b/benchmarks/merics_client.py
+new file mode 100644
+index 0000000..b16b0e2
+--- /dev/null
++++ b/benchmarks/merics_client.py
+@@ -0,0 +1,32 @@
++import asyncio
++import httpx
++import argparse
++
++
++async def get_stream_response(port: int):
++    url = f"http://0.0.0.0:{port}/v1/metrics"
++
++    headers = {"Content-Type": "application/json"}
++
++    async with httpx.AsyncClient(timeout=None) as client:
++        async with client.stream("GET", url, headers=headers) as response:
++            async for line in response.aiter_lines():
++                line = line.strip()
++                print(line)
++
++
++def main():
++    parser = argparse.ArgumentParser(description="Stream metrics from a given port.")
++    parser.add_argument(
++        "--port",
++        type=int,
++        default=50180,
++        help="Port number for the metrics endpoint (default: 20003)"
++    )
++    args = parser.parse_args()
++
++    asyncio.run(get_stream_response(args.port))
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/benchmarks/stream_client.py b/benchmarks/stream_client.py
+new file mode 100644
+index 0000000..7deea47
+--- /dev/null
++++ b/benchmarks/stream_client.py
+@@ -0,0 +1,224 @@
++import asyncio
++import json
++import random
++# client_simple.py
++import httpx
++from openai import OpenAI
++from transformers import AutoTokenizer
++
++MODEL = "/home/admin/resource/model/464482ce.Qwen2.5-7B-Instruct/1.0/"
++#MODEL = "/home/admin/resource/model/464482ce.qwen2.5-72b-instruct/128k-a8w8-v0.2-sps-v0925"
++#MODEL = "/mnt/debugger/hjb/Qwen2-7B-Instruct/"
++
++BASE = "http://0.0.0.0:50180"
++
++def batch_response():
++    client = OpenAI(base_url=f"{BASE}/v1/", api_key="hahaha")
++
++    completion = client.chat.completions.create(
++        model="/mnt/data/models/Qwen2-7B-Instruct/",
++        messages=[
++            {
++                "role": "user",
++                "content": "Hello! Desrible the modern transformer architecture!",
++            }
++        ],
++    )
++
++    print(completion.choices[0].message)
++
++
++# serve
++"""
++vllm serve /mnt/data/models/Qwen2-7B-Instruct/ --block-size 16
++--num_gpu_blocks_override 128 --max-num-batched-tokens 1024 --port 50180
++"""
++
++def generate_random_chinese_string() -> str:
++    chinese_chars = [chr(i) for i in range(0x4e00, 0x9fff + 1)]
++    #length = random.randint(1000, 2000)
++    length = 15
++    return ''.join(random.choices(chinese_chars, k=length))
++
++def generate_a_list() -> list[int]:
++    length = 15
++    return [random.randint(0, 10000) for _ in range(length)]
++
++async def stream_response():
++    url = f"{BASE}/v1/chat/completions"
++
++    #content = "Introduce the first-principle methedology for me"
++    content = generate_random_chinese_string()
++    #content = "give a example of artificial inteligence reshaping the search of operating system"
++    #content = generate_a_list()
++    #print(f"length {len(content)} contents {content}")
++    tokenizer = AutoTokenizer.from_pretrained(MODEL)
++    ids = tokenizer.encode(content)
++    indent_length = 3 * 16 + 2
++    magic_number = 19
++
++    decode_length =  (indent_length - len(ids) - magic_number 
++                      if indent_length > len(ids) + magic_number 
++                      else 3)
++    print(f"encoded length: {len(ids)} decode length: {decode_length}")
++    # try to use exactly 2 blocks
++    
++    # 25 + 19 = 44
++   
++    
++    #text = tokenizer.decode(content, skip_special_tokens=False)
++    #content2 = tokenizer.encode(text)
++    #print(f"length {len(content2)} contents {content2}")
++    payload = {
++        "model": MODEL,
++        "request_id": str(random.randint(1, 100000)),
++        "messages": [{"role": "user", "content": content}],
++        "stream": True,
++        "max_tokens": decode_length,
++        #"X-Request-Id": random.randint()
++    }
++
++    headers = {"Content-Type": "application/json"}
++
++    
++
++    output_length = 0
++    for _ in range(1):
++        async with httpx.AsyncClient(timeout=None) as client:
++            async with client.stream(
++                "POST", url, json=payload, headers=headers
++            ) as response:
++                async for line in response.aiter_lines():
++                    line = line.strip()
++                    print(f"{line}\n")
++                    output_length += 1
++                    if line.startswith("data: "):
++                        data_str = line[6:]
++                        if data_str == "[DONE]":
++                            print("\n[Stream ended]")
++                            break
++                        try:
++                            data = json.loads(data_str)
++                            content = data["choices"][0]["delta"].get("content", "")
++                            if content:
++                                print(content, end="", flush=True)
++                        except:
++                            pass
++
++        await asyncio.sleep(1)
++
++    print(f"input length {len(content)} output length {output_length}")
++
++
++async def stream_with_token_ids():
++    url = f"{BASE}/generate_stream"
++    
++    token_ids = generate_a_list()
++    print(f"Input token IDs: {token_ids}")
++    print(f"Input length: {len(token_ids)}")
++
++    payload = {
++        "prompt_token_ids": token_ids,
++        "stream": True,
++        "max_tokens": 50,
++        "temperature": 0.0,
++        "skip_special_tokens": False
++    }
++
++    headers = {"Content-Type": "application/json"}
++
++    async with httpx.AsyncClient(timeout=None) as client:
++        async with client.stream("POST", url, json=payload, headers=headers) as response:
++            if response.status_code != 200:
++                print(f"Error: {response.status_code} - {await response.text()}")
++                return
++
++            async for line in response.aiter_lines():
++                line = line.strip()
++                if not line:
++                    continue
++                # vLLM 的 /generate_stream 返回的是纯 JSON 每行（不是 SSE 格式）
++                try:
++                    data = json.loads(line)
++                    text = data.get("text", "")
++                    print(text, end="", flush=True)
++                    if data.get("finished", False):
++                        print("\n[Stream ended]")
++                        break
++                except json.JSONDecodeError:
++                    print(f"Invalid JSON line: {line}")
++
++    print(f"\nTotal input tokens: {len(token_ids)}")
++
++async def simulate_disconnection_requests():
++    """
++    Simulate client disconnection during decoding phase for 2nd and 4th requests.
++    Sends 5 sequential requests, disconnecting during decoding for requests 2 and 4.
++    """
++    url = f"{BASE}/v1/chat/completions"
++    
++    for i in range(1, 6):  # Send 5 requests (1-5)
++        print(f"\n--- Sending request {i} ---")
++        
++        content = generate_random_chinese_string()
++        tokenizer = AutoTokenizer.from_pretrained(MODEL)
++        ids = tokenizer.encode(content)
++        indent_length = 3 * 16 + 2
++        magic_number = 19
++
++        decode_length = (indent_length - len(ids) - magic_number 
++                        if indent_length > len(ids) + magic_number 
++                        else 3)
++
++        decode_length = 25
++
++        payload = {
++            "model": MODEL,
++            "request_id": str(i),
++            "messages": [{"role": "user", "content": content}],
++            "stream": True,
++            "max_tokens": decode_length,
++        }
++
++        headers = {"Content-Type": "application/json"}
++
++        try:
++            async with httpx.AsyncClient(timeout=None) as client:
++                async with client.stream(
++                    "POST", url, json=payload, headers=headers
++                ) as response:
++                    token_count = 0
++                    async for line in response.aiter_lines():
++                        line = line.strip()
++                        if line.startswith("data: "):
++                            data_str = line[6:]
++                            if data_str == "[DONE]":
++                                print("\n[Stream ended]")
++                                break
++                            try:
++                                data = json.loads(data_str)
++                                content = data["choices"][0]["delta"].get("content", "")
++                                if content:
++                                    print(content, end="", flush=True)
++                                    token_count += 1
++                                    
++                                    # For 2nd and 4th requests, disconnect during decoding
++                                    if i in [2, 4] and token_count >= 2:  # Disconnect after receiving a few tokens
++                                        print(f"\n[Disconnecting during request {i} at token {token_count}]")
++                                        await response.aclose()  # Close the connection
++                                        break
++                                        
++                            except json.JSONDecodeError:
++                                pass
++        except Exception as e:
++            if i in [2, 4]:
++                print(f"[Expected disconnection for request {i}: {str(e)}]")
++            else:
++                print(f"[Unexpected error in request {i}: {str(e)}]")
++        
++        await asyncio.sleep(1)  # Small delay between requests
++
++#asyncio.run(stream_response())
++
++# Uncomment the line below to run the disconnection simulation
++asyncio.run(simulate_disconnection_requests())
+diff --git a/vllm/README.md b/vllm/README.md
+new file mode 100644
+index 0000000..fcb9ff3
+--- /dev/null
++++ b/vllm/README.md
+@@ -0,0 +1,5 @@
++## SSE如何推送的
++1. vllm/v1/engine/async_llm.py中通过report_once_metric接收engine_core_output并向sse的client推送一次event
++2. 在report_metrics中通过simplified_engine_core_outputs_to_dict将engine_core_output转换为字符串用于发送
++3. EngineCoreOutputs直接添加新的字段进行扩展
++4. vllm/v1/engine/core.py中对EngineCoreOutputs进行初始化和修改
+\ No newline at end of file
+diff --git a/vllm/config.py b/vllm/config.py
+index f038cdd..96e01a4 100644
+--- a/vllm/config.py
++++ b/vllm/config.py
+@@ -4337,6 +4337,8 @@ class VllmConfig:
+ 
+     # TODO: use default_factory once default constructing ModelConfig doesn't
+     # try to download a model
++    report_metrics: Optional[bool] = None
++    """Whether to report metrics. If None, it will be set to True by default."""
+     model_config: ModelConfig = None  # type: ignore
+     """Model configuration."""
+     cache_config: CacheConfig = field(default_factory=CacheConfig)
+diff --git a/vllm/engine/arg_utils.py b/vllm/engine/arg_utils.py
+index aec75f8..920d14c 100644
+--- a/vllm/engine/arg_utils.py
++++ b/vllm/engine/arg_utils.py
+@@ -1273,6 +1273,7 @@ class EngineArgs:
+             otlp_traces_endpoint=self.otlp_traces_endpoint,
+             collect_detailed_traces=self.collect_detailed_traces,
+         )
++        report_metrics = envs.VLLM_REPORT_METRICS
+ 
+         config = VllmConfig(
+             model_config=model_config,
+@@ -1289,6 +1290,7 @@ class EngineArgs:
+             kv_transfer_config=self.kv_transfer_config,
+             kv_events_config=self.kv_events_config,
+             additional_config=self.additional_config,
++            report_metrics=report_metrics,
+         )
+ 
+         return config
+diff --git a/vllm/engine/protocol.py b/vllm/engine/protocol.py
+index 671e964..44f2ee3 100644
+--- a/vllm/engine/protocol.py
++++ b/vllm/engine/protocol.py
+@@ -19,6 +19,7 @@ from vllm.pooling_params import PoolingParams
+ from vllm.sampling_params import BeamSearchParams, SamplingParams
+ from vllm.transformers_utils.tokenizer import AnyTokenizer
+ from vllm.utils import Device, collect_from_async_generator, random_uuid
++from vllm.v1.engine import EngineCoreOutputs
+ 
+ logger = init_logger(__name__)
+ 
+@@ -46,6 +47,11 @@ class EngineClient(ABC):
+     def dead_error(self) -> BaseException:
+         ...
+ 
++    @abstractmethod
++    def report_metrics(self) -> AsyncGenerator[EngineCoreOutputs, None]:
++        ...
++
++
+     @abstractmethod
+     def generate(
+         self,
+diff --git a/vllm/entrypoints/logger.py b/vllm/entrypoints/logger.py
+index 06ff3b4..d2747df 100644
+--- a/vllm/entrypoints/logger.py
++++ b/vllm/entrypoints/logger.py
+@@ -38,10 +38,10 @@ class RequestLogger:
+             if prompt_token_ids is not None:
+                 prompt_token_ids = prompt_token_ids[:max_log_len]
+ 
+-        logger.info(
+-            "Received request %s: prompt: %r, "
+-            "params: %s, prompt_token_ids: %s, "
+-            "prompt_embeds shape: %s, "
+-            "lora_request: %s.", request_id, prompt, params, prompt_token_ids,
+-            prompt_embeds.shape if prompt_embeds is not None else None,
+-            lora_request)
++        # logger.info(
++        #     "Received request %s: prompt: %r, "
++        #     "params: %s, prompt_token_ids: %s, "
++        #     "prompt_embeds shape: %s, "
++        #     "lora_request: %s.", request_id, prompt, params, prompt_token_ids,
++        #     prompt_embeds.shape if prompt_embeds is not None else None,
++        #     lora_request)
+diff --git a/vllm/entrypoints/openai/api_server.py b/vllm/entrypoints/openai/api_server.py
+index d413551..444b40e 100644
+--- a/vllm/entrypoints/openai/api_server.py
++++ b/vllm/entrypoints/openai/api_server.py
+@@ -6,6 +6,7 @@ import atexit
+ import gc
+ import importlib
+ import inspect
++import time
+ import json
+ import multiprocessing
+ import os
+@@ -104,6 +105,7 @@ from vllm.usage.usage_lib import UsageContext
+ from vllm.utils import (Device, FlexibleArgumentParser, get_open_zmq_ipc_path,
+                         is_valid_ipv6_address, set_ulimit)
+ from vllm.v1.metrics.prometheus import get_prometheus_registry
++from vllm.entrypoints.openai.serving_metrics import MetricsReporter
+ from vllm.version import __version__ as VLLM_VERSION
+ 
+ prometheus_multiproc_dir: tempfile.TemporaryDirectory
+@@ -379,6 +381,8 @@ def chat(request: Request) -> Optional[OpenAIServingChat]:
+ def completion(request: Request) -> Optional[OpenAIServingCompletion]:
+     return request.app.state.openai_serving_completion
+ 
++def metrics_reporter(request: Request) -> Optional[MetricsReporter]:
++    return request.app.state.metrics_reporter
+ 
+ def pooling(request: Request) -> Optional[OpenAIServingPooling]:
+     return request.app.state.openai_serving_pooling
+@@ -697,6 +701,21 @@ async def create_completion(request: CompletionRequest, raw_request: Request):
+     return StreamingResponse(content=generator, media_type="text/event-stream")
+ 
+ 
++@router.get("/v1/metrics")
++async def execute_metrics_sse_connection(raw_request: Request):
++    handler = metrics_reporter(raw_request)
++    if handler is None:
++        return base(raw_request).create_error_response(
++            message = "Metrics reporter not found, You may not enable metrics reporter")
++    try:
++        generator = await handler.report_metrics(None, raw_request)
++    except Exception as e:
++        raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR.value,
++                            detail=str(e)) from e
++    
++    return StreamingResponse(content=generator, media_type="text/event-stream")
++
++
+ @router.post("/v1/embeddings",
+              dependencies=[Depends(validate_json_request)],
+              responses={
+@@ -1554,6 +1573,7 @@ async def init_app_state(
+     state: State,
+     args: Namespace,
+ ) -> None:
++    logger.info("init app state!")
+     if args.served_model_name is not None:
+         served_model_names = args.served_model_name
+     else:
+@@ -1714,6 +1734,12 @@ async def init_app_state(
+         state.openai_serving_models,
+         request_logger=request_logger,
+     ) if "transcription" in model_config.supported_tasks else None
++    
++    state.metrics_reporter = MetricsReporter(
++        engine_client,
++        model_config,
++    )
++
+     state.task = model_config.task
+ 
+     state.enable_server_load_tracking = args.enable_server_load_tracking
+diff --git a/vllm/entrypoints/openai/serving_chat.py b/vllm/entrypoints/openai/serving_chat.py
+index 33d8074..c82a64e 100644
+--- a/vllm/entrypoints/openai/serving_chat.py
++++ b/vllm/entrypoints/openai/serving_chat.py
+@@ -203,8 +203,8 @@ class OpenAIServingChat(OpenAIServing):
+             logger.exception("Error in preprocessing prompt inputs")
+             return self.create_error_response(f"{e} {e.__cause__}")
+ 
+-        request_id = "chatcmpl-" \
+-                     f"{self._base_request_id(raw_request, request.request_id)}"
++        request_id = f"{self._base_request_id(raw_request, request.request_id)}"
++        logger.info(f"request_id: {request_id}")
+ 
+         request_metadata = RequestResponseMetadata(request_id=request_id)
+         if raw_request:
+diff --git a/vllm/entrypoints/openai/serving_completion.py b/vllm/entrypoints/openai/serving_completion.py
+index 323795c..94b8cd4 100644
+--- a/vllm/entrypoints/openai/serving_completion.py
++++ b/vllm/entrypoints/openai/serving_completion.py
+@@ -113,7 +113,8 @@ class OpenAIServingCompletion(OpenAIServing):
+             return self.create_error_response(
+                 "Echo is unsupported with prompt embeds.")
+ 
+-        request_id = f"cmpl-{self._base_request_id(raw_request)}"
++        request_id = f"{self._base_request_id(raw_request)}"
++        logger.info(f"request_id: {request_id}")    
+         created_time = int(time.time())
+ 
+         request_metadata = RequestResponseMetadata(request_id=request_id)
+@@ -187,7 +188,7 @@ class OpenAIServingCompletion(OpenAIServing):
+                         self.default_sampling_params,
+                     )
+ 
+-                request_id_item = f"{request_id}-{i}"
++                request_id_item = f"{request_id}"
+ 
+                 self._log_inputs(
+                     request_id_item,
+diff --git a/vllm/entrypoints/openai/serving_metrics.py b/vllm/entrypoints/openai/serving_metrics.py
+new file mode 100644
+index 0000000..ad45bc6
+--- /dev/null
++++ b/vllm/entrypoints/openai/serving_metrics.py
+@@ -0,0 +1,22 @@
++from typing import Optional
++
++from vllm.entrypoints.openai.serving_models import OpenAIServingModels
++from vllm.entrypoints.openai.serving_engine import EngineClient
++from vllm.entrypoints.openai.serving_engine import ModelConfig
++from fastapi import Request
++from collections.abc import AsyncGenerator, AsyncIterator
++from vllm.v1.engine import EngineCoreOutputs
++
++from vllm.entrypoints.openai.protocol import CompletionRequest
++
++class MetricsReporter:
++    def __init__(
++        self,
++        engine_client: EngineClient,
++        model_config: ModelConfig,
++    ):
++        self.engine_client = engine_client
++        self.model_config = model_config
++    
++    async def report_metrics(self, request: CompletionRequest, raw_request: Optional[Request] = None) -> AsyncGenerator[EngineCoreOutputs, None]:
++        return self.engine_client.report_metrics()
+diff --git a/vllm/envs.py b/vllm/envs.py
+index 5c414e8..54f2e6e 100755
+--- a/vllm/envs.py
++++ b/vllm/envs.py
+@@ -8,6 +8,8 @@ import tempfile
+ from typing import TYPE_CHECKING, Any, Callable, Optional
+ 
+ if TYPE_CHECKING:
++    VLLM_REPORT_METRICS: bool = True
++    VLLM_SSE_MODE: str = "full"
+     VLLM_HOST_IP: str = ""
+     VLLM_PORT: Optional[int] = None
+     VLLM_RPC_BASE_PATH: str = tempfile.gettempdir()
+@@ -202,6 +204,14 @@ def get_vllm_port() -> Optional[int]:
+ environment_variables: dict[str, Callable[[], Any]] = {
+ 
+     # ================== Installation Time Env Vars ==================
++    "VLLM_REPORT_METRICS":
++    lambda: bool(int(os.getenv("VLLM_REPORT_METRICS", "1"))),
++
++    # Controls which fields are serialized in SSE metrics JSON.
++    # Valid values: "minimal" (step_id, latency, per-request outputs only),
++    # "full" (all fields including block-level cache data).
++    "VLLM_SSE_MODE":
++    lambda: os.getenv("VLLM_SSE_MODE", "full"),
+ 
+     # Target device of vLLM, supporting [cuda (by default),
+     # rocm, neuron, cpu]
+diff --git a/vllm/v1/core/block_pool.py b/vllm/v1/core/block_pool.py
+index 5bf4d3a..d5cea8a 100644
+--- a/vllm/v1/core/block_pool.py
++++ b/vllm/v1/core/block_pool.py
+@@ -103,7 +103,7 @@ class BlockPool:
+         block_size: int,
+         kv_cache_group_id: int,
+         hash_fn: Callable,
+-    ) -> None:
++    ) -> tuple[list[int], list[int]]:
+         """Cache a list of full blocks for prefix caching.
+         This function takes a list of blocks that will have their block hash
+         metadata to be updated and cached. Given a request, it computes the
+@@ -123,9 +123,15 @@ class BlockPool:
+             block_size: Number of tokens in each block.
+             kv_cache_group_id: The id of the KV cache group.
+             hash_fn: The hash function to use for block hashes.
++
++        Ret:
++            list[int]: new cached hashs
++            list[int]: new bids
+         """
++        ret = []
++        ids = []
+         if num_cached_blocks == num_full_blocks:
+-            return
++            return [], []
+         new_full_blocks = blocks[num_cached_blocks:num_full_blocks]
+         assert len(block_hashes) >= num_cached_blocks
+         new_block_hashes = block_hashes[num_cached_blocks:]
+@@ -184,6 +190,8 @@ class BlockPool:
+                 blk.block_id] = blk
+             if new_hashes is not None:
+                 new_hashes.append(block_hash.hash_value)
++            ret.append(hex(block_hash.hash_value))
++            ids.append(blk.block_id)
+             prev_block_hash_value = block_hash.hash_value
+ 
+         if self.enable_kv_cache_events:
+@@ -198,8 +206,12 @@ class BlockPool:
+                     lora_id=request.lora_request.id
+                     if request.lora_request else None,
+                 ))
+-
+-    def get_new_blocks(self, num_blocks: int) -> list[KVCacheBlock]:
++        
++        return ret, ids
++    
++    def get_new_blocks(self, req_id: str, num_blocks: int) -> tuple[list[KVCacheBlock],
++                                                       list[str],
++                                                       list[int]]:
+         """Get new blocks from the free block pool.
+ 
+         Note that we do not check block cache in this function.
+@@ -209,26 +221,42 @@ class BlockPool:
+ 
+         Returns:
+             A list of new block.
++            
++            A list of evicted hashs.
++
++            A list of evicted id.
+         """
+         if num_blocks > self.get_num_free_blocks():
+             raise ValueError(
+                 f"Cannot get {num_blocks} free blocks from the pool")
+ 
+         ret: list[KVCacheBlock] = self.free_block_queue.popleft_n(num_blocks)
+-
++        evicted_hashes: list[str] = []
++        evicted_ids: list[int] = []
+         # In order to only iterate the list once, we duplicated code a bit
++        fail_dict: dict[int, int] = {}
+         if self.enable_caching:
+             for block in ret:
+-                self._maybe_evict_cached_block(block)
++                success_to_evict, hs, err = self._maybe_evict_cached_block(block)
++                if success_to_evict and hs is not None:
++                    evicted_hashes.append(hs)
++                    evicted_ids.append(block.block_id)
++                else: # fail, why?
++                    fail_dict[block.block_id] = err
+                 assert block.ref_cnt == 0
+                 block.ref_cnt += 1
+         else:
+             for block in ret:
+                 assert block.ref_cnt == 0
+                 block.ref_cnt += 1
+-        return ret
+-
+-    def _maybe_evict_cached_block(self, block: KVCacheBlock) -> bool:
++        logger.debug(f"{req_id=} {fail_dict=} {evicted_ids=}")
++        assert (len(fail_dict) + len(evicted_ids) == len(ret), 
++                f"{len(fail_dict)}, {len(evicted_ids)}, {len(ret)}")
++        return ret, evicted_hashes, evicted_ids
++
++    def _maybe_evict_cached_block(self, block: KVCacheBlock) -> tuple[bool, 
++                                                                      Optional[str],
++                                                                      int]:
+         """
+         If a block is cached in `cached_block_hash_to_block`, we reset its hash
+         metadata and evict it from the cache.
+@@ -238,16 +266,18 @@ class BlockPool:
+ 
+         Returns:
+             True if the block is evicted, False otherwise.
++
++            Hash if existes
+         """
+         block_hash = block.block_hash
+         if block_hash is None:
+             # The block doesn't have hash, eviction is not needed
+-            return False
++            return False, None, 1
+         blocks_by_id = self.cached_block_hash_to_block.get(block_hash)
+         if blocks_by_id is None:
+             # block_hash not found in cached_block_hash_to_block,
+             # eviction is not needed
+-            return False
++            return False, None, 2
+         block.reset_hash()
+         blocks_by_id.pop(block.block_id, None)
+         if len(blocks_by_id) == 0:
+@@ -260,7 +290,7 @@ class BlockPool:
+             # enabled, so there is only one group.
+             self.kv_event_queue.append(
+                 BlockRemoved(block_hashes=[block_hash.get_hash_value()]))
+-        return True
++        return True, hex(block_hash.block_hash.hash_value), 0
+ 
+     def touch(self, blocks: tuple[list[KVCacheBlock], ...]) -> None:
+         """Touch a block increases its reference count by 1, and may remove
+diff --git a/vllm/v1/core/kv_cache_coordinator.py b/vllm/v1/core/kv_cache_coordinator.py
+index de72e60..bf3211b 100644
+--- a/vllm/v1/core/kv_cache_coordinator.py
++++ b/vllm/v1/core/kv_cache_coordinator.py
+@@ -81,7 +81,9 @@ class KVCacheCoordinator(ABC):
+                                              new_computed_blocks[i])
+ 
+     def allocate_new_blocks(self, request_id: str,
+-                            num_tokens: int) -> tuple[list[KVCacheBlock], ...]:
++                            num_tokens: int) -> tuple[tuple[list[KVCacheBlock], ...], 
++                                                      list[str],
++                                                      list[int]]:
+         """
+         Allocate new blocks for the request to give it at least `num_tokens` 
+         token slots.
+@@ -94,12 +96,22 @@ class KVCacheCoordinator(ABC):
+         Returns:
+             The new allocated blocks.
+         """
++        evicted_list : list[str] = []
++        evicted_ids: list[int] = []
++        allocated_list = []
++        for manager in self.single_type_managers:
++            allocs, evict_hashes, evict_ids = manager.allocate_new_blocks(request_id, num_tokens)
++            #print(f"[SeeMe] type of singleManager returns {type(evict_ids)}")
++            evicted_list.extend(evict_hashes)
++            evicted_ids.extend(evict_ids)
++            allocated_list.append(allocs)
++        return tuple(allocated_list), evicted_list, evicted_ids
+         return tuple(
+             manager.allocate_new_blocks(request_id, num_tokens)
+             for manager in self.single_type_managers)
+ 
+     def cache_blocks(self, request: Request, block_hashes: list[BlockHash],
+-                     num_computed_tokens: int) -> None:
++                     num_computed_tokens: int) -> tuple[list[str], list[int]]:
+         """
+         Cache the blocks for the request.
+ 
+@@ -108,9 +120,16 @@ class KVCacheCoordinator(ABC):
+             block_hashes: The block hashes of the request.
+             num_tokens: The total number of tokens that need to be cached 
+                 (including tokens that are already cached).
++        Ret:
++            ret: new cached hashs
+         """
++        ret = []
++        ret2 = []
+         for manager in self.single_type_managers:
+-            manager.cache_blocks(request, block_hashes, num_computed_tokens)
++            hashes, ids = manager.cache_blocks(request, block_hashes, num_computed_tokens)
++            ret.extend(hashes)
++            ret2.extend(ids)
++        return ret, ret2
+ 
+     def free(self, request_id: str) -> None:
+         """
+diff --git a/vllm/v1/core/kv_cache_manager.py b/vllm/v1/core/kv_cache_manager.py
+index e820a0a..b4070e4 100644
+--- a/vllm/v1/core/kv_cache_manager.py
++++ b/vllm/v1/core/kv_cache_manager.py
+@@ -15,6 +15,8 @@ from vllm.v1.kv_cache_interface import KVCacheConfig
+ from vllm.v1.metrics.stats import PrefixCacheStats
+ from vllm.v1.request import Request, RequestStatus
+ 
++from collections import deque
++
+ logger = init_logger(__name__)
+ 
+ 
+@@ -113,7 +115,11 @@ class KVCacheManager:
+         self.num_kv_cache_groups = len(kv_cache_config.kv_cache_groups)
+         self.block_pool = self.coordinator.block_pool
+         self.kv_cache_config = kv_cache_config
+-
++        
++        self.evicted_block_ids_queue = deque()
++        self.evicted_block_hashes_queue = deque()
++        self.new_block_hashes_queue = deque()
++        self.new_block_hashes_ids = defaultdict(list)
+         # Mapping from request ID to kv block hashes.
+         # This is to avoid recomputing the block hashes for each call of
+         # `get_computed_blocks` or `allocate_slots`.
+@@ -285,9 +291,13 @@ class KVCacheManager:
+         self.coordinator.save_new_computed_blocks(request.request_id,
+                                                   new_computed_block_list)
+ 
+-        new_blocks = self.coordinator.allocate_new_blocks(
++        new_blocks, evicted_hashes, evicted_ids = self.coordinator.allocate_new_blocks(
+             request.request_id, num_tokens_need_slot)
+ 
++        logger.debug(f"[manager] for req {request.request_id} extend {evicted_ids=} ")
++        self.evicted_block_ids_queue.extend(evicted_ids)
++        self.evicted_block_hashes_queue.extend(evicted_hashes)
++
+         # P/D: delay caching blocks if we have to recv from
+         # remote. Update state for locally cached blocks.
+         if not self.enable_caching or delay_cache_blocks:
+@@ -299,12 +309,15 @@ class KVCacheManager:
+         # at `request.num_tokens`, ensuring only "finalized" tokens are cached.
+         num_tokens_to_cache = min(num_computed_tokens + num_new_tokens,
+                                   request.num_tokens)
+-        self.coordinator.cache_blocks(
++        new_hashs, new_ids = self.coordinator.cache_blocks(
+             request,
+             self.req_to_block_hashes[request.request_id],
+             num_tokens_to_cache,
+         )
+-
++        # We log the new generated hashs here
++        # These hashs will be stored after this batch
++        self.new_block_hashes_queue.extend(new_hashs)
++        self.new_block_hashes_ids[request.request_id].extend(new_ids)
+         return KVCacheBlocks(new_blocks)
+ 
+     def free(self, request: Request) -> None:
+@@ -401,10 +414,42 @@ class KVCacheManager:
+         """Cache the blocks for the request, if enabled."""
+         if self.enable_caching:
+             block_hashes = self.req_to_block_hashes[request.request_id]
+-            self.coordinator.cache_blocks(request, block_hashes,
++            ret, new_ids = self.coordinator.cache_blocks(request, block_hashes,
+                                           num_computed_tokens)
++            # We also log the new generated hashs here
++            # These means some kvcache blocks were received from remote
++            self.new_block_hashes_queue.extend(ret)
++            self.new_block_hashes_ids[request.request_id].extend(new_ids)
+ 
+     def create_empty_block_list(self) -> KVCacheBlocks:
+         """Creates a new KVCacheBlocks instance with no blocks."""
+         return KVCacheBlocks(tuple([]
+                                    for _ in range(self.num_kv_cache_groups)))
++
++    def poll_evicted_block_ids(self) -> list[int]:
++        if not self.evicted_block_ids_queue:
++            return []
++        result = list(self.evicted_block_ids_queue)
++        self.evicted_block_ids_queue.clear()
++        return result
++
++    def poll_evicted_block_hashes(self) -> list[int]:
++        if not self.evicted_block_hashes_queue:
++            return []
++        result = list(self.evicted_block_hashes_queue)
++        self.evicted_block_hashes_queue.clear()
++        return result
++    
++    def poll_new_block_hashes(self) -> list[int]:
++        if not self.new_block_hashes_queue:
++            return []
++        result = list(self.new_block_hashes_queue)
++        self.new_block_hashes_queue.clear()
++        return result
++
++    def poll_new_block_hashes_ids(self) ->  dict[str, list[int]]:
++        if not self.new_block_hashes_ids: # empty
++            return {}
++        copied = {k: v.copy() for k, v in self.new_block_hashes_ids.items()}
++        self.new_block_hashes_ids.clear()
++        return copied
+\ No newline at end of file
+diff --git a/vllm/v1/core/sched/output.py b/vllm/v1/core/sched/output.py
+index d34f393..e082693 100644
+--- a/vllm/v1/core/sched/output.py
++++ b/vllm/v1/core/sched/output.py
+@@ -3,7 +3,7 @@
+ 
+ from __future__ import annotations
+ 
+-from dataclasses import dataclass
++from dataclasses import dataclass, field
+ from typing import TYPE_CHECKING, Optional
+ 
+ if TYPE_CHECKING:
+@@ -155,3 +155,21 @@ class SchedulerOutput:
+ 
+     # KV Cache Connector metadata.
+     kv_connector_metadata: Optional[KVConnectorMetadata] = None
++    
++    # prefill token budget in each schedule batch
++    prefill_tokens: Optional[int] = None
++    prefill_budget: Optional[int] = None
++    # decode_req_num: Optional[int] = None
++
++    # evicted block ids in this batch
++    evicted_block_hashes: Optional[list[str]] = field(default_factory=list)
++    new_block_hashes: Optional[list[str]] = field(default_factory=list)
++    evicted_block_ids: Optional[list[int]] = field(default_factory=list)
++
++    # used_block_ids:
++    # req_id -> used_block_id list
++    used_block_ids: Optional[dict[str, list[int]]] = field(default_factory=dict)
++    
++    new_block_hashes_ids : Optional[dict[str, list[int]]] = field(default_factory=dict)
++
++    preempted_ids: Optional[list[int]] = field(default_factory=list)
+\ No newline at end of file
+diff --git a/vllm/v1/core/sched/scheduler.py b/vllm/v1/core/sched/scheduler.py
+index 446f980..c0e8cb9 100644
+--- a/vllm/v1/core/sched/scheduler.py
++++ b/vllm/v1/core/sched/scheduler.py
+@@ -59,6 +59,10 @@ class Scheduler(SchedulerInterface):
+         self.log_stats = log_stats
+         self.structured_output_manager = structured_output_manager
+ 
++        # Whether SSE metrics reporting is enabled; gates block-level data
++        # collection that is only needed for the router SSE stream.
++        self.report_metrics: bool = bool(vllm_config.report_metrics)
++
+         # include_finished_set controls whether a separate set of finished
+         # request ids should be included in the EngineCoreOutputs returned
+         # by update_from_outputs(). This is currently used in the multi-engine
+@@ -66,6 +70,10 @@ class Scheduler(SchedulerInterface):
+         self.finished_req_ids_dict: Optional[dict[int, set[str]]] = (
+             defaultdict(set) if include_finished_set else None)
+ 
++        # Return aborted set in every EngineCoreOutputs
++        # This will include every abnormal cases vLLM defined
++        self.aborted_req_ids_dict: Optional[dict[int, set[str]]] = defaultdict(set)
++        
+         # Scheduling constraints.
+         self.max_num_running_reqs = self.scheduler_config.max_num_seqs
+         self.max_num_scheduled_tokens = \
+@@ -118,6 +126,12 @@ class Scheduler(SchedulerInterface):
+ 
+         # KV Connector: requests in process of async KV loading or recving
+         self.finished_recving_kv_req_ids: set[str] = set()
++        self.total_prefill_tokens = 0
++
++        # req id -> block id list
++        # it is the cumulative value of new_used_block_ids
++        # it is deleted when the _free_block calls
++        self.used_block_ids: dict[str, list[int]] = defaultdict(list)
+ 
+         # Encoder-related.
+         # Calculate encoder cache size if applicable
+@@ -189,6 +203,7 @@ class Scheduler(SchedulerInterface):
+ 
+         req_to_new_block_ids: dict[str, tuple[list[int], ...]] = {}
+         num_scheduled_tokens: dict[str, int] = {}
++        preempted_ids: list[int] = []
+         token_budget = self.max_num_scheduled_tokens
+         # Encoder-related.
+         scheduled_encoder_inputs: dict[str, list[int]] = {}
+@@ -201,6 +216,12 @@ class Scheduler(SchedulerInterface):
+ 
+         # First, schedule the RUNNING requests.
+         req_index = 0
++
++
++        prefill_tokens = 0
++        prefill_token_budget = self.max_num_scheduled_tokens
++        # total_token_budget = self.max_num_scheduled_tokens
++
+         while req_index < len(self.running) and token_budget > 0:
+             request = self.running[req_index]
+ 
+@@ -249,6 +270,7 @@ class Scheduler(SchedulerInterface):
+                     request,
+                     num_new_tokens,
+                     num_lookahead_tokens=self.num_lookahead_tokens)
++                
+                 if new_blocks is None:
+                     # The request cannot be scheduled.
+                     # Preempt the lowest-priority request.
+@@ -260,7 +282,11 @@ class Scheduler(SchedulerInterface):
+                         self.running.remove(preempted_req)
+                     else:
+                         preempted_req = self.running.pop()
+-
++                    logger.warning(f"[scheduler] preempt req {preempted_req.request_id} since no blocks")
++                    # Note, clear the used_block_ids when preempted
++                    # Since next time vllm will treat this as a new prefill
++                    # It will reset all blocks 
++                    self.used_block_ids[preempted_req.request_id] = []
+                     self.kv_cache_manager.free(preempted_req)
+                     preempted_req.status = RequestStatus.PREEMPTED
+                     preempted_req.num_computed_tokens = 0
+@@ -270,12 +296,15 @@ class Scheduler(SchedulerInterface):
+ 
+                     self.waiting.prepend_request(preempted_req)
+                     preempted_reqs.append(preempted_req)
++                    preempted_ids.append(int(preempted_req.request_id))
+                     if preempted_req == request:
+                         # No more request to preempt.
+                         can_schedule = False
+                         break
+                 else:
+                     # The request can be scheduled.
++                    # bids = [blk.block_id for blks in new_blocks.blocks for blk in blks ]
++                    # logger.info(f"[scheduler] decoding after allocate slots req {request.request_id} {bids}")
+                     can_schedule = True
+                     break
+             if not can_schedule:
+@@ -283,6 +312,14 @@ class Scheduler(SchedulerInterface):
+             assert new_blocks is not None
+ 
+             # Schedule the request.
++            if request.num_computed_tokens < request.num_prompt_tokens:
++                prefill_tokens += num_new_tokens
++            else:
++                prefill_token_budget -= num_new_tokens
++                if num_new_tokens > 1:
++                    logger.warning(f"req_id {request.request_id} {num_new_tokens=} != 1, {request.num_tokens_with_spec=} {request.num_output_placeholders=} {request.num_computed_tokens=} it must be preemmpted before")
++                
++            request.prev_computed_tokens = request.num_computed_tokens
+             scheduled_running_reqs.append(request)
+             if request.use_structured_output:
+                 # PERF: in case of chunked prefill,
+@@ -436,7 +473,7 @@ class Scheduler(SchedulerInterface):
+                         if num_new_tokens == 0:
+                             # The request cannot be scheduled.
+                             break
+-
++                        
+                 new_blocks = self.kv_cache_manager.allocate_slots(
+                     request,
+                     num_new_tokens + num_external_computed_tokens,
+@@ -445,10 +482,13 @@ class Scheduler(SchedulerInterface):
+                     num_lookahead_tokens=self.num_lookahead_tokens,
+                     delay_cache_blocks=load_kv_async,
+                 )
++                
+                 if new_blocks is None:
+                     # The request cannot be scheduled.
++                    logger.warning(f"[scheduler] prefilling new blocks got None for req {request.request_id}")
+                     break
+-
++                # bids = [blk.block_id for blks in new_blocks.blocks for blk in blks ]
++                # logger.info(f"[scheduler] prefilling after allocate slots req {request.request_id} {bids}")
+                 # KVTransfer: the connector uses this info to determine
+                 # if a load is needed. Note that
+                 # This information is used to determine if a load is
+@@ -492,11 +532,13 @@ class Scheduler(SchedulerInterface):
+                     self.kv_cache_manager.get_block_ids(request.request_id))
+                 num_scheduled_tokens[request.request_id] = num_new_tokens
+                 token_budget -= num_new_tokens
++                prefill_tokens += num_new_tokens + num_computed_tokens
+                 request.status = RequestStatus.RUNNING
+                 request.num_computed_tokens = num_computed_tokens
+                 # Count the number of prefix cached tokens.
+                 if request.num_cached_tokens < 0:
+                     request.num_cached_tokens = num_computed_tokens
++                    request.prev_computed_tokens = num_computed_tokens
+                 # Encoder-related.
+                 if encoder_inputs_to_schedule:
+                     scheduled_encoder_inputs[request.request_id] = (
+@@ -549,6 +591,22 @@ class Scheduler(SchedulerInterface):
+             scheduled_spec_decode_tokens,
+             req_to_new_block_ids,
+         )
++
++        # TODO, this may be changed when multiple kv-cache group is enabled
++        # we flatten the all the kv-cache groups together
++        # It's fine for only one kv-cache group now
++        # Block-level data collection is only needed for SSE metrics reporting.
++        if self.report_metrics:
++            ret_used_block_ids: dict[str, list[int]] = defaultdict(list)
++            for req_id, block_id_tups in req_to_new_block_ids.items():
++                to_extend = [block_id for sublist in block_id_tups for block_id in sublist]
++                self.used_block_ids[req_id].extend(to_extend)
++                if len(to_extend) > 0:
++                    ret_used_block_ids[req_id] = self.used_block_ids[req_id].copy()
++        else:
++            ret_used_block_ids = {}
++
++        logger.debug(f"[scheduler] return once scheduler output to core")
+         scheduler_output = SchedulerOutput(
+             scheduled_new_reqs=new_reqs_data,
+             scheduled_cached_reqs=cached_reqs_data,
+@@ -565,6 +623,15 @@ class Scheduler(SchedulerInterface):
+             free_encoder_input_ids=self.encoder_cache_manager.get_freed_ids(),
+             structured_output_request_ids=structured_output_request_ids,
+             grammar_bitmask=grammar_bitmask,
++            prefill_tokens=prefill_tokens,
++            prefill_budget=prefill_token_budget,
++            evicted_block_hashes=self.kv_cache_manager.poll_evicted_block_hashes() if self.report_metrics else [],
++            evicted_block_ids=self.kv_cache_manager.poll_evicted_block_ids() if self.report_metrics else [],
++            new_block_hashes=self.kv_cache_manager.poll_new_block_hashes() if self.report_metrics else [],
++            used_block_ids=ret_used_block_ids,
++            new_block_hashes_ids=self.kv_cache_manager.poll_new_block_hashes_ids() if self.report_metrics else {},
++            # decode_req_num=len(self.running)
++            preempted_ids=preempted_ids,
+         )
+ 
+         # NOTE(Kuntai): this function is designed for multiple purposes:
+@@ -599,6 +666,7 @@ class Scheduler(SchedulerInterface):
+         num_scheduled_tokens = scheduler_output.num_scheduled_tokens
+         for req_id, num_scheduled_token in num_scheduled_tokens.items():
+             request = self.requests[req_id]
++            # request.prev_computed_tokens = request.num_computed_tokens
+             request.num_computed_tokens += num_scheduled_token
+ 
+             # NOTE: _free_encoder_inputs relies on num_computed_tokens, which
+@@ -766,6 +834,8 @@ class Scheduler(SchedulerInterface):
+         # to avoid expensive operations inside the loop.
+         stopped_running_reqs: set[Request] = set()
+         stopped_preempted_reqs: set[Request] = set()
++
++        client_id_set: set[str] = set()
+         for req_id, num_tokens_scheduled in num_scheduled_tokens.items():
+             assert num_tokens_scheduled > 0
+             request = self.requests.get(req_id)
+@@ -776,6 +846,8 @@ class Scheduler(SchedulerInterface):
+                 continue
+ 
+             req_index = model_runner_output.req_id_to_index[req_id]
++
++            client_id_set.add(request.client_index)
+             generated_token_ids = sampled_token_ids[
+                 req_index] if sampled_token_ids else []
+ 
+@@ -855,6 +927,14 @@ class Scheduler(SchedulerInterface):
+             if new_token_ids or pooler_output is not None \
+                 or kv_transfer_params:
+ 
++                state = None
++                if request.num_computed_tokens == request.num_prompt_tokens:
++                    state = "PREFILL"
++                    ttft = time.time() - request.insert_to_waiting_time
++                else:
++                    state = "DECODE"
++                    ttft = None
++
+                 # Add EngineCoreOutput for this Request.
+                 outputs[request.client_index].append(
+                     EngineCoreOutput(
+@@ -868,6 +948,9 @@ class Scheduler(SchedulerInterface):
+                         events=request.take_events(),
+                         kv_transfer_params=kv_transfer_params,
+                         num_cached_tokens=request.num_cached_tokens,
++                        num_computed_tokens=request.prev_computed_tokens,
++                        state=state,
++                        ttft=ttft,
+                     ))
+ 
+             else:
+@@ -893,6 +976,11 @@ class Scheduler(SchedulerInterface):
+             for client_index, outs in outputs.items()
+         }
+ 
++        for client_id in client_id_set:
++            if client_id not in engine_core_outputs.keys():
++                empty_output_for_metric_reporting = EngineCoreOutputs(outputs=[])
++                engine_core_outputs[client_id] = empty_output_for_metric_reporting
++            
+         finished_req_ids = self.finished_req_ids_dict
+         if finished_req_ids:
+             # Include ids of requests that finished since last outputs
+@@ -905,6 +993,20 @@ class Scheduler(SchedulerInterface):
+                     engine_core_outputs[client_index] = EngineCoreOutputs(
+                         finished_requests=finished_set)
+             finished_req_ids.clear()
++        
++        aborted_req_ids = self.aborted_req_ids_dict
++        if aborted_req_ids:
++            # Include ids of requests that aborted (error but not stopped) since last outputs
++            # were sent.
++            for client_index, aborted_set in aborted_req_ids.items():
++                # Set finished request set in EngineCoreOutputs for this client.
++                logger.warning(f"aggregate aborted req ids {client_index=} {aborted_set=}")
++                if (eco := engine_core_outputs.get(client_index)) is not None:
++                    eco.aborted_requests = aborted_set
++                else:
++                    engine_core_outputs[client_index] = EngineCoreOutputs(
++                        aborted_requests=aborted_set)
++            aborted_req_ids.clear()
+ 
+         if engine_core_outputs:
+             # Return stats to only one of the front-ends.
+@@ -957,8 +1059,10 @@ class Scheduler(SchedulerInterface):
+         return len(self.running), len(self.waiting)
+ 
+     def add_request(self, request: Request) -> None:
++        request.mark_as_waiting()
+         self.waiting.add_request(request)
+         self.requests[request.request_id] = request
++        self.total_prefill_tokens += request.num_prompt_tokens
+         if self.log_stats:
+             request.record_event(EngineCoreEventType.QUEUED)
+ 
+@@ -988,7 +1092,6 @@ class Scheduler(SchedulerInterface):
+             if request is None:
+                 # Invalid request ID.
+                 continue
+-
+             valid_requests.append(request)
+             if request.status == RequestStatus.RUNNING:
+                 running_requests_to_remove.append(request)
+@@ -1016,6 +1119,10 @@ class Scheduler(SchedulerInterface):
+         if self.finished_req_ids_dict is not None:
+             self.finished_req_ids_dict[request.client_index].add(request_id)
+ 
++        if RequestStatus.is_aborted(request.status):
++            logger.warning(f"add to aborted dict for clint{request.client_index} req#{request_id}")
++            self.aborted_req_ids_dict[request.client_index].add(request_id)
++
+         if not delay_free_blocks:
+             self._free_blocks(request)
+ 
+@@ -1026,6 +1133,10 @@ class Scheduler(SchedulerInterface):
+         self.kv_cache_manager.free(request)
+         self.kv_cache_manager.free_block_hashes(request)
+         del self.requests[request.request_id]
++        # Note that if the abort operation is before scheduled
++        # the key is not in the self_used_block_ids
++        if request.request_id in self.used_block_ids:
++            del self.used_block_ids[request.request_id]
+ 
+     def get_num_unfinished_requests(self) -> int:
+         return len(self.waiting) + len(self.running)
+diff --git a/vllm/v1/core/single_type_kv_cache_manager.py b/vllm/v1/core/single_type_kv_cache_manager.py
+index 65a196e..f360079 100644
+--- a/vllm/v1/core/single_type_kv_cache_manager.py
++++ b/vllm/v1/core/single_type_kv_cache_manager.py
+@@ -106,7 +106,7 @@ class SingleTypeKVCacheManager(ABC):
+             assert len(new_computed_blocks) == 0
+ 
+     def allocate_new_blocks(self, request_id: str,
+-                            num_tokens: int) -> list[KVCacheBlock]:
++                            num_tokens: int) -> tuple[list[KVCacheBlock], list[str], list[int]]:
+         """
+         Allocate new blocks for the request to give it at least `num_tokens` 
+         token slots.
+@@ -118,19 +118,21 @@ class SingleTypeKVCacheManager(ABC):
+ 
+         Returns:
+             The new allocated blocks.
++            The evicted block hashes
++            The evicted block ids
+         """
+         req_blocks = self.req_to_blocks[request_id]
+         num_required_blocks = cdiv(num_tokens, self.block_size)
+         num_new_blocks = num_required_blocks - len(req_blocks)
+         if num_new_blocks <= 0:
+-            return []
++            return [],[], []
+         else:
+-            new_blocks = self.block_pool.get_new_blocks(num_new_blocks)
++            new_blocks, evicted_hashes, evicted_ids = self.block_pool.get_new_blocks(request_id, num_new_blocks)
+             req_blocks.extend(new_blocks)
+-            return new_blocks
++            return new_blocks, evicted_hashes, evicted_ids
+ 
+     def cache_blocks(self, request: Request, block_hashes: list[BlockHash],
+-                     num_tokens: int) -> None:
++                     num_tokens: int) -> tuple[list[str], list[int]]:
+         """
+         Cache the blocks for the request.
+ 
+@@ -139,11 +141,16 @@ class SingleTypeKVCacheManager(ABC):
+             block_hashes: The block hashes of the request.
+             num_tokens: The total number of tokens that need to be cached 
+                 (including tokens that are already cached).
++
++        Ret:
++            List[int]: new cached hashs
++
++            list[int]: ids
+         """
+         num_cached_blocks = self.num_cached_block[request.request_id]
+         num_full_blocks = num_tokens // self.block_size
+ 
+-        self.block_pool.cache_full_blocks(
++        hashes, ids = self.block_pool.cache_full_blocks(
+             request=request,
+             blocks=self.req_to_blocks[request.request_id],
+             block_hashes=block_hashes,
+@@ -156,6 +163,8 @@ class SingleTypeKVCacheManager(ABC):
+ 
+         self.num_cached_block[request.request_id] = num_full_blocks
+ 
++        return hashes, ids
++
+     def free(self, request_id: str) -> None:
+         """
+         Free the blocks for the request.
+diff --git a/vllm/v1/engine/__init__.py b/vllm/v1/engine/__init__.py
+index 79dc80d..f2b52f1 100644
+--- a/vllm/v1/engine/__init__.py
++++ b/vllm/v1/engine/__init__.py
+@@ -41,6 +41,102 @@ class FinishReason(enum.IntEnum):
+         return FINISH_REASON_STRINGS[self.value]
+ 
+ 
++def split_hash_to_32bit_list(hash_int):
++    mask = 0xFFFFFFFF
++    hash_int = int(hash_int, 16)
++    bit_len = hash_int.bit_length()
++    if bit_len <= 64:
++        num_chunks = 2
++    else:
++        num_chunks = 8
++    result = []
++    for i in range(num_chunks):
++        chunk = (hash_int >> (i * 32)) & mask
++        result.append(chunk)
++    return result
++
++def split_hash_to_64bit_list(hash_int):
++    mask = 0xFFFFFFFFFFFFFFFF
++    hash_int = int(hash_int, 16)
++    bit_len = hash_int.bit_length()
++    
++    if bit_len <= 64:
++        num_chunks = 1
++    else:
++        num_chunks = 4
++    result = []
++    for i in range(num_chunks):
++        chunk = (hash_int >> (i * 64)) & mask
++        result.append(chunk)
++    return result
++
++def simplified_engine_core_outputs_to_dict(outputs: "EngineCoreOutputs", mode: str = "full") -> dict[str, Any]:
++    """
++    Convert EngineCoreOutputs to a simplified dictionary for metrics reporting.
++
++    This function extracts only the essential fields from EngineCoreOutputs
++    and its nested structures, making it suitable for metrics reporting.
++
++    Args:
++        outputs (EngineCoreOutputs): The EngineCoreOutputs instance to convert.
++        mode (str): Serialization mode. "full" includes all fields (block
++            hashes, evicted IDs, etc.). "minimal" only includes step_id,
++            latency, and per-request outputs.
++
++    Returns:
++        dict[str, Any]: A simplified dictionary representation of the outputs.
++    """
++    simplified_outputs = {
++        "outputs": [],
++        "step_id": outputs.step_id if outputs.step_id is not None else 0,
++        "latency": int(outputs.latency * 1000) if outputs.latency is not None else 0,
++    }
++
++    if mode == "full":
++        serilized_new_block_hashes = [split_hash_to_64bit_list(hs) for hs in outputs.new_block_hashes]
++        serilized_evicted_block_hashes = [split_hash_to_64bit_list(hs) for hs in outputs.evicted_block_hashes]
++        simplified_outputs.update({
++            "prefill_token_budget": outputs.prefill_token_budget if outputs.prefill_token_budget is not None else 0,
++            "prefill_tokens": outputs.prefill_tokens if outputs.prefill_tokens is not None else 0,
++            "new_block_hashes": serilized_new_block_hashes,
++            "evicted_block_hashes": serilized_evicted_block_hashes,
++            "evicted_block_ids": outputs.evicted_block_ids,
++            "cur_used_block_ids": outputs.used_block_ids,
++            "new_block_hashes_ids": outputs.new_block_hashes_ids,
++            "preempted_ids": outputs.preempted_ids,
++            "aborted_requests": [int(id) for id in outputs.aborted_requests] if outputs.aborted_requests else []
++        })
++    else:
++        # Minimal mode: empty defaults for block-level fields.
++        simplified_outputs.update({
++            "prefill_token_budget": 0,
++            "prefill_tokens": 0,
++            "new_block_hashes": [],
++            "evicted_block_hashes": [],
++            "evicted_block_ids": [],
++            "cur_used_block_ids": {},
++            "new_block_hashes_ids": {},
++            "preempted_ids": [],
++            "aborted_requests": []
++        })
++
++    for output in outputs.outputs:
++        simplified_output = {
++            "request_id": int(output.request_id),
++            "new_token_ids": output.new_token_ids,
++            "state": output.state,
++            "is_finished": output.finished,
++            "hit_token_cnt": output.num_cached_tokens,
++            "prev_computed_tokens": output.num_computed_tokens,
++        }
++        if simplified_output["state"] == "PREFILL":
++            simplified_output.update({
++                "ttft": output.ttft
++            })
++
++        simplified_outputs["outputs"].append(simplified_output)
++    return simplified_outputs
++
+ class EngineCoreRequest(
+         msgspec.Struct,
+         array_like=True,  # type: ignore[call-arg]
+@@ -117,6 +213,10 @@ class EngineCoreOutput(
+ 
+     # The number of tokens with prefix cache hits.
+     num_cached_tokens: int = 0
++    num_computed_tokens: Optional[int] = None
++    
++    state: Optional[str] = None
++    ttft: Optional[float] = None
+ 
+     @property
+     def finished(self) -> bool:
+@@ -144,6 +244,10 @@ class EngineCoreOutputs(
+     #NOTE(Nick): We could consider ways to make this more compact,
+     # e.g. columnwise layout
+ 
++
++    
++    latency: Optional[float] = None
++    step_id: Optional[int] = None
+     engine_index: int = 0
+ 
+     # [num_reqs]
+@@ -161,6 +265,25 @@ class EngineCoreOutputs(
+     # "old" wave, so the next wave needs to be started in other engines.
+     start_wave: Optional[int] = None
+ 
++    # prefill_token_budget
++    prefill_token_budget: Optional[int] = None
++    prefill_tokens: Optional[int] = None
++
++    # evict block ids
++    evicted_block_hashes: Optional[list[str]] = []
++    new_block_hashes: Optional[list[str]] = []
++    evicted_block_ids: Optional[list[int]] = []
++
++    # a map req_id -> The block_id used by this request
++    used_block_ids: Optional[dict[str, list[int]]] = None
++    # a map req_id -> The block_ids generated new blocks
++    new_block_hashes_ids: Optional[dict[str, list[int]]] = None
++
++    preempted_ids: Optional[list[int]] = None
++
++    # abonormal requests 
++    aborted_requests: Optional[set[str]] = None
++
+     def __post_init__(self):
+         if self.timestamp == 0.0:
+             self.timestamp = time.monotonic()
+diff --git a/vllm/v1/engine/async_llm.py b/vllm/v1/engine/async_llm.py
+index 02cb801..5f7de4a 100644
+--- a/vllm/v1/engine/async_llm.py
++++ b/vllm/v1/engine/async_llm.py
+@@ -1,8 +1,11 @@
+ # SPDX-License-Identifier: Apache-2.0
+ # SPDX-FileCopyrightText: Copyright contributors to the vLLM project
+ import asyncio
++from asyncio.queues import QueueEmpty
++from datetime import datetime, timezone
+ import time
+ from collections.abc import AsyncGenerator, Mapping
++import json
+ from copy import copy
+ from typing import Any, Optional, Union
+ 
+@@ -19,6 +22,7 @@ from vllm.logger import init_logger
+ from vllm.lora.request import LoRARequest
+ from vllm.multimodal import MULTIMODAL_REGISTRY, MultiModalRegistry
+ from vllm.outputs import PoolingRequestOutput, RequestOutput
++from vllm.v1.engine import EngineCoreOutputs, EngineCoreRequest, simplified_engine_core_outputs_to_dict
+ from vllm.pooling_params import PoolingParams
+ from vllm.sampling_params import SamplingParams
+ from vllm.transformers_utils.config import (
+@@ -87,6 +91,11 @@ class AsyncLLM(EngineClient):
+ 
+         # Ensure we can serialize custom transformer configs
+         maybe_register_config_serialize_by_value()
++                
++        self.if_report_metrics = vllm_config.report_metrics
++        self.sse_mode: str = envs.VLLM_SSE_MODE
++        self.metrics_queue: Optional[asyncio.Queue] = None
++
+ 
+         self.model_config = vllm_config.model_config
+         self.vllm_config = vllm_config
+@@ -210,6 +219,42 @@ class AsyncLLM(EngineClient):
+ 
+         if handler := getattr(self, "output_handler", None):
+             handler.cancel()
++        
++
++    def report_once_metric(self, engine_core_outputs: EngineCoreOutputs) -> None:
++        """Report metrics once."""
++        
++        # logger.info(f"report_once_metric: {self.if_report_metrics}")
++        if not self.if_report_metrics:
++            return
++
++        if self.metrics_queue is None:
++            return 
++        # This is a no-op in the async engine.
++        self.metrics_queue.put_nowait(engine_core_outputs)        
++    
++    async def report_metrics(self) -> AsyncGenerator[EngineCoreOutputs, None]:
++        if not self.if_report_metrics:
++            return
++
++        if self.metrics_queue is None:
++            self.metrics_queue = asyncio.Queue()
++
++        while True:
++            try:
++                out = await asyncio.wait_for(
++                    self.metrics_queue.get(), timeout=5.0
++                )
++            except asyncio.TimeoutError:
++                yield ": heartbeat\n\n"
++                continue
++
++            data_dict = simplified_engine_core_outputs_to_dict(out, mode=self.sse_mode)
++            json_str = json.dumps(data_dict)
++            sse_message = f"data: {json_str}\n\n"
++            yield sse_message
++
++
+ 
+     async def add_request(
+         self,
+@@ -378,6 +423,12 @@ class AsyncLLM(EngineClient):
+                     iteration_stats = IterationStats() if (
+                         log_stats and num_outputs) else None
+ 
++                    if self.if_report_metrics:
++                        self.report_once_metric(outputs)
++
++                    if num_outputs == 0:
++                        continue
++
+                     # Split outputs into chunks of at most
+                     # VLLM_V1_OUTPUT_PROC_CHUNK_SIZE, so that we don't block the
+                     # event loop for too long.
+diff --git a/vllm/v1/engine/core.py b/vllm/v1/engine/core.py
+index 7779b55..5040655 100644
+--- a/vllm/v1/engine/core.py
++++ b/vllm/v1/engine/core.py
+@@ -118,6 +118,12 @@ class EngineCore:
+             log_stats=self.log_stats,
+         )
+ 
++        # Step counter for SSE metrics reporting.
++        self._step_id: int = 0
++
++        # Whether to report SSE metrics (controls block-level data collection).
++        self.report_metrics: bool = bool(vllm_config.report_metrics)
++
+         # Setup MM Input Mapper.
+         self.mm_input_cache_server = MirroredProcessingCache(
+             vllm_config.model_config)
+@@ -263,13 +269,39 @@ class EngineCore:
+         # or finished and not yet removed from the batch.
+         if not self.scheduler.has_requests():
+             return {}, False
++        start_time = time.time()
+         scheduler_output = self.scheduler.schedule()
++        mid_time = time.time()
+         model_output = self.execute_model_with_error_logging(
+             self.model_executor.execute_model,  # type: ignore
+             scheduler_output)
+         engine_core_outputs = self.scheduler.update_from_output(
+             scheduler_output, model_output)  # type: ignore
+ 
++        latency = time.time() - start_time
++        logger.debug(f"step latency {latency * 1000}ms \
++                    scheduling {(mid_time - start_time) * 1000}ms \
++                    executing {(time.time() - mid_time) * 1000}ms")
++        # engine_core_outputs[0].prefill_token_budget = scheduler_output.prefill_token_budget
++        # assert len(engine_core_outputs) == 1
++        # print(engine_core_outputs)
++        for engine_core_output in engine_core_outputs.values():
++            self._step_id += 1
++            engine_core_output.step_id = self._step_id
++            engine_core_output.prefill_tokens = scheduler_output.prefill_tokens
++            engine_core_output.prefill_token_budget = scheduler_output.prefill_budget
++            engine_core_output.latency = latency
++            engine_core_output.finished_requests = scheduler_output.finished_req_ids
++
++            # Block-level data is only needed when metrics reporting is enabled.
++            if self.report_metrics:
++                engine_core_output.evicted_block_ids = scheduler_output.evicted_block_ids
++                engine_core_output.evicted_block_hashes = scheduler_output.evicted_block_hashes
++                engine_core_output.new_block_hashes = scheduler_output.new_block_hashes
++                engine_core_output.used_block_ids = scheduler_output.used_block_ids
++                engine_core_output.new_block_hashes_ids = scheduler_output.new_block_hashes_ids
++                engine_core_output.preempted_ids = scheduler_output.preempted_ids
++            
+         return (engine_core_outputs,
+                 scheduler_output.total_num_scheduled_tokens > 0)
+ 
+diff --git a/vllm/v1/engine/core_client.py b/vllm/v1/engine/core_client.py
+index 69ae369..ce1d600 100644
+--- a/vllm/v1/engine/core_client.py
++++ b/vllm/v1/engine/core_client.py
+@@ -13,6 +13,9 @@ from concurrent.futures import Future
+ from dataclasses import dataclass
+ from threading import Thread
+ from typing import Any, Callable, Optional, TypeVar, Union
++from collections.abc import AsyncGenerator
++
++
+ 
+ import msgspec.msgpack
+ import zmq
+@@ -101,6 +104,10 @@ class EngineCoreClient(ABC):
+     def shutdown(self):
+         ...
+ 
++    def report_metrics(self) -> AsyncGenerator[EngineCoreOutputs, None]:
++        raise NotImplementedError
++
++
+     def get_output(self) -> EngineCoreOutputs:
+         raise NotImplementedError
+ 
+diff --git a/vllm/v1/request.py b/vllm/v1/request.py
+index 85f5dcb..d21cc0e 100644
+--- a/vllm/v1/request.py
++++ b/vllm/v1/request.py
+@@ -82,6 +82,8 @@ class Request:
+         self.num_computed_tokens = 0
+         self.cache_salt: Optional[str] = cache_salt
+ 
++        self.prev_computed_tokens = 0
++
+         # Multi-modal related
+         self.mm_positions = multi_modal_placeholders or []
+         self.mm_inputs = multi_modal_inputs or []
+@@ -107,6 +109,8 @@ class Request:
+         # The number of NaNs in logits. A value greater than 0
+         # indicates that the output is corrupted
+         self.num_nans_in_logits = 0
++        
++        self.insert_to_waiting_time = None
+ 
+     @classmethod
+     def from_engine_core_request(cls, request: EngineCoreRequest) -> "Request":
+@@ -145,6 +149,9 @@ class Request:
+             self._output_token_ids.extend(token_ids)
+             self._all_token_ids.extend(token_ids)
+ 
++    def mark_as_waiting(self):
++        self.insert_to_waiting_time = time.time()
++
+     @property
+     def is_output_corrupted(self) -> bool:
+         return self.num_nans_in_logits > 0
+@@ -216,6 +223,10 @@ class RequestStatus(enum.IntEnum):
+     def get_finished_reason(
+             status: "RequestStatus") -> Union[FinishReason, None]:
+         return _FINISHED_REASON_MAP.get(status)
++    
++    @staticmethod
++    def is_aborted(status: "RequestStatus") -> bool:
++        return status == RequestStatus.FINISHED_ABORTED
+ 
+ 
+ # Mapping of finished statuses to their finish reasons.

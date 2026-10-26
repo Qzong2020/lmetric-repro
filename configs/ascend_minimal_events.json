@@ -1,0 +1,26 @@
+{
+  "status": "INTENDED_ONLY_NOT_A_RUNNING_ENGINE_CONFIG",
+  "protocol": "request-v1",
+  "enable_environment": {"VLLM_LMETRIC_EVENTS": "1"},
+  "first_npu_validation": {
+    "model": "local plain-text Qwen2.5-7B, exact path/revision must be recorded at launch",
+    "tensor_parallel_size": 1,
+    "pipeline_parallel_size": 1,
+    "data_parallel_size": 1,
+    "api_server_count": 1,
+    "async_scheduling": false,
+    "enforce_eager": true,
+    "enable_prefix_caching": true,
+    "enable_chunked_prefill": true,
+    "block_size": 128,
+    "router_block_size": 128,
+    "prefix_caching_hash_algo": "sha256",
+    "speculative_config": null,
+    "kv_transfer_config": null,
+    "ec_transfer_config": null,
+    "simulator_enabled": false
+  },
+  "next_mode_check": "Enable async scheduling only after synchronous NPU state reconciliation; record actual batch_queue_size and scheduler class",
+  "runtime_assertions": ["single KV group", "scheduler block size equals hash block size", "single frontend", "no preemption/resume", "token IDs input, n=1", "no stop strings/echo/LoRA/multimodal", "fresh SSE subscription before requests"],
+  "limitations": ["No KV cache insertion/eviction/reset events", "Abort requires session restart", "No stream replay or recovery", "CPU tests are synthetic and do not establish NPU correctness"]
+}

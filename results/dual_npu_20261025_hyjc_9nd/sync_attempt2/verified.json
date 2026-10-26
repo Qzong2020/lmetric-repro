@@ -1,0 +1,564 @@
+{
+  "shutdown_panic_after_all_requests": false,
+  "offline_audit": "offline_audit_xrmj5h6s",
+  "passed": true,
+  "mode": "sync",
+  "requests": 13,
+  "per_backend": {
+    "0": 6,
+    "1": 7
+  },
+  "subscribed_before_requests": true,
+  "cache_location_swap_passed": true,
+  "independent_namespaces_verified": true,
+  "failure_isolation_passed": true,
+  "original_driver_failure": null,
+  "offline_verifier_fix": "terminal error frames have no outputs; preserve and classify separately",
+  "events": [
+    76,
+    84
+  ],
+  "mutations": [
+    40,
+    41
+  ],
+  "engine_epochs": [
+    "79f640c9576a498c8ea199a08b66be51",
+    "2e556a7d84124f8da9f457f7ea034794"
+  ],
+  "real_device_binding_verified": true,
+  "runtime": [
+    {
+      "pid": 183150,
+      "scheduler": "vllm_ascend.patch.platform.patch_balance_schedule.BalanceScheduler",
+      "mro": [
+        "vllm_ascend.patch.platform.patch_balance_schedule.BalanceScheduler",
+        "vllm.v1.core.sched.scheduler.Scheduler",
+        "vllm.v1.core.sched.interface.SchedulerInterface",
+        "abc.ABC",
+        "builtins.object"
+      ],
+      "scheduler_source": "/vllm-workspace/vllm-ascend/vllm_ascend/patch/platform/patch_balance_schedule.py",
+      "engine_step_fn": "step",
+      "async_scheduling": false,
+      "enforce_eager": true,
+      "scheduler_block_size": 128,
+      "hash_block_size": 128,
+      "kv_groups": 1,
+      "kv_specs": [
+        "FullAttentionSpec(block_size=128, num_kv_heads=4, head_size=128, dtype=torch.bfloat16, kv_quant_mode=<KVQuantMode.NONE: 0>, page_size_padded=None, head_size_v=128, sliding_window=None, attention_chunk_size=None)"
+      ],
+      "num_blocks": 8,
+      "cache_num_gpu_blocks": 8,
+      "available_memory": 10872075264,
+      "batch_queue_size": 1,
+      "batch_queue_length": null,
+      "parallel": "ParallelConfig(pipeline_parallel_size=1, tensor_parallel_size=1, prefill_context_parallel_size=1, data_parallel_size=1, data_parallel_size_local=1, data_parallel_rank=0, data_parallel_rank_local=0, data_parallel_master_ip='127.0.0.1', data_parallel_rpc_port=29550, data_parallel_master_port=0, data_parallel_backend='mp', data_parallel_external_lb=False, data_parallel_hybrid_lb=False, is_moe_model=False, enable_expert_parallel=False, enable_ep_weight_filter=False, enable_eplb=False, eplb_config=EPLBConfig(window_size=1000, step_interval=3000, num_redundant_experts=0, log_balancedness=False, log_balancedness_interval=1, use_async=True, policy='default', communicator=None), expert_placement_strategy='linear', all2all_backend='flashinfer_all2allv', max_parallel_loading_workers=None, disable_custom_all_reduce=True, enable_elastic_ep=False, enable_dbo=False, ubatch_size=0, dbo_decode_token_threshold=32, dbo_prefill_token_threshold=512, disable_nccl_for_dp_synchronization=False, ray_workers_use_nsight=False, ray_runtime_env=None, placement_group=None, distributed_executor_backend='uni', worker_cls='vllm_ascend.worker.worker.NPUWorker', sd_worker_cls='auto', worker_extension_cls='', master_addr='127.0.0.1', master_port=29501, node_rank=0, nnodes=1, numa_bind=False, numa_bind_nodes=None, numa_bind_cpus=None, distributed_timeout_seconds=None, cpu_distributed_timeout_seconds=None, world_size=1, rank=0, _data_parallel_master_port_list=[], _coord_store_port=0, decode_context_parallel_size=1, dcp_kv_cache_interleave_size=1, dcp_comm_backend='ag_rs', cp_kv_cache_interleave_size=1, data_parallel_index=0, _api_process_count=1, _api_process_rank=0)",
+      "speculative": "None",
+      "kv_transfer": "None",
+      "ec_transfer": "None",
+      "lora": "None"
+    },
+    {
+      "pid": 185163,
+      "scheduler": "vllm_ascend.patch.platform.patch_balance_schedule.BalanceScheduler",
+      "mro": [
+        "vllm_ascend.patch.platform.patch_balance_schedule.BalanceScheduler",
+        "vllm.v1.core.sched.scheduler.Scheduler",
+        "vllm.v1.core.sched.interface.SchedulerInterface",
+        "abc.ABC",
+        "builtins.object"
+      ],
+      "scheduler_source": "/vllm-workspace/vllm-ascend/vllm_ascend/patch/platform/patch_balance_schedule.py",
+      "engine_step_fn": "step",
+      "async_scheduling": false,
+      "enforce_eager": true,
+      "scheduler_block_size": 128,
+      "hash_block_size": 128,
+      "kv_groups": 1,
+      "kv_specs": [
+        "FullAttentionSpec(block_size=128, num_kv_heads=4, head_size=128, dtype=torch.bfloat16, kv_quant_mode=<KVQuantMode.NONE: 0>, page_size_padded=None, head_size_v=128, sliding_window=None, attention_chunk_size=None)"
+      ],
+      "num_blocks": 8,
+      "cache_num_gpu_blocks": 8,
+      "available_memory": 10872452096,
+      "batch_queue_size": 1,
+      "batch_queue_length": null,
+      "parallel": "ParallelConfig(pipeline_parallel_size=1, tensor_parallel_size=1, prefill_context_parallel_size=1, data_parallel_size=1, data_parallel_size_local=1, data_parallel_rank=0, data_parallel_rank_local=0, data_parallel_master_ip='127.0.0.1', data_parallel_rpc_port=29550, data_parallel_master_port=0, data_parallel_backend='mp', data_parallel_external_lb=False, data_parallel_hybrid_lb=False, is_moe_model=False, enable_expert_parallel=False, enable_ep_weight_filter=False, enable_eplb=False, eplb_config=EPLBConfig(window_size=1000, step_interval=3000, num_redundant_experts=0, log_balancedness=False, log_balancedness_interval=1, use_async=True, policy='default', communicator=None), expert_placement_strategy='linear', all2all_backend='flashinfer_all2allv', max_parallel_loading_workers=None, disable_custom_all_reduce=True, enable_elastic_ep=False, enable_dbo=False, ubatch_size=0, dbo_decode_token_threshold=32, dbo_prefill_token_threshold=512, disable_nccl_for_dp_synchronization=False, ray_workers_use_nsight=False, ray_runtime_env=None, placement_group=None, distributed_executor_backend='uni', worker_cls='vllm_ascend.worker.worker.NPUWorker', sd_worker_cls='auto', worker_extension_cls='', master_addr='127.0.0.1', master_port=29501, node_rank=0, nnodes=1, numa_bind=False, numa_bind_nodes=None, numa_bind_cpus=None, distributed_timeout_seconds=None, cpu_distributed_timeout_seconds=None, world_size=1, rank=0, _data_parallel_master_port_list=[], _coord_store_port=0, decode_context_parallel_size=1, dcp_kv_cache_interleave_size=1, dcp_comm_backend='ag_rs', cp_kv_cache_interleave_size=1, data_parallel_index=0, _api_process_count=1, _api_process_rank=0)",
+      "speculative": "None",
+      "kv_transfer": "None",
+      "ec_transfer": "None",
+      "lora": "None"
+    }
+  ],
+  "decisions": [
+    {
+      "label": "preflight_first",
+      "request_id": 0,
+      "engine": 0,
+      "predicted_hits": 0,
+      "actual_hits": 0,
+      "prefill_work": 313,
+      "candidates": [
+        {
+          "request_id": "0",
+          "engine": "0",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "0",
+          "cache_epoch": "2",
+          "lmetric_score": "313",
+          "shortest_weight_score": "0"
+        },
+        {
+          "request_id": "0",
+          "engine": "1",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "0",
+          "cache_epoch": "2",
+          "lmetric_score": "313",
+          "shortest_weight_score": "0"
+        }
+      ]
+    },
+    {
+      "label": "preflight_second",
+      "request_id": 1,
+      "engine": 1,
+      "predicted_hits": 0,
+      "actual_hits": 0,
+      "prefill_work": 313,
+      "candidates": [
+        {
+          "request_id": "1",
+          "engine": "0",
+          "routing_enabled": "true",
+          "bs": "1",
+          "waiting": "1",
+          "prefill": "313",
+          "all_tokens": "313",
+          "hit_tokens": "0",
+          "cache_epoch": "2",
+          "lmetric_score": "1252",
+          "shortest_weight_score": "4"
+        },
+        {
+          "request_id": "1",
+          "engine": "1",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "0",
+          "cache_epoch": "2",
+          "lmetric_score": "313",
+          "shortest_weight_score": "0"
+        }
+      ]
+    },
+    {
+      "label": "A_only_target",
+      "request_id": 2,
+      "engine": 0,
+      "predicted_hits": 256,
+      "actual_hits": 256,
+      "prefill_work": 57,
+      "candidates": [
+        {
+          "request_id": "2",
+          "engine": "0",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "256",
+          "cache_epoch": "8",
+          "lmetric_score": "57",
+          "shortest_weight_score": "0"
+        },
+        {
+          "request_id": "2",
+          "engine": "1",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "0",
+          "cache_epoch": "8",
+          "lmetric_score": "313",
+          "shortest_weight_score": "0"
+        }
+      ]
+    },
+    {
+      "label": "controlled_B_warm_second",
+      "request_id": 4,
+      "engine": 1,
+      "predicted_hits": 0,
+      "actual_hits": 0,
+      "prefill_work": 313,
+      "candidates": [
+        {
+          "request_id": "4",
+          "engine": "0",
+          "routing_enabled": "true",
+          "bs": "1",
+          "waiting": "1",
+          "prefill": "700",
+          "all_tokens": "700",
+          "hit_tokens": "0",
+          "cache_epoch": "11",
+          "lmetric_score": "2026",
+          "shortest_weight_score": "4"
+        },
+        {
+          "request_id": "4",
+          "engine": "1",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "0",
+          "cache_epoch": "8",
+          "lmetric_score": "313",
+          "shortest_weight_score": "0"
+        }
+      ]
+    },
+    {
+      "label": "controlled_B_warm_first",
+      "request_id": 3,
+      "engine": 0,
+      "predicted_hits": 0,
+      "actual_hits": 0,
+      "prefill_work": 700,
+      "candidates": [
+        {
+          "request_id": "3",
+          "engine": "0",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "0",
+          "cache_epoch": "11",
+          "lmetric_score": "700",
+          "shortest_weight_score": "0"
+        },
+        {
+          "request_id": "3",
+          "engine": "1",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "0",
+          "cache_epoch": "8",
+          "lmetric_score": "700",
+          "shortest_weight_score": "0"
+        }
+      ]
+    },
+    {
+      "label": "B_only_same_target",
+      "request_id": 5,
+      "engine": 1,
+      "predicted_hits": 256,
+      "actual_hits": 256,
+      "prefill_work": 57,
+      "candidates": [
+        {
+          "request_id": "5",
+          "engine": "0",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "0",
+          "cache_epoch": "23",
+          "lmetric_score": "313",
+          "shortest_weight_score": "0"
+        },
+        {
+          "request_id": "5",
+          "engine": "1",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "256",
+          "cache_epoch": "14",
+          "lmetric_score": "57",
+          "shortest_weight_score": "0"
+        }
+      ]
+    },
+    {
+      "label": "controlled_A_warm_second",
+      "request_id": 7,
+      "engine": 0,
+      "predicted_hits": 0,
+      "actual_hits": 0,
+      "prefill_work": 313,
+      "candidates": [
+        {
+          "request_id": "7",
+          "engine": "0",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "0",
+          "cache_epoch": "23",
+          "lmetric_score": "313",
+          "shortest_weight_score": "0"
+        },
+        {
+          "request_id": "7",
+          "engine": "1",
+          "routing_enabled": "true",
+          "bs": "1",
+          "waiting": "1",
+          "prefill": "444",
+          "all_tokens": "700",
+          "hit_tokens": "256",
+          "cache_epoch": "16",
+          "lmetric_score": "1002",
+          "shortest_weight_score": "4"
+        }
+      ]
+    },
+    {
+      "label": "controlled_A_warm_first",
+      "request_id": 6,
+      "engine": 1,
+      "predicted_hits": 256,
+      "actual_hits": 256,
+      "prefill_work": 444,
+      "candidates": [
+        {
+          "request_id": "6",
+          "engine": "0",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "0",
+          "cache_epoch": "23",
+          "lmetric_score": "700",
+          "shortest_weight_score": "0"
+        },
+        {
+          "request_id": "6",
+          "engine": "1",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "256",
+          "cache_epoch": "16",
+          "lmetric_score": "444",
+          "shortest_weight_score": "0"
+        }
+      ]
+    },
+    {
+      "label": "both_cached_load_first",
+      "request_id": 8,
+      "engine": 0,
+      "predicted_hits": 256,
+      "actual_hits": 256,
+      "prefill_work": 57,
+      "candidates": [
+        {
+          "request_id": "8",
+          "engine": "0",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "256",
+          "cache_epoch": "30",
+          "lmetric_score": "57",
+          "shortest_weight_score": "0"
+        },
+        {
+          "request_id": "8",
+          "engine": "1",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "256",
+          "cache_epoch": "26",
+          "lmetric_score": "57",
+          "shortest_weight_score": "0"
+        }
+      ]
+    },
+    {
+      "label": "both_cached_load_second",
+      "request_id": 9,
+      "engine": 1,
+      "predicted_hits": 256,
+      "actual_hits": 256,
+      "prefill_work": 57,
+      "candidates": [
+        {
+          "request_id": "9",
+          "engine": "0",
+          "routing_enabled": "true",
+          "bs": "1",
+          "waiting": "1",
+          "prefill": "57",
+          "all_tokens": "313",
+          "hit_tokens": "256",
+          "cache_epoch": "30",
+          "lmetric_score": "228",
+          "shortest_weight_score": "4"
+        },
+        {
+          "request_id": "9",
+          "engine": "1",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "256",
+          "cache_epoch": "26",
+          "lmetric_score": "57",
+          "shortest_weight_score": "0"
+        }
+      ]
+    },
+    {
+      "label": "both_cold_first",
+      "request_id": 10,
+      "engine": 0,
+      "predicted_hits": 0,
+      "actual_hits": 0,
+      "prefill_work": 313,
+      "candidates": [
+        {
+          "request_id": "10",
+          "engine": "0",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "0",
+          "cache_epoch": "34",
+          "lmetric_score": "313",
+          "shortest_weight_score": "0"
+        },
+        {
+          "request_id": "10",
+          "engine": "1",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "0",
+          "cache_epoch": "29",
+          "lmetric_score": "313",
+          "shortest_weight_score": "0"
+        }
+      ]
+    },
+    {
+      "label": "both_cold_second",
+      "request_id": 11,
+      "engine": 1,
+      "predicted_hits": 0,
+      "actual_hits": 0,
+      "prefill_work": 313,
+      "candidates": [
+        {
+          "request_id": "11",
+          "engine": "0",
+          "routing_enabled": "true",
+          "bs": "1",
+          "waiting": "1",
+          "prefill": "313",
+          "all_tokens": "313",
+          "hit_tokens": "0",
+          "cache_epoch": "34",
+          "lmetric_score": "1252",
+          "shortest_weight_score": "4"
+        },
+        {
+          "request_id": "11",
+          "engine": "1",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "0",
+          "cache_epoch": "29",
+          "lmetric_score": "313",
+          "shortest_weight_score": "0"
+        }
+      ]
+    },
+    {
+      "label": "invalid_A_healthy_B",
+      "request_id": 12,
+      "engine": 1,
+      "predicted_hits": 0,
+      "actual_hits": 0,
+      "prefill_work": 313,
+      "candidates": [
+        {
+          "request_id": "12",
+          "engine": "0",
+          "routing_enabled": "false",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "0",
+          "cache_epoch": "40",
+          "lmetric_score": "313",
+          "shortest_weight_score": "0"
+        },
+        {
+          "request_id": "12",
+          "engine": "1",
+          "routing_enabled": "true",
+          "bs": "0",
+          "waiting": "0",
+          "prefill": "0",
+          "all_tokens": "0",
+          "hit_tokens": "0",
+          "cache_epoch": "35",
+          "lmetric_score": "313",
+          "shortest_weight_score": "0"
+        }
+      ]
+    }
+  ]
+}

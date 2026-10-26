@@ -1,0 +1,1253 @@
+{
+  "real_npu": true,
+  "mode": "sync",
+  "requests": 8,
+  "events": 87,
+  "mutations": 53,
+  "mutation_types": {
+    "cache_reset": 2,
+    "request_blocks": 22,
+    "cache_insert": 14,
+    "request_release": 8,
+    "cache_remove": 7
+  },
+  "physical_snapshot_matches": 87,
+  "physical_id_reuses": [
+    {
+      "block_id": 1,
+      "mutation_seq": 25,
+      "old_hash": "6ac3b80c3131d345d4444ea6ef872689a6c4973b3bb58fb4a9f8917ba39d6969",
+      "new_hash": "e271bf4050e50cc297ac2171322229b12acd9f3fcb59e847c86cbd487fea1b71"
+    },
+    {
+      "block_id": 5,
+      "mutation_seq": 33,
+      "old_hash": "ee2f556e5896df4aaa203175478cadbb474678336535d7820782e0ccff16c246",
+      "new_hash": "1e63abe14d1bdae0310d2aeb1813e2a4c3b1733eb62e76cf30ccb8aa7fcb7ac0"
+    },
+    {
+      "block_id": 2,
+      "mutation_seq": 35,
+      "old_hash": "a0d9dc0304cdf3cdc2f07d0f25bbe77265f9bebf69e267711c87ce9ad933502b",
+      "new_hash": "4547d63bef2672b4a08a5e164ec7daacbb51f62ab88ddabd54d6ffe19f806d33"
+    },
+    {
+      "block_id": 3,
+      "mutation_seq": 41,
+      "old_hash": "24fb864b789e72e3d2e606a382e46e929c895c205bf76b19d030a5f5a9ceb741",
+      "new_hash": "6ac3b80c3131d345d4444ea6ef872689a6c4973b3bb58fb4a9f8917ba39d6969"
+    },
+    {
+      "block_id": 6,
+      "mutation_seq": 43,
+      "old_hash": "608b3c20c1873c31d581cdf9e9dc4a2582b1a44e0accdf896793c2522629ed91",
+      "new_hash": "a0d9dc0304cdf3cdc2f07d0f25bbe77265f9bebf69e267711c87ce9ad933502b"
+    },
+    {
+      "block_id": 4,
+      "mutation_seq": 51,
+      "old_hash": "006d3570a1fbc74cb9ca7ded729da7a23f1f153a1af127a72b847509df0ee164",
+      "new_hash": "a0d9dc0304cdf3cdc2f07d0f25bbe77265f9bebf69e267711c87ce9ad933502b"
+    }
+  ],
+  "hits": [
+    0,
+    256,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "prefill_work": [
+    313,
+    57,
+    313,
+    313,
+    313,
+    313,
+    313,
+    313
+  ],
+  "runtime": {
+    "pid": 105594,
+    "scheduler": "vllm_ascend.patch.platform.patch_balance_schedule.BalanceScheduler",
+    "mro": [
+      "vllm_ascend.patch.platform.patch_balance_schedule.BalanceScheduler",
+      "vllm.v1.core.sched.scheduler.Scheduler",
+      "vllm.v1.core.sched.interface.SchedulerInterface",
+      "abc.ABC",
+      "builtins.object"
+    ],
+    "scheduler_source": "/vllm-workspace/vllm-ascend/vllm_ascend/patch/platform/patch_balance_schedule.py",
+    "engine_step_fn": "step",
+    "async_scheduling": false,
+    "enforce_eager": true,
+    "scheduler_block_size": 128,
+    "hash_block_size": 128,
+    "kv_groups": 1,
+    "kv_specs": [
+      "FullAttentionSpec(block_size=128, num_kv_heads=8, head_size=128, dtype=torch.bfloat16, kv_quant_mode=<KVQuantMode.NONE: 0>, page_size_padded=None, head_size_v=128, sliding_window=None, attention_chunk_size=None)"
+    ],
+    "num_blocks": 8,
+    "cache_num_gpu_blocks": 8,
+    "available_memory": 11833340416,
+    "batch_queue_size": 1,
+    "batch_queue_length": null,
+    "parallel": "ParallelConfig(pipeline_parallel_size=1, tensor_parallel_size=1, prefill_context_parallel_size=1, data_parallel_size=1, data_parallel_size_local=1, data_parallel_rank=0, data_parallel_rank_local=0, data_parallel_master_ip='127.0.0.1', data_parallel_rpc_port=29550, data_parallel_master_port=0, data_parallel_backend='mp', data_parallel_external_lb=False, data_parallel_hybrid_lb=False, is_moe_model=False, enable_expert_parallel=False, enable_ep_weight_filter=False, enable_eplb=False, eplb_config=EPLBConfig(window_size=1000, step_interval=3000, num_redundant_experts=0, log_balancedness=False, log_balancedness_interval=1, use_async=True, policy='default', communicator=None), expert_placement_strategy='linear', all2all_backend='flashinfer_all2allv', max_parallel_loading_workers=None, disable_custom_all_reduce=True, enable_elastic_ep=False, enable_dbo=False, ubatch_size=0, dbo_decode_token_threshold=32, dbo_prefill_token_threshold=512, disable_nccl_for_dp_synchronization=False, ray_workers_use_nsight=False, ray_runtime_env=None, placement_group=None, distributed_executor_backend='uni', worker_cls='vllm_ascend.worker.worker.NPUWorker', sd_worker_cls='auto', worker_extension_cls='', master_addr='127.0.0.1', master_port=29501, node_rank=0, nnodes=1, numa_bind=False, numa_bind_nodes=None, numa_bind_cpus=None, distributed_timeout_seconds=None, cpu_distributed_timeout_seconds=None, world_size=1, rank=0, _data_parallel_master_port_list=[], _coord_store_port=0, decode_context_parallel_size=1, dcp_kv_cache_interleave_size=1, dcp_comm_backend='ag_rs', cp_kv_cache_interleave_size=1, data_parallel_index=0, _api_process_count=1, _api_process_rank=0)",
+    "speculative": "None",
+    "kv_transfer": "None",
+    "ec_transfer": "None",
+    "lora": "None"
+  },
+  "final": {
+    "last_mutation": 53,
+    "ledger": {
+      "all_tokens": 0,
+      "bs": 0,
+      "prefill": 0,
+      "waiting": 0
+    },
+    "physical": {
+      "1": "6ac3b80c3131d345d4444ea6ef872689a6c4973b3bb58fb4a9f8917ba39d6969",
+      "4": "a0d9dc0304cdf3cdc2f07d0f25bbe77265f9bebf69e267711c87ce9ad933502b"
+    },
+    "requests": 8,
+    "valid": true
+  },
+  "snapshots": [
+    {
+      "step_id": 1,
+      "mutation_seq": 3,
+      "physical_maps": 1,
+      "active_occupancies": 1,
+      "free_blocks": 6,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 185,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 2,
+      "mutation_seq": 5,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 5,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 57,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 3,
+      "mutation_seq": 6,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 314,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 4,
+      "mutation_seq": 6,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 315,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 5,
+      "mutation_seq": 6,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 316,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 6,
+      "mutation_seq": 6,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 317,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 7,
+      "mutation_seq": 6,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 318,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 8,
+      "mutation_seq": 6,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 319,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 9,
+      "mutation_seq": 6,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 320,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 10,
+      "mutation_seq": 7,
+      "physical_maps": 2,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 11,
+      "mutation_seq": 7,
+      "physical_maps": 2,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 57,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 12,
+      "mutation_seq": 8,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 314,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 13,
+      "mutation_seq": 8,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 315,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 14,
+      "mutation_seq": 8,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 316,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 15,
+      "mutation_seq": 8,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 317,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 16,
+      "mutation_seq": 8,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 318,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 17,
+      "mutation_seq": 8,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 319,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 18,
+      "mutation_seq": 8,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 320,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 19,
+      "mutation_seq": 9,
+      "physical_maps": 2,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 20,
+      "mutation_seq": 9,
+      "physical_maps": 2,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 313,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 21,
+      "mutation_seq": 11,
+      "physical_maps": 3,
+      "active_occupancies": 1,
+      "free_blocks": 6,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 185,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 22,
+      "mutation_seq": 13,
+      "physical_maps": 4,
+      "active_occupancies": 1,
+      "free_blocks": 5,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 57,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 23,
+      "mutation_seq": 14,
+      "physical_maps": 4,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 314,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 24,
+      "mutation_seq": 14,
+      "physical_maps": 4,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 315,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 25,
+      "mutation_seq": 14,
+      "physical_maps": 4,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 316,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 26,
+      "mutation_seq": 14,
+      "physical_maps": 4,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 317,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 27,
+      "mutation_seq": 14,
+      "physical_maps": 4,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 318,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 28,
+      "mutation_seq": 14,
+      "physical_maps": 4,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 319,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 29,
+      "mutation_seq": 14,
+      "physical_maps": 4,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 320,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 30,
+      "mutation_seq": 15,
+      "physical_maps": 4,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 31,
+      "mutation_seq": 15,
+      "physical_maps": 4,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 313,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 32,
+      "mutation_seq": 17,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 6,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 185,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 33,
+      "mutation_seq": 19,
+      "physical_maps": 6,
+      "active_occupancies": 1,
+      "free_blocks": 5,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 57,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 34,
+      "mutation_seq": 21,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 314,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 35,
+      "mutation_seq": 21,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 315,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 36,
+      "mutation_seq": 21,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 316,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 37,
+      "mutation_seq": 21,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 317,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 38,
+      "mutation_seq": 21,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 318,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 39,
+      "mutation_seq": 21,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 319,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 40,
+      "mutation_seq": 21,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 320,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 41,
+      "mutation_seq": 22,
+      "physical_maps": 5,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 42,
+      "mutation_seq": 22,
+      "physical_maps": 5,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 313,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 43,
+      "mutation_seq": 25,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 6,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 185,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 44,
+      "mutation_seq": 27,
+      "physical_maps": 6,
+      "active_occupancies": 1,
+      "free_blocks": 5,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 57,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 45,
+      "mutation_seq": 29,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 314,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 46,
+      "mutation_seq": 29,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 315,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 47,
+      "mutation_seq": 29,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 316,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 48,
+      "mutation_seq": 29,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 317,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 49,
+      "mutation_seq": 29,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 318,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 50,
+      "mutation_seq": 29,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 319,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 51,
+      "mutation_seq": 29,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 320,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 52,
+      "mutation_seq": 30,
+      "physical_maps": 5,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 53,
+      "mutation_seq": 30,
+      "physical_maps": 5,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 313,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 54,
+      "mutation_seq": 33,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 6,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 185,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 55,
+      "mutation_seq": 35,
+      "physical_maps": 6,
+      "active_occupancies": 1,
+      "free_blocks": 5,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 57,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 56,
+      "mutation_seq": 37,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 314,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 57,
+      "mutation_seq": 37,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 315,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 58,
+      "mutation_seq": 37,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 316,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 59,
+      "mutation_seq": 37,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 317,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 60,
+      "mutation_seq": 37,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 318,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 61,
+      "mutation_seq": 37,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 319,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 62,
+      "mutation_seq": 37,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 320,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 63,
+      "mutation_seq": 38,
+      "physical_maps": 5,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 64,
+      "mutation_seq": 38,
+      "physical_maps": 5,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 313,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 65,
+      "mutation_seq": 41,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 6,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 185,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 66,
+      "mutation_seq": 43,
+      "physical_maps": 6,
+      "active_occupancies": 1,
+      "free_blocks": 5,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 57,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 67,
+      "mutation_seq": 45,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 314,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 68,
+      "mutation_seq": 45,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 315,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 69,
+      "mutation_seq": 45,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 316,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 70,
+      "mutation_seq": 45,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 317,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 71,
+      "mutation_seq": 45,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 318,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 72,
+      "mutation_seq": 45,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 319,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 73,
+      "mutation_seq": 45,
+      "physical_maps": 5,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 320,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 74,
+      "mutation_seq": 46,
+      "physical_maps": 5,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 75,
+      "mutation_seq": 46,
+      "physical_maps": 5,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 76,
+      "mutation_seq": 47,
+      "physical_maps": 0,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 77,
+      "mutation_seq": 49,
+      "physical_maps": 1,
+      "active_occupancies": 1,
+      "free_blocks": 6,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 185,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 78,
+      "mutation_seq": 51,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 5,
+      "ledger": {
+        "all_tokens": 313,
+        "bs": 1,
+        "prefill": 57,
+        "waiting": 1
+      }
+    },
+    {
+      "step_id": 79,
+      "mutation_seq": 52,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 314,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 80,
+      "mutation_seq": 52,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 315,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 81,
+      "mutation_seq": 52,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 316,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 82,
+      "mutation_seq": 52,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 317,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 83,
+      "mutation_seq": 52,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 318,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 84,
+      "mutation_seq": 52,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 319,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 85,
+      "mutation_seq": 52,
+      "physical_maps": 2,
+      "active_occupancies": 1,
+      "free_blocks": 4,
+      "ledger": {
+        "all_tokens": 320,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 86,
+      "mutation_seq": 53,
+      "physical_maps": 2,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      }
+    },
+    {
+      "step_id": 87,
+      "mutation_seq": 53,
+      "physical_maps": 2,
+      "active_occupancies": 0,
+      "free_blocks": 7,
+      "ledger": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      }
+    }
+  ],
+  "note": "scheduler cache metadata; no device content completion or performance claim"
+}

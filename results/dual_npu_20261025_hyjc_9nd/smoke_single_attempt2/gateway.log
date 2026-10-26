@@ -1,0 +1,9 @@
+[2m2026-10-25T13:52:05.523126Z[0m [33m WARN[0m [2mrouter[0m[2m:[0m [2mrouter/src/main.rs[0m[2m:[0m[2m417:[0m The shard info is not set properly by the st-server
+[2m2026-10-25T13:52:05.523629Z[0m [32m INFO[0m [2mrouter[0m[2m:[0m [2mrouter/src/main.rs[0m[2m:[0m[2m435:[0m Loaded model config: type=qwen2, max_position_embeddings=32768
+[2m2026-10-25T13:52:05.523678Z[0m [33m WARN[0m [2mrouter[0m[2m:[0m [2mrouter/src/main.rs[0m[2m:[0m[2m447:[0m --max-total-tokens=1024 overrides auto-discovered max_position_embeddings=32768 from config.json
+[2m2026-10-25T13:52:05.523709Z[0m [33m WARN[0m [2mrouter[0m[2m:[0m [2mrouter/src/main.rs[0m[2m:[0m[2m471:[0m --max-input-length=800 overrides auto-discovered max_total_tokens-1=1023
+Blitz router is ready
+[2m2026-10-25T13:52:05.707046Z[0m [33m WARN[0m [2mrouter::scheduler::statistic[0m[2m:[0m [2mrouter/src/scheduler/statistic.rs[0m[2m:[0m[2m16:[0m Statistic path is not set
+[2m2026-10-25T13:52:05.756361Z[0m [32m INFO[0m [2mcache_tracking[0m[2m:[0m [2mrouter/src/engine/colocation.rs[0m[2m:[0m[2m727:[0m SSE_EVENT [3mengine[0m[2m=[0m0 [3mstep_id[0m[2m=[0m1 [3mevicted[0m[2m=[0m0 [3minserted[0m[2m=[0m0 [3mepoch_before[0m[2m=[0m0 [3mepoch_after[0m[2m=[0m2
+[2m2026-10-25T13:52:05.756597Z[0m [34mDEBUG[0m [2mcache_tracking[0m[2m:[0m [2mrouter/src/engine/colocation.rs[0m[2m:[0m[2m935:[0m KV_STATE [3mstate[0m[2m=[0m{"active_entries":0,"all_tokens":0,"bs":0,"engine":0,"engine_epoch":"add5929054d94a578378ed759b198812","exception_entries":0,"mutation_seq":2,"physical":{},"prefill":0,"requests":{},"step_id":1,"valid":true,"waiting":0}
+[2m2026-10-25T13:52:10.769244Z[0m [32m INFO[0m [2mrouter::gateway::server[0m[2m:[0m [2mrouter/src/gateway/server.rs[0m[2m:[0m[2m649:[0m signal received, starting graceful shutdown

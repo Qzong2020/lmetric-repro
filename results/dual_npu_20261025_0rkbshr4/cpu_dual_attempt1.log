@@ -1,0 +1,180 @@
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:174:17
+    |
+174 |                 (*node).payload[i].push(alias_bid);
+    |                 ^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+    = note: `#[warn(dangerous_implicit_autorefs)]` on by default
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+174 |                 (&mut (*node).payload)[i].push(alias_bid);
+    |                 +++++                +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:356:47
+    |
+356 |                     !(*n).value.is_empty() && (*n).value[0] == key[consumed]
+    |                                               ^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+356 |                     !(*n).value.is_empty() && (&(*n).value)[0] == key[consumed]
+    |                                               ++          +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:366:58
+    |
+366 |             while i < val_len && consumed < key.len() && (*child).value[i] == key[consumed] {
+    |                                                          ^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+366 |             while i < val_len && consumed < key.len() && (&(*child).value)[i] == key[consumed] {
+    |                                                          ++              +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:369:21
+    |
+369 |                     (*child).payload[i].push(alias_bid);
+    |                     ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+369 |                     (&mut (*child).payload)[i].push(alias_bid);
+    |                     +++++                 +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:459:41
+    |
+459 | ...                   for bids in (*node).payload[new_start..].iter() {
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+459 |                             for bids in (&(*node).payload)[new_start..].iter() {
+    |                                         ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:685:51
+    |
+685 |             while pos < (*node).payload.len() && !(*node).payload[pos].contains(&block_id) {
+    |                                                   ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+685 |             while pos < (*node).payload.len() && !(&(*node).payload)[pos].contains(&block_id) {
+    |                                                   ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:691:36
+    |
+691 |             let bids_at_pos = &mut (*node).payload[pos];
+    |                                    ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+691 |             let bids_at_pos = &mut (&mut (*node).payload)[pos];
+    |                                    +++++                +
+
+warning: `radixtree` (lib) generated 7 warnings
+   Compiling router v0.1.0 (/root/lmetric-repro/blitz-router/router)
+warning: unused import: `vllm::JShortestWeightQ`
+   --> router/src/scheduler/policies/mod.rs:117:16
+    |
+117 | pub(crate) use vllm::JShortestWeightQ;
+    |                ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `std::sync::OnceLock`
+ --> router/src/scheduler/state.rs:1:5
+  |
+1 | use std::sync::OnceLock;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: field `hashes` is never read
+    --> router/src/scheduler/kvcache.rs:1053:50
+     |
+1053 |             struct SeqState { indices: Vec<u64>, hashes: Vec<u64>, removed: bool }
+     |                    -------- field in this struct ^^^^^^
+     |
+     = note: `#[warn(dead_code)]` on by default
+
+warning: function `new_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:128:15
+    |
+128 | pub(crate) fn new_blocks(req: &ValidGenerateRequest, sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^
+
+warning: function `match_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:157:15
+    |
+157 | pub(crate) fn match_blocks(req: &ValidGenerateRequest, sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `hit_pct` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:163:15
+    |
+163 | pub(crate) fn hit_pct(req: &ValidGenerateRequest, sctx: &Observation) -> f32 {
+    |               ^^^^^^^
+
+warning: function `decode_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:172:15
+    |
+172 | pub(crate) fn decode_blocks(sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^^^^
+
+warning: function `mean_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:423:15
+    |
+423 | pub(crate) fn mean_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> f32 {
+    |               ^^^^^^^^^^^^^
+
+warning: function `std_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:429:15
+    |
+429 | pub(crate) fn std_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize + Copy) -> f32 {
+    |               ^^^^^^^^^^^^
+
+warning: function `min_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:439:15
+    |
+439 | pub(crate) fn min_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `max_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:444:15
+    |
+444 | pub(crate) fn max_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `min_of_f32` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:475:15
+    |
+475 | pub(crate) fn min_of_f32(obs: &[Observation], proj: impl Fn(&Observation) -> f32) -> f32 {
+    |               ^^^^^^^^^^
+
+warning: function `max_of_f32` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:480:15
+    |
+480 | pub(crate) fn max_of_f32(obs: &[Observation], proj: impl Fn(&Observation) -> f32) -> f32 {
+    |               ^^^^^^^^^^
+
+error: linking with `cc` failed: exit status: 1
+  |
+  = note:  "cc" "/tmp/rustcfj0Kzy/symbols.o" "<257 object files omitted>" "-Wl,--as-needed" "-Wl,-Bstatic" "/root/lmetric-repro/blitz-router/target/debug/deps/{libasync_stream-9d08b4eb305bd3aa.rlib}.rlib" "<sysroot>/lib/rustlib/aarch64-unknown-linux-gnu/lib/{libtest-*,libgetopts-*,libunicode_width-*,librustc_std_workspace_std-*}.rlib" "/root/lmetric-repro/blitz-router/target/debug/deps/{libproptest-eb3586890e4c79c3.rlib,libunarray-36142bd26806d9ee.rlib,librand_xorshift-85fca5f132bd8f06.rlib,libchacha20-76cb3770f58c345c.rlib,librand-4b1310568325a468.rlib,libgetrandom-89a9cdee6b2f602d.rlib,librand_core-69fb59c90d8b1f9f.rlib,librusty_fork-57fcb0f51d9c9050.rlib,libwait_timeout-155e2eb8995ab07d.rlib,libtempfile-a288430295df4c6d.rlib,libfastrand-be271bd00bed301d.rlib,librustix-1dac978872bbd260.rlib,liblinux_raw_sys-d4a7ab10fe1e4430.rlib,libquick_error-4eeb22a6e7f033e1.rlib,libbit_set-93d1c683ac8a8e2d.rlib,libbit_vec-9555f35ca257acac.rlib,libradixtree-4f7070d617025401.rlib,libxxhash_rust-fa7b80cd52d1a244.rlib,libutoipa_swagger_ui-fac2786fba72bf4f.rlib,libmime_guess-efd60665e109259e.rlib,libunicase-4e42fb1e91f504db.rlib,librust_embed-124c9df987a4cf40.rlib,librust_embed_utils-4dfb6576e2b13ad0.rlib,libwalkdir-3994a15167084a60.rlib,libsame_file-c299ffa75d80346e.rlib,libsha2-76e7f7d638f54aab.rlib,libdigest-53baac443c6013c7.rlib,libblock_buffer-cf0ae701dee81ba2.rlib,libcrypto_common-bcdb42fac1f6cf4f.rlib,libgeneric_array-795b7a750c864422.rlib,libtypenum-73f9e1446e2d8d6b.rlib,libtower_http-01710b96a4cb6545.rlib,libmetrics_exporter_prometheus-c64065ffab94b835.rlib,libmetrics_util-84e232cc39f1e0fb.rlib,libnum_cpus-f469bc93295bf8ad.rlib,libsketches_ddsketch-0c1c590304ab2688.rlib,libhashbrown-075d137b04f09fc8.rlib,libquanta-cb3a247d188a623f.rlib,libmetrics-3159a7a8d5a3a471.rlib,libaxum_tracing_opentelemetry-33d66a3d81ddba80.rlib,libtracing_opentelemetry_instrumentation_sdk-dbf9982aea057062.rlib,libtracing_opentelemetry-7a1c272cfc81d644.rlib,libtracing_log-61f173696e11b1ee.rlib,libtracing_subscriber-0897606b0cfe4090.rlib,libtracing_serde-10ef20aa229b3af9.rlib,libsharded_slab-a3f61512c1fb0567.rlib,liblazy_static-dedcecc202425388.rlib,libmatchers-6ca397648eae3d58.rlib,libnu_ansi_term-582fc7c775d5055d.rlib,libthread_local-8cd13851650983fa.rlib,libtracing_log-9f47bc0a6c7fad96.rlib,libopentelemetry-960c6fb6d9dd9990.rlib,libopentelemetry_sdk-ef0d308ffa873df6.rlib,libtokio_stream-ca3b5562283c5d2f.rlib,libcrossbeam_channel-3ea1be91b4bf4c68.rlib,libordered_float-f39fc42a521eb3de.rlib,libnum_traits-17358d0bf91650f1.rlib,libopentelemetry_http-7096b170799840c8.rlib,libopentelemetry_api-f678d0e234c45c2f.rlib,liburlencoding-58f46afd532f14f7.rlib,libutoipa-8331eb76ba8873a8.rlib,libtokenizers-47c303038b4b7416.rlib,libesaxx_rs-3579b4c7f197022d.rlib,libregex-7855334775f526b1.rlib,libregex_automata-19c48e2b232261bb.rlib,libaho_corasick-7923818fed0f74ed.rlib,libregex_syntax-92a56435d81c18d7.rlib,libunicode_normalization_alignments-f704de689d796657.rlib,libspm_precompiled-7c7550802dbcd263.rlib,libbase64-12b2372f0fad052f.rlib,libunicode_segmentation-9ad4b47a81b7899a.rlib,libnom-aba7ebdd8aa13281.rlib,libunicode_categories-1d603ca28a9efc50.rlib,libdary_heap-204215e21d98fa26.rlib,libcompact_str-3719652e9b5a942c.rlib,libstatic_assertions-cf15c5194befd0e2.rlib,libcastaway-46b6e9de4f18a46b.rlib,libmonostate-601bf5bda5bb12a9.rlib,libmacro_rules_attribute-ae9a005f6d25d132.rlib,librayon_cond-28c7755e0713680e.rlib,libitertools-c4b724ac8b97e8f8.rlib,librayon-a6562a257997e63a.rlib,librayon_core-8211dbe7ed2b012e.rlib,libcrossbeam_deque-de07234f73132edf.rlib,libcrossbeam_epoch-6bdb23608c0707a0.rlib,libcrossbeam_utils-b180482bb5996ff1.rlib,libeither-e509a228558bf08b.rlib,libonig-7ac6fead2f9582b0.rlib,libonig_sys-5574391406584513.rlib,libhf_hub-ee445270c10b3ee7.rlib,libdirs-526af7eb8a92c594.rlib,libdirs_sys-0b452b667fc1498f.rlib,liboption_ext-81e97fdf679ed993.rlib,libureq-e2c6cac8a632b65e.rlib,libwebpki_roots-8fb5d6e12d97285d.rlib,libwebpki_roots-5c965d539c88c078.rlib,libsocks-c0001bfe67072369.rlib,libbyteorder-5e396abfd1e007bc.rlib,libflate2-42669ed966745734.rlib,libminiz_oxide-461fdf3af71dc18f.rlib,libsimd_adler32-0dfa979cc6bba42c.rlib,libcrc32fast-d6bdbf189ac5c0f9.rlib,librustls-0d6f2a92307602d3.rlib,libsubtle-235345db1372ef1e.rlib,libwebpki-beddaea53bb4be8e.rlib,librustls_pki_types-a21d480369c38c29.rlib,libzeroize-5388c490bd2e8583.rlib,libthiserror-0deb0fa3095556c0.rlib,librand-fc55e1212dd325e1.rlib,librand_chacha-782d8ab809b7bcb7.rlib,librand_core-e0989e880b715c66.rlib,libhttp-5a1d5cc9e19ffd2e.rlib,libindicatif-d5ac8daa5a86bfea.rlib,libportable_atomic-1134b5b3fb31d8d7.rlib,libnumber_prefix-72a69772cf0d41ec.rlib,libconsole-61db8bb676131eb8.rlib,libunicode_width-df487f2c794611ad.rlib,libahash-7775f74225234c80.rlib,libgetrandom-dbab787bd28235d8.rlib,libderive_builder-42e82b2d3124caa3.rlib,libreqwest-99955c3e771f7327.rlib,libhyper_tls-23495cf4b09cd06d.rlib,libipnet-2f7ee733f49e0bbc.rlib,libtokio_native_tls-084abbc8716db216.rlib,libencoding_rs-3736bec16114e527.rlib,libnative_tls-23a1ebf3ae701cfb.rlib,libopenssl_probe-14deaccc5753c9aa.rlib,libopenssl-dc11f8b7e06c94cd.rlib,libbitflags-8738cad0ef102bd8.rlib,libforeign_types-671a4ab7f3d7c56d.rlib,libforeign_types_shared-c4924f35728770f5.rlib,libopenssl_sys-07324b4d85d2dd28.rlib,liburl-54b13399fc33dc9d.rlib,libidna-294d212cc034bbb7.rlib,libidna_adapter-99f3d0baf87bde0e.rlib,libicu_properties-86d4ca5e9183559f.rlib,libicu_properties_data-c24624daa4ff5e35.rlib,libicu_normalizer-de5ce2905d675a7b.rlib,libicu_normalizer_data-19ce94330c683cb0.rlib,libicu_collections-b93d1acbc4b96190.rlib,libutf8_iter-0be0d819429d0f20.rlib,libpotential_utf-cbd2916015d90327.rlib,libicu_provider-c6293fc8b50938da.rlib,libicu_locale_core-b9b3f3b1a422b350.rlib,libtinystr-2fc8bc294901734d.rlib,liblitemap-16650856002af183.rlib,libwriteable-a0dbb7004fe08d22.rlib,libzerovec-4734f4569ed497e5.rlib,libzerotrie-b002fbdb80e9ffb1.rlib,libyoke-8d820f3c462cf9e3.rlib,libstable_deref_trait-181abd7ef7b8e73e.rlib,libzerofrom-950441d46c673836.rlib,libaxum-8c35de20d391d11d.rlib,libserde_path_to_error-4e115c2bba0aa5d1.rlib,libserde_json-4c96f7ee223e5a32.rlib,libzmij-8bcd231bf77e62e8.rlib,libserde_urlencoded-f51b47bb8e349037.rlib,libryu-acd0adb185950752.rlib,libform_urlencoded-6e63a6da08e5c025.rlib,libpercent_encoding-d470dd2784bcca2d.rlib,libmatchit-d91a9870a148eb34.rlib,libbitflags-6f15c335b9a1d130.rlib,libsync_wrapper-8ada8dac6684e59c.rlib,libaxum_core-b2dd057dabd50e2d.rlib,libmime-0dd4e244d7d833fc.rlib,libtower-c49aa6ede6348b9b.rlib,libindexmap-5b84785825d211f1.rlib,libhashbrown-8124d08dbffc0369.rlib,libtower_layer-75e7bda1bbad9edd.rlib,libeventsource_client-fe6802aebe8f106d.rlib,librand-0bbf932f12a01be6.rlib,librand_chacha-25ff31e45880217f.rlib,libppv_lite86-8febd553ec1e1060.rlib,libzerocopy-e770244835314971.rlib,librand_core-9fac2fd6610e7e41.rlib,libhyper_rustls-83bd9418cc54757d.rlib,librustls_native_certs-ee1ead662a04dbc0.rlib,librustls_pemfile-50306e73b02e36e2.rlib,libbase64-b199e8998b49417a.rlib,libopenssl_probe-faddadc9560ab137.rlib,libtokio_rustls-3c97d91ad13f84ac.rlib,librustls-d7ab4f817a0d6fd5.rlib,libsct-61327cb682ae278b.rlib,libwebpki-6cda10c33c1f4f9f.rlib,libring-818497eb480d9a3b.rlib,libgetrandom-211b5920a71780ce.rlib,libuntrusted-61e462c4ff66dae4.rlib,libhyper_timeout-5dcb34792d2dced4.rlib,libtokio_io_timeout-1b0be6f34f4c1280.rlib,libpin_project-22c76a2cd111598c.rlib,libhyper-1161e2ffddb8707e.rlib,libwant-8e49fb79f06d2910.rlib,libtry_lock-5e8c67c377e495c3.rlib,libsocket2-7df8bc1e22494ec4.rlib,libhttparse-4b3096c63aa11487.rlib,libh2-29c6b9156370b487.rlib,libindexmap-3d33bbca72aef37b.rlib,libequivalent-5d26bed58d6c283f.rlib,libhashbrown-bed79a66f23c52db.rlib,libtokio_util-a79d52a6b0e00935.rlib,libtower_service-8b54da21e86b09bd.rlib,libtracing-0842287d729df66c.rlib,liblog-29d9e61cc22b0263.rlib,libtracing_core-3459d776c479823b.rlib,libonce_cell-8e0482d44a6f251f.rlib,libhttp_body-1cacd02f47891beb.rlib,libhttpdate-c63d9b1e7037e09b.rlib,libhttp-2a41ffdf3985e9e5.rlib,libitoa-68bb0977495cb98f.rlib,libfnv-583a59e42a91d625.rlib,libfutures-7ab14dd05841a360.rlib,libfutures_executor-7f57f2452375ab1f.rlib,libfutures_util-af8485e1fb403ed6.rlib,libmemchr-7aa5dec79bfefeb9.rlib,libfutures_io-47e024b0e8129ab2.rlib,libslab-a81f23bc5638fd56.rlib,libfutures_channel-8fab12de6af4f9ea.rlib,libfutures_sink-9adbb3ae75842025.rlib,libfutures_task-f206a55782bec73a.rlib,libfutures_core-95a05c8113bb75f3.rlib,libbase64-aa3f3e5af5324a78.rlib,libtokio-da6fbe536dd7bf96.rlib,libsignal_hook_registry-d68b389af443e4f1.rlib,liberrno-35b31356ec5c398c.rlib,libsocket2-f9c55e009f6537b3.rlib,libbytes-2126bb76cc8ef8a2.rlib,libmio-004a74604a9b246d.rlib,libparking_lot-e739aa4e56dfa9e7.rlib,libparking_lot_core-c4e2d5dc8195168d.rlib,liblibc-94162ab3a90b485a.rlib,libcfg_if-e253170cc9e695b4.rlib,libsmallvec-8b4f6ff4d07312bf.rlib,liblock_api-f63e9e87a37e29b9.rlib,libscopeguard-15c273effb8af0ab.rlib,libpin_project_lite-afadca967ec6213a.rlib,libthiserror-bb0a30d70ceef424.rlib,libserde-55bdeb994504e1fa.rlib,libserde_core-ad4d742ecf375ba3.rlib,libnohash_hasher-ef554996f2817270.rlib}.rlib" "<sysroot>/lib/rustlib/aarch64-unknown-linux-gnu/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,libcfg_if-*,liblibc-*,liballoc-*,librustc_std_workspace_core-*,libcore-*,libcompiler_builtins-*}.rlib" "-Wl,-Bdynamic" "-lstdc++" "-lssl" "-lcrypto" "-lgcc_s" "-lutil" "-lrt" "-lpthread" "-lm" "-ldl" "-lc" "-L" "/tmp/rustcfj0Kzy/raw-dylibs" "-Wl,--eh-frame-hdr" "-Wl,-z,noexecstack" "-L" "/root/lmetric-repro/blitz-router/target/debug/build/ring-119bb386c77877e2/out" "-L" "/root/lmetric-repro/blitz-router/target/debug/build/esaxx-rs-89edbbcc7241c5e8/out" "-L" "/root/lmetric-repro/blitz-router/target/debug/build/onig_sys-a91a5c12b2219b19/out" "-L" "<sysroot>/lib/rustlib/aarch64-unknown-linux-gnu/lib" "-o" "/root/lmetric-repro/blitz-router/target/debug/deps/router-edaf117dc4e07598" "-Wl,--gc-sections" "-pie" "-Wl,-z,relro,-z,now" "-nodefaultlibs"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: /usr/bin/ld: cannot find -lssl: No such file or directory
+          /usr/bin/ld: cannot find -lcrypto: No such file or directory
+          collect2: error: ld returned 1 exit status
+          
+
+warning: `router` (lib test) generated 13 warnings
+error: could not compile `router` (lib test) due to 1 previous error; 13 warnings emitted

@@ -1,0 +1,16 @@
+{
+  "docs/dual_npu_validation.md": "781520284bd5b63d5770d2cc28b5622568b4b6f0ca88609e671dea97581138cd",
+  "docs/dual_npu_preliminary_benchmark.md": "1e6a48b728ad62703e719835a5470fb431c817d626d7dd5d68365e111005b8cf",
+  "scripts/dual_npu/verify_correctness.py": "bb996254cca5890fcb96ecf3c0071e6baed9990ef73e6139354b6278647c039f",
+  "scripts/dual_npu/inspect_benchmarks.py": "d296981481bf041ee5fdfc977bf36aa02306bdb27cf22dfa194680d7e39272e6",
+  "scripts/dual_npu/test_driver.py": "8b0909d94e5b6e52540742965ccfc1f3b1829c4777dd43e3b520ddc970079d1c",
+  "scripts/dual_npu/finalize.py": "ba152f2f795570b8267c6b7b5cb644462ce42dddb88142556871b4f30a5fcec7",
+  "scripts/dual_npu/edit_production.py": "a9764060af5bbdf680853878f05cda653a25e44fe40f44eceb2656dd65fd053a",
+  "scripts/dual_npu/build.py": "0933bae609d6079a66e20bce9f6a99e49c271fe8c88a6101a7d940437c372d41",
+  "scripts/dual_npu/experiment.py": "657ffa36de2b9a8d041104e0e43abe20000cb6edb3150cd122fb8dd890fa1282",
+  "scripts/dual_npu/benchmark.py": "907d8f2ec08a214471191a781de3b3555683463652cb62ade58afb8508846b7d",
+  "scripts/dual_npu/edit_cpu.py": "7c453dcc69a73a4fa601f4167395ab52b8cc9d92ab4c78ecd82b744eb1aefd53",
+  "scripts/dual_npu/report.py": "8d0aa33f6a75a456cdcde85cb8fea427676ed3a66abc62d2f8da59a9f75edba1",
+  "scripts/dual_npu/snapshot.py": "d7b1aa33c55ac38906bfb3282277cc971d97fa3d689e0a3268964886471f6ecb",
+  "scripts/dual_npu/README.md": "4158cad27313f38bceddc4479e62597cbef5346af2a8a4a1a58cb8a2b06e9d97"
+}

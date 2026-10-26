@@ -1,0 +1,171 @@
+diff --git a/router/src/engine/colocation.rs b/router/src/engine/colocation.rs
+index 94ce634..34cde4f 100644
+--- a/router/src/engine/colocation.rs
++++ b/router/src/engine/colocation.rs
+@@ -691,6 +691,16 @@ mod task_assignment {
+             #[cfg(any(feature = "preble-bs-q", feature = "preble-tps-q"))]
+             let pre_step_bs = sctx.lmetric.bs;
+             sctx.lmetric -= metric_delta;
++            // State after this engine step. These gauges also make drain
++            // checks possible without parsing periodic statistics files.
++            metrics::gauge!("blitz_replica_active_requests", sctx.lmetric.bs as f64,
++                "engine" => replica_index.to_string());
++            metrics::gauge!("blitz_replica_waiting_requests", sctx.lmetric.waiting_reqs as f64,
++                "engine" => replica_index.to_string());
++            metrics::gauge!("blitz_replica_pending_prefill_tokens", sctx.lmetric.prefill_tokens as f64,
++                "engine" => replica_index.to_string());
++            metrics::gauge!("blitz_replica_context_tokens", sctx.lmetric.all_tokens as f64,
++                "engine" => replica_index.to_string());
+             #[cfg(any(feature = "preble-bs-q", feature = "preble-tps-q"))]
+             sctx.block_hash.update_with_step(pre_step_bs, std::time::Instant::now());
+             drop(sctx);
+diff --git a/router/src/gateway/server.rs b/router/src/gateway/server.rs
+index 8067439..9e91534 100644
+--- a/router/src/gateway/server.rs
++++ b/router/src/gateway/server.rs
+@@ -490,6 +490,12 @@ pub async fn run(
+ 
+     // Prometheus handler
+     let builder = PrometheusBuilder::new()
++        .set_buckets_for_metric(
++            Matcher::Full("blitz_policy_schedule_duration_seconds".into()),
++            &[0.000001, 0.000002, 0.000005, 0.000010, 0.000020, 0.000050,
++              0.000100, 0.000200, 0.000500, 0.001, 0.002, 0.005, 0.01, 0.1],
++        )
++        .unwrap()
+         .set_buckets_for_metric(duration_matcher, &duration_buckets)
+         .unwrap()
+         .set_buckets_for_metric(input_length_matcher, &input_length_buckets)
+diff --git a/router/src/scheduler/policies/lmetric.rs b/router/src/scheduler/policies/lmetric.rs
+index 89e21b8..da669bd 100644
+--- a/router/src/scheduler/policies/lmetric.rs
++++ b/router/src/scheduler/policies/lmetric.rs
+@@ -17,3 +17,83 @@ policy! {
+     gctx: (),
+     body: { select_min_by(&root_target(&observations), |o| prefill_tokens(req, o) * (o.bs + 1)) },
+ }
++
++#[cfg(test)]
++mod tests {
++    use super::LmetricQ;
++    use crate::gateway::validation::ValidGenerateRequest;
++    use crate::scheduler::kvcache::{BlockHash, BlockHashState, PrefixBlockHash};
++    use crate::scheduler::policies::{policy_trait::Policy, Entry};
++    use crate::scheduler::state::LMetric;
++    use crate::types::GenerationParams;
++    use crate::ScheduleContext;
++    use std::{sync::Arc, time::Duration};
++    use tokio::sync::{mpsc, Mutex};
++
++    fn entry(id: u64) -> Entry {
++        let tokens: Vec<u32> = (0..64).collect();
++        let (response_tx, _) = mpsc::unbounded_channel();
++        Entry {
++            block_hash_state: BlockHashState::new(&tokens, 16),
++            request: ValidGenerateRequest {
++                request_id: id, messages: vec![], inputs: String::new(),
++                input_length: 64, truncate: 0, decoder_input_details: false,
++                params: GenerationParams {
++                    temperature: 1.0, repetition_penalty: 1.0, top_k: 0,
++                    top_p: 1.0, seed: 0, max_new_tokens: 8,
++                    stop_sequences: vec![], ignore_eos_token: false,
++                },
++                top_n_tokens: 0, input_tokens: tokens,
++            },
++            response_tx, span: tracing::Span::none(), temp_span: None,
++            queue_time: tokio::time::Instant::now(), batch_time: None,
++            generated_token_cnt: 0, prev_token_time: None, time_of_per_token: None,
++            max_time_between_tokens: Duration::ZERO,
++        }
++    }
++
++    fn pool(n: usize) -> Vec<Arc<Mutex<ScheduleContext>>> {
++        (0..n).map(|_| Arc::new(Mutex::new(ScheduleContext {
++            lmetric: LMetric::default(), block_hash: PrefixBlockHash::new(1024),
++        }))).collect()
++    }
++
++    #[tokio::test]
++    async fn balances_cache_affinity_against_pending_work_and_active_requests() {
++        let req = entry(0);
++        let p = pool(2);
++        {
++            let mut cached = p[0].lock().await;
++            cached.block_hash.insert(&req.block_hash_state.get_hashes()[..3], vec![1, 2, 3]);
++        }
++        assert_eq!(LmetricQ::schedule(&req, &p, &mut ()).await, Some(0));
++        assert_eq!(req.block_hash_state.pred_hit_tokens(), 48);
++        let cached = p[0].lock().await;
++        assert_eq!(cached.lmetric.bs, 1);
++        assert_eq!(cached.lmetric.waiting_reqs, 1);
++        assert_eq!(cached.lmetric.prefill_tokens, 16);
++        drop(cached);
++        // Cached but busy: (128 + 16) * (8 + 1) > (0 + 64) * (0 + 1).
++        {
++            let mut cached = p[0].lock().await;
++            cached.lmetric.bs = 8;
++            cached.lmetric.prefill_tokens = 128;
++        }
++        assert_eq!(LmetricQ::schedule(&entry(1), &p, &mut ()).await, Some(1));
++    }
++
++    #[tokio::test]
++    async fn admission_updates_prevent_burst_concentration() {
++        let p = pool(4);
++        let mut counts = [0; 4];
++        for id in 0..100 {
++            counts[LmetricQ::schedule(&entry(id), &p, &mut ()).await.unwrap()] += 1;
++        }
++        assert_eq!(counts, [25; 4]);
++    }
++
++    #[tokio::test]
++    async fn no_replicas_returns_none() {
++        assert_eq!(LmetricQ::schedule(&entry(0), &[], &mut ()).await, None);
++    }
++}
+diff --git a/router/src/scheduler/policies/policy_runner.rs b/router/src/scheduler/policies/policy_runner.rs
+index 430b274..508242f 100644
+--- a/router/src/scheduler/policies/policy_runner.rs
++++ b/router/src/scheduler/policies/policy_runner.rs
+@@ -68,6 +68,22 @@ where
+         }
+     }
+ 
++    /// Wall time of the policy call, including snapshot locks and admission
++    /// bookkeeping; excludes the time waiting in the command queue.
++    async fn schedule_measured(
++        entry: &Entry,
++        all_sctx: &[Arc<Mutex<ScheduleContext>>],
++        gctx: &mut P::GlobalContext,
++    ) -> Option<usize> {
++        let started = std::time::Instant::now();
++        let chosen = P::schedule(entry, all_sctx, gctx).await;
++        metrics::histogram!(
++            "blitz_policy_schedule_duration_seconds",
++            started.elapsed().as_secs_f64()
++        );
++        chosen
++    }
++
+     async fn queue_task(
+         num_replicas: usize,
+         mut receiver: mpsc::UnboundedReceiver<PolicyCommand>,
+@@ -85,7 +101,7 @@ where
+                     uncommit_buffer.push_back(*entry);
+                     let entry = uncommit_buffer.front().unwrap();
+                     if let Some(replica_idx) =
+-                        P::schedule(entry, &all_schedule_context, &mut gctx).await
++                        Self::schedule_measured(entry, &all_schedule_context, &mut gctx).await
+                     {
+                         let entry = uncommit_buffer.pop_front().unwrap();
+                         let request_id = entry.request.request_id;
+@@ -99,7 +115,7 @@ where
+                     'ineligible: while all_commit_req_buffers[replica_idx].is_empty() {
+                         if let Some(entry) = uncommit_buffer.front() {
+                             if let Some(tmp_replica_idx) =
+-                                P::schedule(entry, &all_schedule_context, &mut gctx).await
++                                Self::schedule_measured(entry, &all_schedule_context, &mut gctx).await
+                             {
+                                 let entry = uncommit_buffer.pop_front().unwrap();
+                                 let request_id = entry.request.request_id;

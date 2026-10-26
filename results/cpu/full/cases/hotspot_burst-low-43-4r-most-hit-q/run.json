@@ -1,0 +1,27 @@
+{
+  "command": [
+    "/root/lmetric-repro/results/cpu/bins/most-hit-q",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "43897",
+    "--client-config",
+    "/root/lmetric-repro/results/cpu/full/cases/hotspot_burst-low-43-4r-most-hit-q/clients.json",
+    "--model-name",
+    "cpu-synthetic",
+    "--tokenizer-name",
+    "/root/lmetric-repro/models/cpu-synthetic-tokenizer",
+    "--use-tokenizer",
+    "--max-concurrent-requests",
+    "4096",
+    "--validation-workers",
+    "2"
+  ],
+  "policy": "most-hit-q",
+  "scenario": "hotspot_burst",
+  "load": "low",
+  "seed": 43,
+  "replicas": 4,
+  "requests": 300,
+  "trace_sha256": "d9c093f33bc8e831061b9f290c73c7e3a308008153975ad30ac3b97701a770f0"
+}

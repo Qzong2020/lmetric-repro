@@ -1,0 +1,130 @@
+[
+  {
+    "name": ".gitattributes",
+    "path": ".gitattributes",
+    "sha": "8c9c4f1c78352d259905d888390374d1f21298f0",
+    "size": 44,
+    "url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/.gitattributes?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+    "html_url": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/blob/5f7439c51ec248a0c585f7d90a41a6f57773b912/.gitattributes",
+    "git_url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/blobs/8c9c4f1c78352d259905d888390374d1f21298f0",
+    "download_url": "https://raw.githubusercontent.com/alibaba-edu/qwen-bailian-usagetraces-anon/5f7439c51ec248a0c585f7d90a41a6f57773b912/.gitattributes",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/.gitattributes?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+      "git": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/blobs/8c9c4f1c78352d259905d888390374d1f21298f0",
+      "html": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/blob/5f7439c51ec248a0c585f7d90a41a6f57773b912/.gitattributes"
+    }
+  },
+  {
+    "name": "LICENSE",
+    "path": "LICENSE",
+    "sha": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
+    "size": 11357,
+    "url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/LICENSE?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+    "html_url": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/blob/5f7439c51ec248a0c585f7d90a41a6f57773b912/LICENSE",
+    "git_url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/blobs/7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
+    "download_url": "https://raw.githubusercontent.com/alibaba-edu/qwen-bailian-usagetraces-anon/5f7439c51ec248a0c585f7d90a41a6f57773b912/LICENSE",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/LICENSE?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+      "git": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/blobs/7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
+      "html": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/blob/5f7439c51ec248a0c585f7d90a41a6f57773b912/LICENSE"
+    }
+  },
+  {
+    "name": "README.md",
+    "path": "README.md",
+    "sha": "d01cbe6a10faac546e3454260e11ea339ad92a18",
+    "size": 6628,
+    "url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/README.md?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+    "html_url": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/blob/5f7439c51ec248a0c585f7d90a41a6f57773b912/README.md",
+    "git_url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/blobs/d01cbe6a10faac546e3454260e11ea339ad92a18",
+    "download_url": "https://raw.githubusercontent.com/alibaba-edu/qwen-bailian-usagetraces-anon/5f7439c51ec248a0c585f7d90a41a6f57773b912/README.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/README.md?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+      "git": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/blobs/d01cbe6a10faac546e3454260e11ea339ad92a18",
+      "html": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/blob/5f7439c51ec248a0c585f7d90a41a6f57773b912/README.md"
+    }
+  },
+  {
+    "name": "docs",
+    "path": "docs",
+    "sha": "186f45371b0461ba8a08321e0653b76d045777b7",
+    "size": 0,
+    "url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/docs?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+    "html_url": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/tree/5f7439c51ec248a0c585f7d90a41a6f57773b912/docs",
+    "git_url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/trees/186f45371b0461ba8a08321e0653b76d045777b7",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/docs?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+      "git": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/trees/186f45371b0461ba8a08321e0653b76d045777b7",
+      "html": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/tree/5f7439c51ec248a0c585f7d90a41a6f57773b912/docs"
+    }
+  },
+  {
+    "name": "qwen_coder_blksz_16.jsonl",
+    "path": "qwen_coder_blksz_16.jsonl",
+    "sha": "44a3042b981390d37e6b88f95fbaa6943e0c5218",
+    "size": 134,
+    "url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/qwen_coder_blksz_16.jsonl?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+    "html_url": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/blob/5f7439c51ec248a0c585f7d90a41a6f57773b912/qwen_coder_blksz_16.jsonl",
+    "git_url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/blobs/44a3042b981390d37e6b88f95fbaa6943e0c5218",
+    "download_url": "https://raw.githubusercontent.com/alibaba-edu/qwen-bailian-usagetraces-anon/5f7439c51ec248a0c585f7d90a41a6f57773b912/qwen_coder_blksz_16.jsonl",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/qwen_coder_blksz_16.jsonl?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+      "git": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/blobs/44a3042b981390d37e6b88f95fbaa6943e0c5218",
+      "html": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/blob/5f7439c51ec248a0c585f7d90a41a6f57773b912/qwen_coder_blksz_16.jsonl"
+    }
+  },
+  {
+    "name": "qwen_thinking_blksz_16.jsonl",
+    "path": "qwen_thinking_blksz_16.jsonl",
+    "sha": "55e92753f87dc9cc36849bc9285bdc45d5cc7153",
+    "size": 133,
+    "url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/qwen_thinking_blksz_16.jsonl?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+    "html_url": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/blob/5f7439c51ec248a0c585f7d90a41a6f57773b912/qwen_thinking_blksz_16.jsonl",
+    "git_url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/blobs/55e92753f87dc9cc36849bc9285bdc45d5cc7153",
+    "download_url": "https://raw.githubusercontent.com/alibaba-edu/qwen-bailian-usagetraces-anon/5f7439c51ec248a0c585f7d90a41a6f57773b912/qwen_thinking_blksz_16.jsonl",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/qwen_thinking_blksz_16.jsonl?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+      "git": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/blobs/55e92753f87dc9cc36849bc9285bdc45d5cc7153",
+      "html": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/blob/5f7439c51ec248a0c585f7d90a41a6f57773b912/qwen_thinking_blksz_16.jsonl"
+    }
+  },
+  {
+    "name": "qwen_traceA_blksz_16.jsonl",
+    "path": "qwen_traceA_blksz_16.jsonl",
+    "sha": "d8c9a0e0fbf3a45b5264c79f4d973c508f507e70",
+    "size": 133,
+    "url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/qwen_traceA_blksz_16.jsonl?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+    "html_url": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/blob/5f7439c51ec248a0c585f7d90a41a6f57773b912/qwen_traceA_blksz_16.jsonl",
+    "git_url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/blobs/d8c9a0e0fbf3a45b5264c79f4d973c508f507e70",
+    "download_url": "https://raw.githubusercontent.com/alibaba-edu/qwen-bailian-usagetraces-anon/5f7439c51ec248a0c585f7d90a41a6f57773b912/qwen_traceA_blksz_16.jsonl",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/qwen_traceA_blksz_16.jsonl?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+      "git": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/blobs/d8c9a0e0fbf3a45b5264c79f4d973c508f507e70",
+      "html": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/blob/5f7439c51ec248a0c585f7d90a41a6f57773b912/qwen_traceA_blksz_16.jsonl"
+    }
+  },
+  {
+    "name": "qwen_traceB_blksz_16.jsonl",
+    "path": "qwen_traceB_blksz_16.jsonl",
+    "sha": "34432ac74acce73cc0ca29fc6780f9d0c7b5a4ac",
+    "size": 133,
+    "url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/qwen_traceB_blksz_16.jsonl?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+    "html_url": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/blob/5f7439c51ec248a0c585f7d90a41a6f57773b912/qwen_traceB_blksz_16.jsonl",
+    "git_url": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/blobs/34432ac74acce73cc0ca29fc6780f9d0c7b5a4ac",
+    "download_url": "https://raw.githubusercontent.com/alibaba-edu/qwen-bailian-usagetraces-anon/5f7439c51ec248a0c585f7d90a41a6f57773b912/qwen_traceB_blksz_16.jsonl",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/contents/qwen_traceB_blksz_16.jsonl?ref=5f7439c51ec248a0c585f7d90a41a6f57773b912",
+      "git": "https://api.github.com/repos/alibaba-edu/qwen-bailian-usagetraces-anon/git/blobs/34432ac74acce73cc0ca29fc6780f9d0c7b5a4ac",
+      "html": "https://github.com/alibaba-edu/qwen-bailian-usagetraces-anon/blob/5f7439c51ec248a0c585f7d90a41a6f57773b912/qwen_traceB_blksz_16.jsonl"
+    }
+  }
+]

@@ -1,0 +1,234 @@
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:174:17
+    |
+174 |                 (*node).payload[i].push(alias_bid);
+    |                 ^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+    = note: `#[warn(dangerous_implicit_autorefs)]` on by default
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+174 |                 (&mut (*node).payload)[i].push(alias_bid);
+    |                 +++++                +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:356:47
+    |
+356 |                     !(*n).value.is_empty() && (*n).value[0] == key[consumed]
+    |                                               ^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+356 |                     !(*n).value.is_empty() && (&(*n).value)[0] == key[consumed]
+    |                                               ++          +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:366:58
+    |
+366 |             while i < val_len && consumed < key.len() && (*child).value[i] == key[consumed] {
+    |                                                          ^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+366 |             while i < val_len && consumed < key.len() && (&(*child).value)[i] == key[consumed] {
+    |                                                          ++              +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:369:21
+    |
+369 |                     (*child).payload[i].push(alias_bid);
+    |                     ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+369 |                     (&mut (*child).payload)[i].push(alias_bid);
+    |                     +++++                 +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:459:41
+    |
+459 | ...                   for bids in (*node).payload[new_start..].iter() {
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+459 |                             for bids in (&(*node).payload)[new_start..].iter() {
+    |                                         ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:685:51
+    |
+685 |             while pos < (*node).payload.len() && !(*node).payload[pos].contains(&block_id) {
+    |                                                   ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+685 |             while pos < (*node).payload.len() && !(&(*node).payload)[pos].contains(&block_id) {
+    |                                                   ++               +
+
+warning: implicit autoref creates a reference to the dereference of a raw pointer
+   --> radixtree/src/block_hash.rs:691:36
+    |
+691 |             let bids_at_pos = &mut (*node).payload[pos];
+    |                                    ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: creating a reference requires the pointer target to be valid and imposes aliasing requirements
+help: try using a raw pointer method instead; or if this reference is intentional, make it explicit
+    |
+691 |             let bids_at_pos = &mut (&mut (*node).payload)[pos];
+    |                                    +++++                +
+
+warning: `radixtree` (lib) generated 7 warnings
+   Compiling router v0.1.0 (/root/lmetric-repro/blitz-router/router)
+warning: unused import: `vllm::JShortestWeightQ`
+   --> router/src/scheduler/policies/mod.rs:117:16
+    |
+117 | pub(crate) use vllm::JShortestWeightQ;
+    |                ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `std::sync::OnceLock`
+ --> router/src/scheduler/state.rs:1:5
+  |
+1 | use std::sync::OnceLock;
+  |     ^^^^^^^^^^^^^^^^^^^
+
+warning: field `hashes` is never read
+    --> router/src/scheduler/kvcache.rs:1053:50
+     |
+1053 |             struct SeqState { indices: Vec<u64>, hashes: Vec<u64>, removed: bool }
+     |                    -------- field in this struct ^^^^^^
+     |
+     = note: `#[warn(dead_code)]` on by default
+
+warning: field `all_tokens` is never read
+  --> router/src/scheduler/policies/dsl_runtime.rs:33:9
+   |
+27 | pub(crate) struct Observation {
+   |                   ----------- field in this struct
+...
+33 |     pub all_tokens: usize,
+   |         ^^^^^^^^^^
+   |
+   = note: `Observation` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `new_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:128:15
+    |
+128 | pub(crate) fn new_blocks(req: &ValidGenerateRequest, sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^
+
+warning: function `match_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:157:15
+    |
+157 | pub(crate) fn match_blocks(req: &ValidGenerateRequest, sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `hit_pct` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:163:15
+    |
+163 | pub(crate) fn hit_pct(req: &ValidGenerateRequest, sctx: &Observation) -> f32 {
+    |               ^^^^^^^
+
+warning: function `decode_blocks` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:172:15
+    |
+172 | pub(crate) fn decode_blocks(sctx: &Observation) -> usize {
+    |               ^^^^^^^^^^^^^
+
+warning: function `mean_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:423:15
+    |
+423 | pub(crate) fn mean_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> f32 {
+    |               ^^^^^^^^^^^^^
+
+warning: function `std_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:429:15
+    |
+429 | pub(crate) fn std_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize + Copy) -> f32 {
+    |               ^^^^^^^^^^^^
+
+warning: function `min_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:439:15
+    |
+439 | pub(crate) fn min_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `max_of_usize` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:444:15
+    |
+444 | pub(crate) fn max_of_usize(obs: &[Observation], proj: impl Fn(&Observation) -> usize) -> usize {
+    |               ^^^^^^^^^^^^
+
+warning: function `min_of_f32` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:475:15
+    |
+475 | pub(crate) fn min_of_f32(obs: &[Observation], proj: impl Fn(&Observation) -> f32) -> f32 {
+    |               ^^^^^^^^^^
+
+warning: function `max_of_f32` is never used
+   --> router/src/scheduler/policies/dsl_runtime.rs:480:15
+    |
+480 | pub(crate) fn max_of_f32(obs: &[Observation], proj: impl Fn(&Observation) -> f32) -> f32 {
+    |               ^^^^^^^^^^
+
+warning: `router` (lib test) generated 14 warnings (run `cargo fix --lib -p router --tests` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 13.69s
+     Running unittests src/lib.rs (target/debug/deps/router-edaf117dc4e07598)
+
+running 46 tests
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_128_physical_mapping_uses_local_hash ... ok
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_128_tail_and_multi_block_append ... ok
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_first_output_finish_matrix ... ok
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_legacy_regression_still_reproduced ... ok
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_mismatched_block_size_rejected_before_accounting ... ok
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_multi_token_finish ... ok
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_prefill_prediction_matrix ... ok
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_real_http_sse_to_completion_loop ... ignored, requires scripts/run_ascend_minimal_tests.py synthetic server
+test engine::colocation::task_assignment::ascend_request_tests::ascend_request_sequence_validation ... ok
+test engine::colocation::task_assignment::kv_journal_integration_tests::kv_gateway_final_frame_reports_all_actual_tokens ... ok
+test engine::colocation::task_assignment::kv_journal_integration_tests::kv_journal_admission_rechecks_after_observation ... ok
+test engine::colocation::task_assignment::kv_journal_integration_tests::kv_journal_failure_stops_before_accounting_and_disables_admission ... ok
+test engine::colocation::task_assignment::kv_journal_integration_tests::kv_journal_real_npu_cache_lifecycle ... ignored, requires bounded real single-card KV engine and fixture
+test engine::colocation::task_assignment::kv_journal_integration_tests::kv_journal_same_size_rebuild_must_invalidate_hit_observation ... ok
+test engine::kv_journal::protocol_tests::kv_journal_sse_sequence_rejects_duplicate_gap_downgrade_and_epoch ... ok
+test engine::kv_journal::tests::kv_journal_duplicate_gap_epoch_and_atomic_failure ... ok
+test engine::kv_journal::tests::kv_journal_parent_only_eviction_orphan_restore_alias_reuse_and_reset ... ok
+test engine::kv_journal::tests::kv_journal_request_full_occupancy_release_is_not_eviction ... ok
+test gateway::chat_template::tests::test_chat_renderer_none_empty ... ok
+test gateway::chat_template::tests::test_chat_renderer_none_passthrough ... ok
+test gateway::chat_template::tests::test_load_chat_template_missing_file ... ok
+test gateway::model_config::tests::test_load_model_config_missing_dir ... ok
+test gateway::model_config::tests::test_load_model_config_valid ... ok
+test scheduler::infer::gateway_aggregation_tests::gateway_aggregation_counts_and_decodes_complete_token_sequence ... ok
+test scheduler::kvcache::tests::bug_cascading_remove_shared_prefix ... ok
+test scheduler::kvcache::tests::bug_get_semantic_mismatch ... ok
+test scheduler::kvcache::tests::fuzz_prefix_suffix ... ok
+test scheduler::kvcache::tests::insert_count_duplicate_hashes_agrees ... ok
+test scheduler::kvcache::tests::medium_batched_prefix_suffix ... ok
+test scheduler::kvcache::tests::prop_rtbh_disjoint_sequences ... ok
+test scheduler::kvcache::tests::prop_rtbh_insert_returns_new_count ... ok
+test scheduler::kvcache::tests::prop_rtbh_insert_then_get ... ok
+test scheduler::kvcache::tests::prop_rtbh_oracle_agreement ... ok
+test scheduler::kvcache::tests::prop_rtbh_partial_remove ... ok
+test scheduler::kvcache::tests::prop_rtbh_prefix_sharing ... ok
+test scheduler::kvcache::tests::prop_rtbh_random_op_sequence ... ok
+test scheduler::kvcache::tests::prop_rtbh_remove_all_then_get_zero ... ok
+test scheduler::kvcache::tests::prop_rtbh_single_element ... ok
+test scheduler::kvcache::tests::prop_rtbh_vs_htbh_disjoint_domains ... ok
+test scheduler::kvcache::tests::small_prefix_suffix_suite ... ok
+test scheduler::policies::lmetric::tests::admission_updates_prevent_burst_concentration ... ok
+test scheduler::policies::lmetric::tests::balances_cache_affinity_against_pending_work_and_active_requests ... ok
+test scheduler::policies::lmetric::tests::no_replicas_returns_none ... ok
+test scheduler::policies::paper_tests::figure6_waiting_and_running_are_distinct ... ok
+test scheduler::policies::paper_tests::independent_paper_oracles_match_real_policies ... ok
+test scheduler::policies::paper_tests::real_trace_tokens_match_paper_oracles ... ignored, requires verified public traces and real-tokenizer output from paper_trace_check
+
+test result: ok. 43 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 4.88s
+

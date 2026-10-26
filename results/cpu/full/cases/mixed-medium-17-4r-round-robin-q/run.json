@@ -1,0 +1,27 @@
+{
+  "command": [
+    "/root/lmetric-repro/results/cpu/bins/round-robin-q",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "40099",
+    "--client-config",
+    "/root/lmetric-repro/results/cpu/full/cases/mixed-medium-17-4r-round-robin-q/clients.json",
+    "--model-name",
+    "cpu-synthetic",
+    "--tokenizer-name",
+    "/root/lmetric-repro/models/cpu-synthetic-tokenizer",
+    "--use-tokenizer",
+    "--max-concurrent-requests",
+    "4096",
+    "--validation-workers",
+    "2"
+  ],
+  "policy": "round-robin-q",
+  "scenario": "mixed",
+  "load": "medium",
+  "seed": 17,
+  "replicas": 4,
+  "requests": 300,
+  "trace_sha256": "451ce157d78185334fbd96099f1dbe0d264330e332451b57297139ff01413297"
+}

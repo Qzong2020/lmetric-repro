@@ -1,0 +1,12 @@
+sync_attempt2: both engines ready, subscribed and reset
+Traceback (most recent call last):
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 282, in <module>
+    try:correctness(s)
+        ^^^^^^^^^^^^^^
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 272, in correctness
+    survivor=s.request(prompt(3),'invalid_A_healthy_B');s.drain([1]);s.verify([1]);s.reconcile([survivor])
+                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 176, in reconcile
+    es=self.events(backend);os_=[o for e in es for o in e['outputs'] if o['request_id']==rid]
+                                                        ~^^^^^^^^^^^
+KeyError: 'outputs'

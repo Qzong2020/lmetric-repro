@@ -1,0 +1,94 @@
+[
+  {
+    "logical_device": 0,
+    "name": "Ascend910B2",
+    "operation": "matmul",
+    "shape": [
+      512,
+      512
+    ],
+    "dtype": "torch.float16",
+    "iterations": 10,
+    "relative_l2_error": 0.00020759503240697086,
+    "max_abs_error": 0.0017838478088378906,
+    "relative_l2_limit": 0.002,
+    "peak_allocated_bytes": 2623488,
+    "passed": true
+  },
+  {
+    "logical_device": 0,
+    "name": "Ascend910B2",
+    "operation": "matmul",
+    "shape": [
+      512,
+      512
+    ],
+    "dtype": "torch.bfloat16",
+    "iterations": 10,
+    "relative_l2_error": 0.0016626238357275724,
+    "max_abs_error": 0.01529693603515625,
+    "relative_l2_limit": 0.015,
+    "peak_allocated_bytes": 2623488,
+    "passed": true
+  },
+  {
+    "logical_device": 0,
+    "operation": "scaled_dot_product_attention",
+    "shape": [
+      1,
+      4,
+      64,
+      64
+    ],
+    "dtype": "torch.float16",
+    "relative_l2_error": 0.00026812677970156074,
+    "relative_l2_limit": 0.01,
+    "passed": true
+  },
+  {
+    "logical_device": 1,
+    "name": "Ascend910B2",
+    "operation": "matmul",
+    "shape": [
+      512,
+      512
+    ],
+    "dtype": "torch.float16",
+    "iterations": 10,
+    "relative_l2_error": 0.00020734156714752316,
+    "max_abs_error": 0.0018572807312011719,
+    "relative_l2_limit": 0.002,
+    "peak_allocated_bytes": 2623488,
+    "passed": true
+  },
+  {
+    "logical_device": 1,
+    "name": "Ascend910B2",
+    "operation": "matmul",
+    "shape": [
+      512,
+      512
+    ],
+    "dtype": "torch.bfloat16",
+    "iterations": 10,
+    "relative_l2_error": 0.0016627160366624594,
+    "max_abs_error": 0.014842987060546875,
+    "relative_l2_limit": 0.015,
+    "peak_allocated_bytes": 2623488,
+    "passed": true
+  },
+  {
+    "logical_device": 1,
+    "operation": "scaled_dot_product_attention",
+    "shape": [
+      1,
+      4,
+      64,
+      64
+    ],
+    "dtype": "torch.float16",
+    "relative_l2_error": 0.0002629192895255983,
+    "relative_l2_limit": 0.01,
+    "passed": true
+  }
+]

@@ -1,0 +1,6 @@
+test_real_snapshot_function_does_not_collide_with_emitter (__main__.ObserverTest.test_real_snapshot_function_does_not_collide_with_emitter) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.003s
+
+OK

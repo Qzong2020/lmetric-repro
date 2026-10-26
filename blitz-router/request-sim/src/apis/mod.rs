@@ -1,0 +1,74 @@
+use reqwest::Response;
+use std::collections::BTreeMap;
+use std::sync::atomic::AtomicU64;
+use std::sync::{Arc, OnceLock};
+
+use crate::dataset::PromptPayload;
+
+pub static MODEL_NAME: OnceLock<String> = OnceLock::new();
+pub static METRIC_PERCENTILES: OnceLock<Vec<u32>> = OnceLock::new();
+pub static MAX_TOKENS_CAP: OnceLock<Option<u64>> = OnceLock::new();
+pub static CONTEXT_LENGTH: OnceLock<Option<u64>> = OnceLock::new();
+pub static RID_SOURCE: OnceLock<RidSource> = OnceLock::new();
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum RidSource {
+    None,
+    ContentHash,
+}
+
+/// Per-request live state for real-time controller observation.
+/// Created at dispatch, updated by streaming parser, read by controller.
+pub struct InFlightState {
+    pub input_length: u64,
+    pub output_tokens_so_far: AtomicU64,
+    /// ms from BASETIME when first output token arrived. 0 = not yet received.
+    pub first_token_time_ms: AtomicU64,
+}
+
+/// Compute a deterministic rid from the serialized messages JSON.
+/// Returns a 16-char hex string (first 8 bytes of SHA-256).
+pub fn compute_content_hash_rid(messages: &serde_json::Value) -> String {
+    use sha2::{Digest, Sha256};
+    let serialized = messages.to_string();
+    let hash = Sha256::digest(serialized.as_bytes());
+    hash[..8].iter().map(|b| format!("{b:02x}")).collect()
+}
+
+pub mod aibrix_api;
+pub mod amadeus_api;
+pub mod openai_api;
+pub mod sgl_api;
+pub mod tgi_api;
+
+pub use aibrix_api::{AbxApi, AIBRIX_ROUTE_STRATEGY};
+pub use amadeus_api::{AmadeusApi, AMADEUS_ID};
+pub use openai_api::OaiApi;
+pub use sgl_api::SglApi;
+pub use tgi_api::TgiApi;
+
+use std::time::Duration;
+
+pub enum RequestError {
+    Timeout,
+    StreamErr(std::io::Error),
+    Other(reqwest::Error),
+}
+
+#[async_trait::async_trait]
+pub trait LLMApi: Copy + Clone + Send + Sync {
+    fn request_json_body(prompt: PromptPayload, input_length: u64, output_length: u64, stream: bool) -> String;
+
+    /// Per-request extra HTTP headers. Called with the serialized JSON body.
+    /// AIBrix uses this for static routing-strategy; Amadeus for per-request trace-id.
+    fn extra_headers(_body: &str) -> Vec<(&'static str, String)> {
+        vec![]
+    }
+
+    async fn parse_response(
+        response: Response,
+        stream: bool,
+        timeout_duration: Duration,
+        in_flight: Option<Arc<InFlightState>>,
+    ) -> Result<BTreeMap<String, String>, RequestError>;
+}

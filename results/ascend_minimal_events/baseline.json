@@ -1,0 +1,33 @@
+{
+  "time_utc": "2026-10-25T09:41:02.049560+00:00",
+  "router_head": "a005ceb3a6689d30514bd27e45ede0db933d0fea",
+  "router_branch": "lmetric/camera-ready",
+  "router_status": " M .cargo/config.toml\n M CLAUDE.md\n M README.md\n M docs/dsl/policies.md\n ? request-sim\n M router/src/engine/colocation.rs\n M router/src/gateway/server.rs\n M router/src/scheduler/policies/llm_d/least_bs.rs\n M router/src/scheduler/policies/llm_d/least_waiting.rs\n M router/src/scheduler/policies/lmetric.rs\n M router/src/scheduler/policies/mod.rs\n M router/src/scheduler/policies/policy_runner.rs\n M router/src/scheduler/policies/vllm.rs\n?? docs/cpu-testing.md\n?? docs/paper-cpu-tests.md\n?? router/src/scheduler/policies/paper_tests.rs\n",
+  "files": {
+    "docs/cpu-testing.md": "ebd47c8cacaf5ca825ee19dc439990f668295adf2313a6dd617695e143e0c3ef",
+    "docs/paper-cpu-tests.md": "79cfc25a8e27895be223a99be97992ac68a3d462b654da48fa39059985fd70ba",
+    "router/src/scheduler/policies/paper_tests.rs": "e4b7e7e8bc56f852f34335b74ad8fa5502901f96ba20641dbabced9aa34f2e76",
+    ".cargo/config.toml": "ac9b68adc345109347d93fedd83b4885a71d3c0c41580c4f64d014ee9ec00150",
+    "CLAUDE.md": "2a863b3efeed1681524a26d59e258abc26277967310fe33aa293d6beab60d973",
+    "README.md": "9a0b33b73e1fbf0cf49041bc7788bd1be217f081fef8554d7d81d0af7202ad92",
+    "docs/dsl/policies.md": "40d5d0503622da32ad55320feee3db03964ec4419ee614ab201328b60fd8cc8c",
+    "router/src/engine/colocation.rs": "6952a4399efeeec35d2fd730d64ea1d039274b3374f8b241a29ea9ba73c8daae",
+    "router/src/gateway/server.rs": "88c5b7dde26b2cf886edbf53bb5138f21d9b36ccda639cac7be652ac3dce3ccb",
+    "router/src/scheduler/policies/llm_d/least_bs.rs": "0204ec7aad3aeff42b6b776f7029878886b1bf777d14a4652d9167778bc5c91a",
+    "router/src/scheduler/policies/llm_d/least_waiting.rs": "298b3218e89cb9468249f0f4d350970186a28c88bfb9d8831d45742195bba46d",
+    "router/src/scheduler/policies/lmetric.rs": "c9617481119a209f8571d6f481efb222e2c9cb29fc2ebbc31dfafd476876e25b",
+    "router/src/scheduler/policies/mod.rs": "94d8f8d29164b984dcba4e2bccc6f8b7698e0bdf5b547cbcf8bb83d46ddf761a",
+    "router/src/scheduler/policies/policy_runner.rs": "3c54032c7488682fedeca7d9f4c9471ba6c955da9a9444d5ba733947f029f25e",
+    "router/src/scheduler/policies/vllm.rs": "0d8f93e07b3dc01c0e1de998e2114c1ef9af34bb23b56f861c936b3f9726c4f0"
+  },
+  "engines": {
+    "vllm": {
+      "head": "0fc695fc6d1d82e9a5ac6835ac8e4e1c83703665",
+      "status": ""
+    },
+    "vllm-ascend": {
+      "head": "5cb98caaadeff42b5b62b996e34bb2aaa29d20fd",
+      "status": ""
+    }
+  }
+}

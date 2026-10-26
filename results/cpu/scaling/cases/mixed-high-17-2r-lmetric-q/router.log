@@ -1,0 +1,7 @@
+2026-10-23T03:27:44.598589Z  WARN router: router/src/main.rs:417: The shard info is not set properly by the st-server
+Blitz router is ready
+2026-10-23T03:27:44.601078Z  WARN router::scheduler::statistic: router/src/scheduler/statistic.rs:16: Statistic path is not set
+
+thread 'tokio-rt-worker' panicked at router/src/scheduler/policies/policy_runner.rs:143:52:
+called `Result::unwrap()` on an `Err` value: None
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/root/lmetric-repro/scripts/dual_npu/verify_correctness.py", line 31, in <module>
+    assert re.search(r'\|\s+'+str(physical)+r'\s+0\s+'+str(runtime['pid'])+r'\s+',loaded),('wrong physical binding',idx,runtime['pid'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('wrong physical binding', 0, 42373)

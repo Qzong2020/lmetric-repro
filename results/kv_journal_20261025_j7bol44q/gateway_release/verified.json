@@ -1,0 +1,26 @@
+{
+  "real_npu": true,
+  "full_production_gateway": true,
+  "requests": 3,
+  "sse_events": 32,
+  "consumer_step_log_matches": 32,
+  "mutations": 16,
+  "mutation_types": {
+    "cache_reset": 2,
+    "request_blocks": 7,
+    "cache_insert": 4,
+    "request_release": 3
+  },
+  "actual_hits": [
+    0,
+    256,
+    0
+  ],
+  "usage_verified": true,
+  "text_equals_true_sse_token_decode": true,
+  "metrics_zero": true,
+  "final_physical_map": {
+    "5": "f4cb24cef899ecad9df692aaad4740a06ae029e816f841135a58e93f99113e81",
+    "6": "24dc4d552d0d6d951d89c0363cae4f3c7361a315d3fb93c245c00917721f151b"
+  }
+}

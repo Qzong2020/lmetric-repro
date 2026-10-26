@@ -1,0 +1,20 @@
+{
+  "policies": ["lmetric-q", "round-robin-q", "join-shortest-weight-q", "most-hit-q"],
+  "scenarios": ["no_share", "shared", "mixed", "hotspot_burst"],
+  "loads_rps": {"low": 40, "medium": 120, "high": 360},
+  "seeds": [17, 29, 43],
+  "requests": 300,
+  "warmup_requests": 40,
+  "replicas": 4,
+  "router_workers": 4,
+  "backend": {
+    "block_size": 16,
+    "cache_blocks": 4096,
+    "max_running": 16,
+    "prefill_budget": 4096,
+    "base_step_ms": 2.0,
+    "prefill_tokens_per_second": 64000,
+    "decode_request_ms": 0.08,
+    "context_1024_ms": 0.015
+  }
+}

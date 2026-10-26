@@ -1,0 +1,177 @@
+{
+  "scope": "SIMULATED events in unchanged production completion_event_loop and real LmetricQ admission; visibility-only test hook in /tmp copy",
+  "npu_used": false,
+  "engine_executed": false,
+  "rust_full_event_loop_executed": true,
+  "command": [
+    "cargo",
+    "+1.88.0",
+    "test",
+    "-p",
+    "router",
+    "--lib",
+    "--no-default-features",
+    "--features",
+    "vllm-backend,radixtree-blockhash,default-hash-algo,determinent-schedule,lmetric-q",
+    "--locked",
+    "--offline",
+    "--jobs",
+    "4",
+    "ascend_audit",
+    "--",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "exit_code": 0,
+  "cases": [
+    {
+      "case": "cancel_after_first_output_then_ack",
+      "result": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      },
+      "simulated": true
+    },
+    {
+      "case": "chunk_prefill_decode_finish",
+      "result": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      },
+      "simulated": true
+    },
+    {
+      "case": "duplicate_decode_is_applied_twice",
+      "result": {
+        "all_tokens": 67,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      },
+      "simulated": true
+    },
+    {
+      "case": "finish_skips_hit_correction",
+      "result": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      },
+      "simulated": true
+    },
+    {
+      "case": "compute_only_finish_hit_mismatch",
+      "result": {
+        "all_tokens": 0,
+        "bs": 0,
+        "prefill": -16,
+        "waiting": 0
+      },
+      "simulated": true
+    },
+    {
+      "case": "kv_remove_before_insert_full_loop",
+      "result": {
+        "all_tokens": 65,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      },
+      "simulated": true
+    },
+    {
+      "case": "kv_reuse_final_mapping",
+      "result": {
+        "passed": true
+      },
+      "simulated": true
+    },
+    {
+      "case": "multi_token_event_finish_residue",
+      "result": {
+        "all_tokens": 1,
+        "bs": 0,
+        "prefill": 0,
+        "waiting": 0
+      },
+      "simulated": true
+    },
+    {
+      "case": "preemption_has_no_ledger_rebuild",
+      "result": {
+        "all_tokens": 64,
+        "bs": 1,
+        "prefill": 32,
+        "waiting": 1
+      },
+      "simulated": true
+    },
+    {
+      "case": "yaullm_prefill_pred_0_actual_0",
+      "result": {
+        "all_tokens": 65,
+        "bs": 1,
+        "prefill": 0,
+        "waiting": 0
+      },
+      "simulated": true
+    },
+    {
+      "case": "yaullm_prefill_pred_32_actual_32",
+      "result": {
+        "all_tokens": 65,
+        "bs": 1,
+        "prefill": -32,
+        "waiting": 0
+      },
+      "simulated": true
+    },
+    {
+      "case": "yaullm_prefill_pred_16_actual_32",
+      "result": {
+        "all_tokens": 65,
+        "bs": 1,
+        "prefill": -32,
+        "waiting": 0
+      },
+      "simulated": true
+    },
+    {
+      "case": "yaullm_prefill_pred_32_actual_16",
+      "result": {
+        "all_tokens": 65,
+        "bs": 1,
+        "prefill": -16,
+        "waiting": 0
+      },
+      "simulated": true
+    },
+    {
+      "case": "serde_and_mapping",
+      "result": {
+        "passed": true
+      },
+      "simulated": true
+    }
+  ],
+  "test_summary": "test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 27 filtered out; finished in 0.01s",
+  "expected_panic_cases": [
+    "duplicate_prefill",
+    "unsolicited_abort_ack",
+    "radix_parent_removal",
+    "non16_partial_hash"
+  ],
+  "source_sha256": {
+    "blitz-router/router/src/engine/colocation.rs": "6952a4399efeeec35d2fd730d64ea1d039274b3374f8b241a29ea9ba73c8daae",
+    "blitz-router/router/src/engine/client.rs": "f0797f2e3932c061bba1d4eae0ecb730df2abbef834a2e4deb3a12ba3e9a7b81",
+    "blitz-router/router/src/engine/vllm_http.rs": "fd00e7953f3abc759ad73787917149d56e44e4b556cc09b700d9f35625bac506",
+    "blitz-router/router/src/scheduler/kvcache.rs": "572379792d4692d0d48e56ca017913fd1b561c5751fb1211327dc8a0648689c0",
+    "blitz-router/router/src/scheduler/state.rs": "8cf01f0f1e5f89514776fdf2cac852f55cfe7b78d1f492817d606dedd3483029",
+    "scripts/ascend_audit/router_replay.rs": "5ff7a7b4aa2d5fbaf73081f32820902fe485fb6d0a6cc8a8d3d159dd04e0a313"
+  }
+}

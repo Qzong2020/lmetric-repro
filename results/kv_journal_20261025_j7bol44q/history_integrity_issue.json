@@ -1,0 +1,13 @@
+{
+  "path": "results/ascend_minimal_events/synthetic_ipc_events.json",
+  "cause": "scripts/ascend_minimal/test_events.py::test_real_struct_and_zmq_subprocess writes a fixed historical output path; invoked by this run",
+  "current_sha256": "b0b98552a9a2b48a33f7095617686887cfd81edaaaf47f5294977884cad9e828",
+  "original_contents_recovered": false,
+  "original_epoch": "unknown; must not reconstruct or invent",
+  "status": "disclosed loss of a CPU synthetic example; user confirmed no backup; nonblocking for real NPU validation",
+  "single_card_history_verified_separately": true,
+  "further_writes_to_historical_results": false,
+  "user_has_no_backup": true,
+  "user_reply": "没了，应该不重要吧？",
+  "real_npu_evidence_affected": false
+}

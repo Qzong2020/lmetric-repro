@@ -1,0 +1,65 @@
+{
+  "started": "2026-10-25T13:35:24.713507+00:00",
+  "mode": "sync",
+  "policy": "lmetric-q",
+  "devices": [
+    0,
+    6
+  ],
+  "scope": "bounded real dual-NPU production gateway",
+  "packages": {
+    "vllm": "0.23.0+empty",
+    "vllm-ascend": "0.23.0",
+    "torch": "2.10.0+cpu",
+    "torch-npu": "2.10.0.post4",
+    "tokenizers": "0.22.2"
+  },
+  "model": "/models/Qwen2.5-7B-Instruct",
+  "tokenizer": "/models/Qwen2.5-7B-Instruct/tokenizer.json",
+  "gpu_memory_utilization": "0.40",
+  "num_gpu_blocks_override": "8",
+  "max_model_len": "1024",
+  "engines": [
+    {
+      "device": 0,
+      "runtime_id": 0,
+      "visible_devices": "0",
+      "pid": 145657,
+      "command": [
+        "/root/lmetric-repro/.venv/bin/python",
+        "-u",
+        "/root/lmetric-repro/scripts/kv_journal/launch_gateway.py",
+        "--model",
+        "/models/Qwen2.5-7B-Instruct",
+        "--served-model-name",
+        "ascend-small",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18181",
+        "--tensor-parallel-size",
+        "1",
+        "--pipeline-parallel-size",
+        "1",
+        "--max-model-len",
+        "1024",
+        "--max-num-seqs",
+        "1",
+        "--max-num-batched-tokens",
+        "128",
+        "--gpu-memory-utilization",
+        "0.40",
+        "--num-gpu-blocks-override",
+        "8",
+        "--enforce-eager",
+        "--no-async-scheduling",
+        "--enable-prefix-caching",
+        "--enable-chunked-prefill",
+        "--block-size",
+        "128"
+      ]
+    }
+  ],
+  "failure": "TimeoutError('bounded single-model load timeout')",
+  "finished": "2026-10-25T13:50:27.202341+00:00"
+}

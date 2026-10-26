@@ -1,0 +1,36 @@
+{
+  "all_checks_passed": true,
+  "preexisting_files": {
+    "docs/cpu-testing.md": "byte-identical",
+    "docs/paper-cpu-tests.md": "byte-identical",
+    "router/src/scheduler/policies/paper_tests.rs": "byte-identical",
+    ".cargo/config.toml": "byte-identical",
+    "CLAUDE.md": "byte-identical",
+    "README.md": "original bytes retained; documentation appended",
+    "docs/dsl/policies.md": "byte-identical",
+    "router/src/engine/colocation.rs": "baseline reconstructed byte-for-byte by removing only new protocol checks/correction/test include",
+    "router/src/gateway/server.rs": "byte-identical",
+    "router/src/scheduler/policies/llm_d/least_bs.rs": "byte-identical",
+    "router/src/scheduler/policies/llm_d/least_waiting.rs": "byte-identical",
+    "router/src/scheduler/policies/lmetric.rs": "byte-identical",
+    "router/src/scheduler/policies/mod.rs": "baseline reconstructed byte-for-byte by removing only new token accounting",
+    "router/src/scheduler/policies/policy_runner.rs": "byte-identical",
+    "router/src/scheduler/policies/vllm.rs": "byte-identical"
+  },
+  "installed_sources": {
+    "vllm": {
+      "unchanged": true,
+      "head": "0fc695fc6d1d82e9a5ac6835ac8e4e1c83703665",
+      "status": ""
+    },
+    "vllm-ascend": {
+      "unchanged": true,
+      "head": "5cb98caaadeff42b5b62b996e34bb2aaa29d20fd",
+      "status": ""
+    }
+  },
+  "router_branch": "lmetric/ascend-minimal-events",
+  "engine_branch": "lmetric/ascend-minimal-events",
+  "original_submodule_status_retained": true,
+  "no_staged_changes": true
+}

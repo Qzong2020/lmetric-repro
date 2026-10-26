@@ -1,0 +1,16 @@
+
+running 1 test
+test engine::colocation::task_assignment::kv_journal_integration_tests::kv_journal_real_npu_cache_lifecycle ... KV_REAL_SUBSCRIBED_BEFORE_REQUEST
+
+thread 'engine::colocation::task_assignment::kv_journal_integration_tests::kv_journal_real_npu_cache_lifecycle' panicked at router/src/engine/kv_journal_tests.rs:94:100:
+called `Result::unwrap()` on an `Err` value: ApiError("{\"error\":{\"message\":\"EngineCore encountered an issue. See stack trace (above) for the root cause.\",\"type\":\"InternalServerError\",\"param\":null,\"code\":500}}")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    engine::colocation::task_assignment::kv_journal_integration_tests::kv_journal_real_npu_cache_lifecycle
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 42 filtered out; finished in 0.49s
+

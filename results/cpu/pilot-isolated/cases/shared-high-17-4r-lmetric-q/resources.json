@@ -1,0 +1,26 @@
+[
+  {
+    "at": 0.0005044578574597836,
+    "router_rss_bytes": 37666816,
+    "runner_rss_bytes": 52789248,
+    "backends_rss_bytes": 181227520
+  },
+  {
+    "at": 0.10148790199309587,
+    "router_rss_bytes": 37937152,
+    "runner_rss_bytes": 52789248,
+    "backends_rss_bytes": 182038528
+  },
+  {
+    "at": 0.2033589300699532,
+    "router_rss_bytes": 40095744,
+    "runner_rss_bytes": 52789248,
+    "backends_rss_bytes": 182308864
+  },
+  {
+    "at": 0.3047540211118758,
+    "router_rss_bytes": 42258432,
+    "runner_rss_bytes": 52789248,
+    "backends_rss_bytes": 182579200
+  }
+]

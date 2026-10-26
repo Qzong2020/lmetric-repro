@@ -1,0 +1,11 @@
+{
+  "cross_request_prefix_hit_blocks": 153048,
+  "cross_request_prefix_mismatches": 0,
+  "cross_request_prefix_queries": 4000,
+  "decisions": 8000,
+  "mismatches": 0,
+  "replicas": 16,
+  "requests": 4000,
+  "scope": "real trace tokens, controlled replica snapshots, real Rust policies; no inference",
+  "tie_cases": 115
+}

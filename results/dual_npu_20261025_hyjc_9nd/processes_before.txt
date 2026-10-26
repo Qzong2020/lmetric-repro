@@ -1,0 +1,31 @@
+    PID    PPID    PGID COMMAND
+      1       0       1 ./coder agent
+     36       1      36 ./coder agent --no-reap
+    952       1     952 sshd: /usr/sbin/sshd -e -o PermitRootLogin=prohibit-password -o PubkeyAuthentication=yes -o AuthorizedKeysFile=/etc/ssh/authorized_keys.generated %h/.ssh/authorized_keys -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no -o PermitUserEnvironment=yes [listener] 0 of 10-100 startups
+  10271     952   10271 sshd: root [priv]
+  10274   10271   10271 sshd: root
+  10461       1   10461 /root/.vscode-server/code-e646868227c3e3a9e3f24277c8c7220be42c0be7 --cli-data-dir /root/.vscode-server/cli agent host
+  10605       1   10279 sh /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/bin/code-server --connection-token=remotessh --accept-server-license-terms --agent-host-bridge-port=46331 --agent-host-bridge-host=127.0.0.1 --start-server --enable-remote-auto-shutdown --socket-path=/tmp/code-f21bf960-eb3c-48fb-bc44-bd80cbefd59e
+  10640   10605   10279 /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/node /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/out/server-main.js --connection-token=remotessh --accept-server-license-terms --agent-host-bridge-port=46331 --agent-host-bridge-host=127.0.0.1 --start-server --enable-remote-auto-shutdown --socket-path=/tmp/code-f21bf960-eb3c-48fb-bc44-bd80cbefd59e
+  10931   10461   10461 sh /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/bin/code-server --socket-path /tmp/code-b3fe445b-3876-400c-822a-9c863fe0c468 --agent-host-path /tmp/code-263080ab-c00f-4fa8-8dab-dc682f15cf99 --start-server --accept-server-license-terms --enable-remote-auto-shutdown --without-connection-token
+  10950   10931   10461 /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/node /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/out/server-main.js --socket-path /tmp/code-b3fe445b-3876-400c-822a-9c863fe0c468 --agent-host-path /tmp/code-263080ab-c00f-4fa8-8dab-dc682f15cf99 --start-server --accept-server-license-terms --enable-remote-auto-shutdown --without-connection-token
+  11208   10950   10461 /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/node /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/out/bootstrap-fork --type=agentHost --logsPath /root/.vscode-server/data/logs/20261025T122217 --user-data-dir /root/.vscode-server/data --telemetry-level all
+  11224   10640   10279 /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/node /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/out/bootstrap-fork --type=ptyHost --logsPath /root/.vscode-server/data/logs/20261025T122216
+  11263   11208   10461 /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/node_modules/@github/copilot-sdk-linux-arm64/prebuilds/linux-arm64/copilot-runtime --headless --no-auto-update --log-level info --stdio --no-auto-login
+  12312   11224   12312 /bin/bash --init-file /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/out/vs/workbench/contrib/terminal/common/scripts/shellIntegration-bash.sh
+  93589   11224   93589 /bin/bash --init-file /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/out/vs/workbench/contrib/terminal/common/scripts/shellIntegration-bash.sh
+ 136357     952  136357 sshd: root [priv]
+ 136360  136357  136357 sshd: root@notty
+ 136361  136360  136361 sh
+ 136491  136361  136361 /root/.vscode-server/code-e646868227c3e3a9e3f24277c8c7220be42c0be7 command-shell --cli-data-dir /root/.vscode-server/cli --parent-process-id 136361 --on-host=127.0.0.1 --on-port
+ 136519   10640   10279 /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/node --dns-result-order=ipv4first /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/out/bootstrap-fork --type=extensionHost --transformURIs --useHostProxy=false
+ 136567   10640   10279 /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/node /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/out/bootstrap-fork --type=fileWatcher
+ 137025  136519   10279 /root/.vscode-server/extensions/openai.chatgpt-26.1021.22027/bin/linux-aarch64/codex -c features.code_mode_host=true -c features.windows_sandbox_service=true app-server --analytics-default-enabled
+ 137077  136519   10279 /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/node /root/.vscode-server/cli/servers/Stable-e646868227c3e3a9e3f24277c8c7220be42c0be7/server/extensions/markdown-language-features/dist/serverWorkerMain --node-ipc --clientProcessId=136519
+ 137086  136491  136361 /bin/sh
+ 137608  136519   10279 /root/.vscode-server/extensions/anthropic.claude-code-2.1.310-linux-arm64/resources/native-binary/claude --output-format stream-json --verbose --input-format stream-json --max-thinking-tokens=31999 --permission-prompt-tool=stdio --setting-sources=user,project,local --debug --debug-to-stderr --enable-auth-status --no-chrome --replay-user-messages
+ 143373  137608  143373 /bin/bash -c source /root/.claude/shell-snapshots/snapshot-bash-1792935109100-t36tcb.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalias -- 'unsetenv'; \builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval '.venv/bin/python scripts/dual_npu/snapshot.py 2>&1 | tail -5' < /dev/null && pwd -P >| /tmp/claude-e186-cwd
+ 143374  143373  143374 .venv/bin/python scripts/dual_npu/snapshot.py
+ 143375  143373  143374 tail -5
+ 143404  136361  136361 sleep 180
+ 143730  143374  143374 ps -eo pid,ppid,pgid,args

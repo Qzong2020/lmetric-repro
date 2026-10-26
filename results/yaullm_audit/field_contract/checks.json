@@ -1,0 +1,15 @@
+{
+  "actual_author_serializer_executed": true,
+  "serializer_cases": 3,
+  "serializer_assertions_passed": true,
+  "npu_used": false,
+  "rust_event_loop_executed": false,
+  "engine_schedule_executed": false,
+  "source_sha256": {
+    "results/yaullm_audit/engine_types.py": "9c024026b6cf3e72190face5e35aba0d6a72e7e7ec3bb5676ddf45c9f669cbfc",
+    "results/yaullm_audit/scheduler.py": "e5e2c97519e13cf84cc3ec58439fe434bb6f129d664998632b62106778b05e64",
+    "blitz-router/router/src/scheduler/policies/dsl_runtime.rs": "3f9590e5c7069a9d01fee70ce2b0fa311ff088f84c6c8667955dfe87e67b240b",
+    "blitz-router/router/src/engine/colocation.rs": "6952a4399efeeec35d2fd730d64ea1d039274b3374f8b241a29ea9ba73c8daae",
+    "blitz-router/router/src/scheduler/kvcache.rs": "572379792d4692d0d48e56ca017913fd1b561c5751fb1211327dc8a0648689c0"
+  }
+}

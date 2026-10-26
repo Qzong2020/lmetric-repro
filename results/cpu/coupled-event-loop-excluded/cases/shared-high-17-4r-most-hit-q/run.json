@@ -1,0 +1,27 @@
+{
+  "command": [
+    "/root/lmetric-repro/results/cpu/bins/most-hit-q",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "43859",
+    "--client-config",
+    "/root/lmetric-repro/results/cpu/full/cases/shared-high-17-4r-most-hit-q/clients.json",
+    "--model-name",
+    "cpu-synthetic",
+    "--tokenizer-name",
+    "/root/lmetric-repro/models/cpu-synthetic-tokenizer",
+    "--use-tokenizer",
+    "--max-concurrent-requests",
+    "4096",
+    "--validation-workers",
+    "2"
+  ],
+  "policy": "most-hit-q",
+  "scenario": "shared",
+  "load": "high",
+  "seed": 17,
+  "replicas": 4,
+  "requests": 300,
+  "trace_sha256": "83758686204f133d3298c82a4153b0a212811381b8f74de9c44599ea3cb43ecc"
+}

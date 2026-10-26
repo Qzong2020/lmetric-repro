@@ -1,0 +1,11 @@
+test_cdf_is_over_requests (test_paper_metrics.MetricsTests.test_cdf_is_over_requests) ... ok
+test_empty_role_and_delayed_done_do_not_change_token_timing (test_paper_metrics.MetricsTests.test_empty_role_and_delayed_done_do_not_change_token_timing) ... ok
+test_incomplete_or_failed_streams_are_rejected (test_paper_metrics.MetricsTests.test_incomplete_or_failed_streams_are_rejected) ... ok
+test_missing_usage_does_not_treat_chunks_as_tokens (test_paper_metrics.MetricsTests.test_missing_usage_does_not_treat_chunks_as_tokens) ... ok
+test_one_output_token_has_no_decode_interval (test_paper_metrics.MetricsTests.test_one_output_token_has_no_decode_interval) ... ok
+test_timestamp_reversals_are_rejected (test_paper_metrics.MetricsTests.test_timestamp_reversals_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.001s
+
+OK

@@ -1,0 +1,1 @@
+real SSE HTTP 200 before request

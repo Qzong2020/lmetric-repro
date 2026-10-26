@@ -1,0 +1,73 @@
+{
+  "off": {
+    "request_phase_error_lines": [],
+    "shutdown_error_lines": [
+      "(APIServer pid=31869) ERROR 10-25 10:27:04 [async_llm.py:715] AsyncLLM output_handler failed.",
+      "(APIServer pid=31869) ERROR 10-25 10:27:04 [async_llm.py:715] Traceback (most recent call last):",
+      "(APIServer pid=31869) ERROR 10-25 10:27:04 [async_llm.py:715]   File \"/root/lmetric-repro/engines/vllm/vllm/v1/engine/async_llm.py\", line 669, in output_handler",
+      "(APIServer pid=31869) ERROR 10-25 10:27:04 [async_llm.py:715]     outputs = await engine_core.get_output_async()",
+      "(APIServer pid=31869) ERROR 10-25 10:27:04 [async_llm.py:715]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "(APIServer pid=31869) ERROR 10-25 10:27:04 [async_llm.py:715]   File \"/root/lmetric-repro/engines/vllm/vllm/v1/engine/core_client.py\", line 1049, in get_output_async",
+      "(APIServer pid=31869) ERROR 10-25 10:27:04 [async_llm.py:715]     raise self._format_exception(outputs) from None",
+      "(APIServer pid=31869) ERROR 10-25 10:27:04 [async_llm.py:715] vllm.v1.engine.exceptions.EngineDeadError: EngineCore encountered an issue. See stack trace (above) for the root cause."
+    ]
+  },
+  "sync_final": {
+    "request_phase_error_lines": [],
+    "shutdown_error_lines": [],
+    "seq_last": 11,
+    "ledger": {
+      "all_tokens": 0,
+      "bs": 0,
+      "prefill": 0,
+      "waiting": 0
+    }
+  },
+  "async": {
+    "request_phase_error_lines": [],
+    "shutdown_error_lines": [
+      "(APIServer pid=34626) ERROR 10-25 10:28:33 [async_llm.py:715] AsyncLLM output_handler failed.",
+      "(APIServer pid=34626) ERROR 10-25 10:28:33 [async_llm.py:715] Traceback (most recent call last):",
+      "(APIServer pid=34626) ERROR 10-25 10:28:33 [async_llm.py:715]   File \"/root/lmetric-repro/engines/vllm/vllm/v1/engine/async_llm.py\", line 669, in output_handler",
+      "(APIServer pid=34626) ERROR 10-25 10:28:33 [async_llm.py:715]     outputs = await engine_core.get_output_async()",
+      "(APIServer pid=34626) ERROR 10-25 10:28:33 [async_llm.py:715]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "(APIServer pid=34626) ERROR 10-25 10:28:33 [async_llm.py:715]   File \"/root/lmetric-repro/engines/vllm/vllm/v1/engine/core_client.py\", line 1049, in get_output_async",
+      "(APIServer pid=34626) ERROR 10-25 10:28:33 [async_llm.py:715]     raise self._format_exception(outputs) from None",
+      "(APIServer pid=34626) ERROR 10-25 10:28:33 [async_llm.py:715] vllm.v1.engine.exceptions.EngineDeadError: EngineCore encountered an issue. See stack trace (above) for the root cause."
+    ],
+    "seq_last": 12,
+    "ledger": {
+      "all_tokens": 0,
+      "bs": 0,
+      "prefill": 0,
+      "waiting": 0
+    }
+  },
+  "preservation": {
+    "engines/vllm": {
+      "head_unchanged": true,
+      "status_unchanged": true,
+      "diff_unchanged": true,
+      "captured_worktree_hashes_unchanged": true
+    },
+    "blitz-router": {
+      "head_unchanged": true,
+      "status_unchanged": true,
+      "diff_unchanged": true,
+      "captured_worktree_hashes_unchanged": true
+    },
+    "/vllm-workspace/vllm": {
+      "head_unchanged": true,
+      "status_unchanged": true,
+      "diff_unchanged": true,
+      "captured_worktree_hashes_unchanged": true
+    },
+    "/vllm-workspace/vllm-ascend": {
+      "head_unchanged": true,
+      "status_unchanged": true,
+      "diff_unchanged": true,
+      "captured_worktree_hashes_unchanged": true
+    }
+  },
+  "report_sha256": "5118d5656ceee87db1334c88f54f11637769da3ed26dfed2188d50bc32608693"
+}

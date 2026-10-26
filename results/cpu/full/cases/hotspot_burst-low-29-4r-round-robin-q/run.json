@@ -1,0 +1,27 @@
+{
+  "command": [
+    "/root/lmetric-repro/results/cpu/bins/round-robin-q",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "34149",
+    "--client-config",
+    "/root/lmetric-repro/results/cpu/full/cases/hotspot_burst-low-29-4r-round-robin-q/clients.json",
+    "--model-name",
+    "cpu-synthetic",
+    "--tokenizer-name",
+    "/root/lmetric-repro/models/cpu-synthetic-tokenizer",
+    "--use-tokenizer",
+    "--max-concurrent-requests",
+    "4096",
+    "--validation-workers",
+    "2"
+  ],
+  "policy": "round-robin-q",
+  "scenario": "hotspot_burst",
+  "load": "low",
+  "seed": 29,
+  "replicas": 4,
+  "requests": 300,
+  "trace_sha256": "44f7bef2705d0b9766eca64f8d9203ff6caf99d4b3da06bb6244b3bb9d6c3cb3"
+}

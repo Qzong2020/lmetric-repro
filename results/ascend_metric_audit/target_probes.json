@@ -1,0 +1,41 @@
+{
+  "scope": "ORIGINAL selected source methods with SIMULATED blocks, queue, request and event containers; NOT Scheduler or NPU execution",
+  "npu_used": false,
+  "vllm_imported": false,
+  "cases": [
+    {
+      "case": "allocation_is_not_cache_commit",
+      "passed": true
+    },
+    {
+      "case": "free_zero_ref_keeps_cache_mapping",
+      "passed": true
+    },
+    {
+      "case": "reuse_evicts_mapping_but_native_event_has_no_physical_id",
+      "passed": true
+    },
+    {
+      "case": "take_events_is_destructive",
+      "passed": true
+    },
+    {
+      "case": "duplicate_content_removal_preserves_other_physical_copy",
+      "passed": true
+    },
+    {
+      "case": "reset_is_global_clear",
+      "passed": true
+    },
+    {
+      "case": "ascend_refresh_overrides_32_to_128_with_prefix_cache",
+      "passed": true
+    }
+  ],
+  "author_serializer_cases": 3,
+  "source_sha256": {
+    "/vllm-workspace/vllm/vllm/v1/core/block_pool.py": "84755b84c36ed6460ceefe2690c9484a9c31488c5da6daa6c918f497d8837dee",
+    "/vllm-workspace/vllm/vllm/v1/core/kv_cache_utils.py": "b89f9afa7f95fcc30412ae2031d5370a23e95f35d068fa14e5824dce1c900ee5",
+    "/vllm-workspace/vllm-ascend/vllm_ascend/utils.py": "575b45d684eabdb7ac3195d33de48bd5f3233081f78886c08be92a4a2fd2fc02"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "vllm": "0.23.0+empty",
+  "vllm_ascend": "0.23.0",
+  "platform": "vllm_ascend.platform.NPUPlatform",
+  "LLM_import": true,
+  "SamplingParams_import": true,
+  "scope": "import and platform detection only; no model engine initialized",
+  "passed": true
+}

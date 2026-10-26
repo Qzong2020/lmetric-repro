@@ -1,0 +1,138 @@
+{
+  "router": [
+    {
+      "file": "README.md",
+      "baseline_sha256": "9a0b33b73e1fbf0cf49041bc7788bd1be217f081fef8554d7d81d0af7202ad92",
+      "current_sha256": "911059ae37610b49b8e1bd904bd52423d30af25fdae6a789c3a78c93f13c9e22",
+      "new": false
+    },
+    {
+      "file": "docs/ascend-request-events.md",
+      "baseline_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "current_sha256": "13fb858a9fb7812ef83995af861284c89b8a39d3576265bc17ce672510152c94",
+      "new": true
+    },
+    {
+      "file": "router/src/engine/ascend_request_tests.rs",
+      "baseline_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "current_sha256": "05b185ab20e51b32e9e0685c04b0e1b13cbdeb0feba129e96b2c5499f513fc55",
+      "new": true
+    },
+    {
+      "file": "router/src/engine/client.rs",
+      "baseline_sha256": "f0797f2e3932c061bba1d4eae0ecb730df2abbef834a2e4deb3a12ba3e9a7b81",
+      "current_sha256": "b24c45a179ccacdb834996849728d163217b1cc9cfad636df8c150de04c8eafd",
+      "new": false
+    },
+    {
+      "file": "router/src/engine/colocation.rs",
+      "baseline_sha256": "6952a4399efeeec35d2fd730d64ea1d039274b3374f8b241a29ea9ba73c8daae",
+      "current_sha256": "9ee339666ccd62c20061f68f19be6a2b0d496a13e3330029c104f63386de2322",
+      "new": false
+    },
+    {
+      "file": "router/src/engine/vllm_http.rs",
+      "baseline_sha256": "fd00e7953f3abc759ad73787917149d56e44e4b556cc09b700d9f35625bac506",
+      "current_sha256": "c570ea08389d6d4139116bc1d759e3fcff58295b1f34da586a03ef9737b61804",
+      "new": false
+    },
+    {
+      "file": "router/src/scheduler/kvcache.rs",
+      "baseline_sha256": "572379792d4692d0d48e56ca017913fd1b561c5751fb1211327dc8a0648689c0",
+      "current_sha256": "2a9f182e887eda39954b42e55fc5969272de94bd1e897a0dc70382d4469c7b3b",
+      "new": false
+    },
+    {
+      "file": "router/src/scheduler/policies/mod.rs",
+      "baseline_sha256": "94d8f8d29164b984dcba4e2bccc6f8b7698e0bdf5b547cbcf8bb83d46ddf761a",
+      "current_sha256": "4b578b227bf6c430f7e393c0ff93bfeacc4f9f871233ac728c8b82b449956920",
+      "new": false
+    },
+    {
+      "file": "router/src/scheduler/simulator/mirror.rs",
+      "baseline_sha256": "71b63f0b77e7903dd9bd2cf68f8cf5f5114b011dfb38a612cb3cfcd827c5588e",
+      "current_sha256": "be2c56d0b7d0d1b5112fbab31a60e484e6b120890b6403bbc22ab69547f552fb",
+      "new": false
+    },
+    {
+      "file": "router/src/scheduler/simulator/mod.rs",
+      "baseline_sha256": "d7d6a296e3ff18c6ae185fd8794a50f2eb2ddeae8e829e2912157d28b70d7d23",
+      "current_sha256": "8f1718b90843be490a7a9bda35ac40adc005ab24f4274c7287721f697f494e09",
+      "new": false
+    },
+    {
+      "file": "router/src/scheduler/simulator/pctx.rs",
+      "baseline_sha256": "9d1783be474a5a2a8fcaf796237e147fe5c2c90ef5b4dc7c5c42ab50404ff2be",
+      "current_sha256": "68a876e0f6db114851ee8352b88a5667da667adebc6624ae25e90620b7639a4d",
+      "new": false
+    },
+    {
+      "file": "router/src/scheduler/simulator/sched.rs",
+      "baseline_sha256": "f7c337e0a4ac5aa5ab99ff86756f36e643898698e83478374de25fbf1609df11",
+      "current_sha256": "962774fe9cf6b4f157e839dff8bbbb227038617ba7a70718b7121895dda00cf2",
+      "new": false
+    }
+  ],
+  "engine": [
+    {
+      "file": "docs/design/lmetric_request_events.md",
+      "baseline_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "current_sha256": "6e818167a0ada7039fdcbe5198c86467c48ccedcdaf28a8f11d0e75c0bff7398",
+      "new": true
+    },
+    {
+      "file": "vllm/entrypoints/openai/api_server.py",
+      "baseline_sha256": "6d8df133280618a1afffa9d03e4655af011f2f94ced0f90c15f7fc8b0afc538f",
+      "current_sha256": "ccbe4a56dfb2e72098b54283667c1c27a72c567e3bcf5b891bd70e6b280ccd37",
+      "new": false
+    },
+    {
+      "file": "vllm/entrypoints/openai/completion/serving.py",
+      "baseline_sha256": "c67bff55fa29c5f89000c3afdc9c7c66305612b13a8a1d85976e5872cee086d7",
+      "current_sha256": "899546c0bed6c6353d3b12085c2db3a24ec0f1097dfa9b0f5df8183afa7b122e",
+      "new": false
+    },
+    {
+      "file": "vllm/entrypoints/openai/serving_metrics.py",
+      "baseline_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "current_sha256": "3eaecdc9714324ce35b57f06254ed0ca6c8a3c61206f3b2204f5f185d2d3dd81",
+      "new": true
+    },
+    {
+      "file": "vllm/v1/core/sched/output.py",
+      "baseline_sha256": "44230b995721a011dbe2c1d012371b1d9ec844b1b09abfc24dd0c6d8a9e307fc",
+      "current_sha256": "1f340e1a9bce0f6a59488549bb95f7266a2b33371bd1a17d3dd63a3127b6938e",
+      "new": false
+    },
+    {
+      "file": "vllm/v1/engine/__init__.py",
+      "baseline_sha256": "6eb1175dd76d5099dd4b6297d12c682f13ca42e297968983bc433894c1b82245",
+      "current_sha256": "d54174f2620e2a4504f6f7e9dd1c00b86e5a9ee3dcdce9663e9a051262d1cd69",
+      "new": false
+    },
+    {
+      "file": "vllm/v1/engine/async_llm.py",
+      "baseline_sha256": "2128cf018fe136b698c5e89dc7325bc6dced9d516cc9d772695f044716970b64",
+      "current_sha256": "c27f64d13a731497b70747c74957df0e0e2b6c3549e21d4dda0f25051eddfb9d",
+      "new": false
+    },
+    {
+      "file": "vllm/v1/engine/core.py",
+      "baseline_sha256": "cf9cbde601afb80925254aae814033abeab3817f9c4fe7bf01ca92edc9d10c2d",
+      "current_sha256": "6426b08eaad196459458f94f0d47ed8055ee0541cec4855b6bf6e0367ef390c1",
+      "new": false
+    },
+    {
+      "file": "vllm/v1/engine/core_client.py",
+      "baseline_sha256": "e41fe15caa59dfd289ae212b3eaefc20c34be87a72e779df03d970f9714b793d",
+      "current_sha256": "d96af15d3f4c2aeff8481fb39de532a4840ef879ce716af8e241efe039d7cc8b",
+      "new": false
+    },
+    {
+      "file": "vllm/v1/engine/lmetric_events.py",
+      "baseline_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "current_sha256": "1c57dfeb88c305e5678a127e0ce8071515b76e1457962beda4a6d283f945f32f",
+      "new": true
+    }
+  ]
+}

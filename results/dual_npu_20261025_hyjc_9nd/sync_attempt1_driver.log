@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 314, in <module>
+    try:correctness(s)
+        ^^^^^^^^^^^^^^
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 279, in correctness
+    s.start();x,y,z=prompt(0),prompt(1),prompt(2,700)
+    ^^^^^^^^^
+  File "/root/lmetric-repro/scripts/dual_npu/experiment.py", line 105, in start
+    with socket.socket() as s:s.bind(('127.0.0.1',port))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use

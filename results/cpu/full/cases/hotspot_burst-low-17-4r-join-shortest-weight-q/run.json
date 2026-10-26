@@ -1,0 +1,27 @@
+{
+  "command": [
+    "/root/lmetric-repro/results/cpu/bins/join-shortest-weight-q",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "49095",
+    "--client-config",
+    "/root/lmetric-repro/results/cpu/full/cases/hotspot_burst-low-17-4r-join-shortest-weight-q/clients.json",
+    "--model-name",
+    "cpu-synthetic",
+    "--tokenizer-name",
+    "/root/lmetric-repro/models/cpu-synthetic-tokenizer",
+    "--use-tokenizer",
+    "--max-concurrent-requests",
+    "4096",
+    "--validation-workers",
+    "2"
+  ],
+  "policy": "join-shortest-weight-q",
+  "scenario": "hotspot_burst",
+  "load": "low",
+  "seed": 17,
+  "replicas": 4,
+  "requests": 300,
+  "trace_sha256": "3bef5bf3ae66e84bc94a77d97b271ba7e85c4b23b289b192d9d3c42bd6011755"
+}
